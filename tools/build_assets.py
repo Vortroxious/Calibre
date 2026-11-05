@@ -47,7 +47,7 @@ def build_gun(name, preview=False):
         if a.name == "inspect":
             a = asset.anims[i] = cs2.cs2_inspect(asset)
             motion.fluid_inspect(asset, a)
-            motion.clearance(asset, a)
+            motion.clearance(asset, a, dmin=0.07)   # close-ups: only keep parts out of the near plane
     core.pack_uv(m)
     core.export_geo(m, os.path.join(ASSETS, "geckolib", "models", "item", f"{m.name}.geo.json"))
     tex = materials.paint_texture(m, os.path.join(ASSETS, "textures", "gun", f"{m.name}.png"))

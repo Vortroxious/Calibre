@@ -54,10 +54,11 @@ Stats come from the real weapons:
 Ammunition comes in 23 calibres.
 
 ### Inspects (H)
-Every inspect is a CS2-style presentation of about 7–8 seconds, generated from each gun's own parts
-(`tools/calibre_gen/cs2.py`):
-- **Long guns:** turned to show both sides, the magazine wiggled and seated, the top of the receiver rolled towards you, a press-check with whatever the gun has (charging handle, bolt, pump, lever or feed cover), a selector flick, then a look along the top and down the muzzle.
-- **Handguns:** a slide press-check, a turn-over, a magazine tap and a look at the rear sights. The Desert Eagle and the revolvers finish with one clean finger spin, and the revolvers swing the cylinder out first.
+Every inspect is a close-up presentation (in the style of modern shooters such as MW3) of about 7–9 seconds,
+generated from each gun's own parts (`tools/calibre_gen/cs2.py`):
+- **Long guns:** snapped up to the eye side-on with the muzzle up and held, the magazine pulled out and brought up to the camera to look at the rounds (the gun drops away meanwhile) and pushed home, turned over to the other side, a press-check with whatever the gun has (charging handle, bolt, pump, lever or feed cover), a selector flick, back to ready.
+- **Pistols:** the slide side-on up close, a press-check, the other side, the magazine shown to the camera, a look along the top of the slide.
+- **Revolvers:** the cylinder swung out and spun (or the gate opened and the cylinder clicked round), both sides held up close.
 
 Handling sounds come from real recordings, and the camera moves subtly with every weapon action (the **Camera motion** setting).
 

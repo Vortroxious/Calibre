@@ -240,7 +240,8 @@ def fluid_inspect(asset, anim):
         dz = -min(60.0, rear * (0.04 + 0.1 * s_yaw)) if long_gun else -20.0
         return np.array([0.0, 0.0, dz]) * env(t)
 
-    anim.layers.append(("gun", "pos", hold))
+    if not getattr(anim, "cs2", False):       # the generated close-ups are placed against the camera already
+        anim.layers.append(("gun", "pos", hold))
 
     # arcs: the gun is carried up a little while it travels between two poses (one smooth lobe, no return swing)
     arcs = []

@@ -1,4 +1,4 @@
-"""CS2-style inspects, generated for every gun from its class and the mechanism parts it actually has.
+"""Close-up (MW3-style) inspects, generated for every gun from its class and the mechanism parts it actually has.
 
 No tossing, no rolling: the gun is presented slowly and with weight, turned to show one side and then the other,
 and the hands do the small detailed things - the support hand slides along and checks the magazine, tugs the
@@ -138,106 +138,6 @@ class _Inspect:
 # ------------------------------------------------------------------------------------------------
 # long guns
 # ------------------------------------------------------------------------------------------------
-def _long(asset, kind):
-    m = asset.model
-    lo, hi = m.bounds()
-    length = float(hi[2] - lo[2])
-    heavy = kind == "heavy"
-    k = 1.0 if heavy else (0.92 if length < 760 else 1.0)
-    k *= 0.84 if "magazine" in m.bones else 0.95      # ~8 s either way: guns without a magazine skip that step
-    T = lambda x: x * k
-    I = _Inspect(asset, T(8.0) + (0.5 if heavy and "cover" in m.bones else 0.0))
-    a = I.a
-    ang = 0.7 if heavy else 1.0
-    # poses: right (ejection port) side, left side, glance down the top
-    # (kept on their own side of the screen: drawn in towards the middle, the stock comes into the face)
-    # held out in front and raised into view (searched against the camera: the stock stays clear of the cheek)
-    out = -110 if length > 760 else -60
-    A = ((-40, 20, out), (14 * ang, -40 * ang, -30 * ang))
-    B = ((-20, 56, out), (6 * ang, 40 * ang, 42 * ang))
-    C = ((-10, 40, out * 0.6), (12 * ang, 8 * ang, 6 * ang))
-    hl = np.asarray(m.bones["arm_left"].pivot, dtype=float)
-
-    D = ((-24, 36, out), (10 * ang, -18 * ang, -62 * ang))          # top of the receiver rolled towards the eye
-    E = ((-26, 52, out * 0.8), (22 * ang, 14 * ang, 10 * ang))       # muzzle tipped up towards the crosshair
-
-    # 1) present the right side; the support hand slides back along the handguard; let it sit there a moment
-    I.sound(0.0, "grip")
-    I.move(0.0, T(0.75), *A)
-    a.mv("arm_left", T(0.12), T(0.7), pos=(2, -2, 34))
-    I.sound(T(0.08), "cloth")
-    I.creep(T(0.75), T(1.45), A, ((-4, 3, -4), (1, -5, 3)))
-
-    # 2) magazine: hold it, a little wiggle, a palm tap from underneath to seat it
-    t = T(1.5)
-    if I.has("magazine"):
-        mlo, mhi = _box(m, "magazine")
-        side = np.array([mlo[0] - 12, (mlo[1] + mhi[1]) / 2 + 10, (mlo[2] + mhi[2]) / 2])
-        base = np.array([(mlo[0] + mhi[0]) / 2 - 4, mlo[1] - 14, (mlo[2] + mhi[2]) / 2])
-        I.reach("arm_left", t, t + T(0.34), side)
-        I.grab("arm_left", "magazine", t + T(0.36), t + T(0.78), fade_in=0.04, fade_out=0.05)
-        a.key("magazine", t + T(0.36), rot=(0, 0, 0))
-        a.key("magazine", t + T(0.47), rot=(0, 0, 2.5))
-        a.key("magazine", t + T(0.58), rot=(0, 0, -2.0))
-        a.key("magazine", t + T(0.68), rot=(0, 0, 1.0))
-        a.key("magazine", t + T(0.76), rot=(0, 0, 0))
-        I.sound(t + T(0.45), "mag_check")
-        I.sound(t + T(0.64), "mag_check")
-        I.reach("arm_left", t + T(0.82), t + T(0.98), base + (0, -16, 0))
-        I.reach("arm_left", t + T(0.98), t + T(1.04), base, e="inquad")
-        a.key("magazine", t + T(1.02), pos=(0, 0, 0))
-        a.key("magazine", t + T(1.05), pos=(0, 3, 0), e="outquad")
-        a.key("magazine", t + T(1.13), pos=(0, 0, 0), e="inoutsine")
-        I.sound(t + T(1.04), "tap")
-        a.kick("gun", "pos", t + T(1.04), (0, 2.5, 0), attack=0.03, recover=0.2)
-        t = t + T(1.15)
-    else:
-        t = t + T(0.3)
-
-    # 3) roll the top of the receiver towards you and look along it
-    I.home("arm_left", t, t + T(0.4))
-    I.move(t, t + T(0.65), *D)
-    I.creep(t + T(0.65), t + T(1.1), D, ((2, 2, -4), (2, 3, -3)))
-    t = t + T(1.15)
-
-    # 4) turn it over to show the left side; the hand goes back onto the handguard
-    I.sound(t + T(0.12), "cloth")
-    # through the middle of the turn the gun dips down and out, so the stock passes under the cheek, not across it
-    I.move(t + T(0.02), t + T(0.5), (10, 0, out), (4 * ang, -4 * ang, 6 * ang), e="inoutsine")
-    I.gun(t + T(0.5), t + T(1.0), *B, e="inoutsine")
-    I.sound(t + T(1.0), "grip")
-    I.creep(t + T(1.0), t + T(1.6), B, ((3, 3, -4), (1, 5, -3)))
-    t = t + T(1.6)
-
-    # 5) press-check with whatever the gun has
-    t = _press_check(I, kind, t, T, hl)
-
-    # 6) selector off and back on
-    sel = _peak(asset, "selector", "rot")
-    if sel is not None:
-        snd = "selector_ak" if m.name in AK else "selector"
-        I.tug("selector", t + T(0.06), sel, out=T(0.1), hold=T(0.16), back=T(0.1), ch="rot", snd=(snd, snd))
-        a.kick("gun", "rot", t + T(0.12), (0.6, 0, -0.8), attack=0.04, recover=0.25)
-        t = t + T(0.5)
-
-    # 7) a glance down the top / along the scope
-    I.move(t, t + T(0.6), *C)
-    I.creep(t + T(0.6), t + T(1.0), C, ((-2, 2, -3), (1, 2, 1)))
-    t = t + T(1.0)
-
-    # 8) tip the muzzle up and look down it at the front sight
-    I.move(t, t + T(0.6), *E)
-    I.creep(t + T(0.6), t + T(1.05), E, ((0, 3, -3), (2, -2, 2)))
-    t = t + T(1.05)
-
-    # 9) back to ready, the support hand takes its place again
-    I.move(t, t + T(0.8), (0, 0, 0), (0, 0, 0))
-    I.home("arm_left", t + T(0.05), t + T(0.6))
-    I.sound(t + T(0.62), "grip")
-    a.length = max(a.length, t + T(0.9))
-    return a
-
-
 def _press_check(I, kind, t, T, hl):
     asset, m, a = I.asset, I.m, I.a
     if kind == "shotgun" and I.has("pump"):
@@ -331,213 +231,360 @@ def _press_check(I, kind, t, T, hl):
 # ------------------------------------------------------------------------------------------------
 # handguns
 # ------------------------------------------------------------------------------------------------
-def _pistol(asset):
+# ------------------------------------------------------------------------------------------------
+# MW3-style close-ups: the gun is pulled right up to the eye, turned side-on with the muzzle up,
+# quick moves between poses and long slow holds; the magazine is taken out and shown to the camera
+# ------------------------------------------------------------------------------------------------
+from .core import euler_mat, mat_euler  # noqa: E402
+
+
+class _Close:
+    """Poses placed in view space: a focus point on the gun is put at a chosen spot in front of the eye."""
+
+    def __init__(self, I):
+        self.I, self.a, self.m = I, I.a, I.m
+        hip = I.asset.meta.get("hip", {})
+        self.R = euler_mat(hip.get("rot", (0, 0, 0)))
+        self.off = np.asarray(hip.get("pos", (0.12, -0.12, -0.3)), dtype=float)
+        self.poses = {}          # time -> (pos, rot) of the keyed gun, to place hands/parts in its frame
+        self.h0 = {h: np.asarray(self.m.bones[h].pivot, dtype=float) for h in ("arm_left", "arm_right")}
+
+    def world(self, v):
+        return self.R.T @ (np.asarray(v, dtype=float) - self.off) * 1000.0
+
+    def pose(self, F, rot, v):
+        rot = np.asarray(rot, dtype=float)
+        return self.world(v) - euler_mat(rot) @ np.asarray(F, dtype=float), rot
+
+    def at(self, t):
+        ts = sorted(self.poses)
+        best = max([x for x in ts if x <= t + 1e-6], default=ts[0])
+        return self.poses[best]
+
+    def local(self, t, v):
+        """View-space point (m) -> gun-local point (mm) for the gun pose keyed at/just before t."""
+        gp, gr = self.at(t)
+        return euler_mat(gr).T @ (self.world(v) - gp)
+
+    def move(self, t0, t1, pose, snd=True, e="inoutcubic"):
+        self.I.move(t0, t1, *pose, e=e, snd=snd)
+        self.poses[t1] = pose
+        self.poses.setdefault(t0, self.at(t0) if self.poses else pose)
+
+    def creep(self, t0, t1, pose, drift):
+        dp, dr = drift
+        p = (np.add(pose[0], dp), np.add(pose[1], dr))
+        self.I.gun(t0, t1, *p, e="inoutsine")
+        self.poses[t1] = p
+        return p
+
+    def park(self, t0, t1, hand="arm_left"):
+        """Support hand out of the way, just off the bottom-left of the screen."""
+        p = self.local(t1, (-0.17, -0.31, -0.15)) - self.h0[hand]
+        self.a.mv(hand, t0, t1, pos=p, e="inoutcubic")
+
+
+def _mag_sounds(asset):
+    out = inn = None
+    for an in asset.anims:
+        if an.name.startswith("reload"):
+            for _, s in sorted(an.sounds):
+                if out is None and s.startswith(("mag_out", "drum_out", "box_out")):
+                    out = s
+                if inn is None and s.startswith(("mag_in", "drum_in", "box_in")):
+                    inn = s
+    return out or "mag_out_rifle", inn or "mag_in_rifle"
+
+
+def _mag_dir(asset):
+    """Direction the magazine leaves the well, from the gun's own reload (first move of the magazine)."""
+    for an in asset.anims:
+        if not an.name.startswith("reload"):
+            continue
+        tr = an.tracks.get(("magazine", "pos"))
+        if not tr:
+            continue
+        for _, v, _ in tr.keys:
+            if isinstance(v, np.ndarray) and np.linalg.norm(v) > 2:
+                return v / np.linalg.norm(v)
+    return None
+
+
+def _show_mag(C, t, T, down_pose, back_pose, show_v=(0.0, 0.025, -0.25)):
+    """Take the magazine out, bring it up to the eye (the gun drops away), look at the rounds, put it back,
+    palm-seat it. Returns the end time, or None if the gun has no detachable magazine."""
+    I, a, m = C.I, C.a, C.m
+    d = _mag_dir(I.asset)
+    if not I.has("magazine") or d is None:
+        return None
+    mo, mi = _mag_sounds(I.asset)
+    mag = m.bones["magazine"]
+    piv = np.asarray(mag.pivot, dtype=float)
+    rest_rot = np.asarray(mag.rot, dtype=float)
+    mlo, mhi = _box(m, "magazine")
+    side = np.array([mlo[0] - 10, (mlo[1] + mhi[1]) / 2, (mlo[2] + mhi[2]) / 2])
+    base = np.array([(mlo[0] + mhi[0]) / 2 - 4, mlo[1] - 14, (mlo[2] + mhi[2]) / 2])
+    out = d * 75.0
+    z = np.zeros(3)
+    # hand onto the magazine, from underneath (so the arm hangs below it and the magazine stays in view)
+    I.reach("arm_left", t, t + T(0.3), base)
+    tg = t + T(0.32)
+    I.grab("arm_left", "magazine", tg, tg + T(2.0), fade_in=0.04, fade_out=0.05)
+    a.key("magazine", tg, pos=z, rot=z)
+    a.key("magazine", tg + T(0.2), pos=out, rot=z, e="outquad")
+    I.sound(tg + T(0.08), mo)
+    # gun drops away to the bottom-right, the magazine comes up to the eye, rounds towards the camera
+    t1 = tg + T(0.22)
+    t2 = t1 + T(0.42)
+    C.move(t1, t2, down_pose)
+    gp, gr = down_pose
+    target = euler_mat(gr).T @ (C.world(show_v) - gp)
+    Rt = euler_mat((38, 32, -6))          # in view space: top tipped towards the eye, three-quarter turn
+    Rm = (C.R @ euler_mat(gr)).T @ Rt
+    mrot = mat_euler(Rm) - rest_rot
+    a.key("magazine", t2, pos=target - piv, rot=mrot, e="inoutcubic")
+    # look at it: a slow turn of the wrist and a little shake to hear the rounds
+    t3 = t2 + T(1.0)
+    a.key("magazine", t2 + T(0.45), pos=target - piv + (0, 4, -6), rot=mrot + (6, -14, 4), e="inoutsine")
+    a.key("magazine", t2 + T(0.62), pos=target - piv + (0, 6, -4), rot=mrot + (9, -10, 2), e="inoutsine")
+    a.key("magazine", t2 + T(0.7), pos=target - piv + (0, 3, -6), rot=mrot + (4, -12, 3), e="inoutsine")
+    a.key("magazine", t3, pos=target - piv + (2, 2, -2), rot=mrot + (2, -6, 2), e="inoutsine")
+    I.sound(t2 + T(0.6), "mag_check")
+    I.sound(t2 + T(0.7), "mag_check")
+    C.creep(t2, t3, down_pose, ((4, -3, 2), (1, 2, -2)))
+    # gun comes back up, magazine goes back to the well, pushed home, then palm-seated
+    t4 = t3 + T(0.42)
+    C.move(t3, t4, back_pose)
+    a.key("magazine", t4, pos=out, rot=z, e="inoutcubic")
+    t5 = t4 + T(0.14)
+    a.key("magazine", t5, pos=z, rot=z, e="inquad")
+    I.sound(t5 - T(0.02), mi)
+    I.a.grabs[-1].t1 = t5
+    a.key("arm_left", t5, pos=base - C.h0["arm_left"])
+    I.reach("arm_left", t5 + T(0.04), t5 + T(0.18), base + (0, -18, 0))
+    I.reach("arm_left", t5 + T(0.18), t5 + T(0.24), base, e="inquad")
+    a.key("magazine", t5 + T(0.22), pos=z)
+    a.key("magazine", t5 + T(0.25), pos=(0, 3, 0), e="outquad")
+    a.key("magazine", t5 + T(0.33), pos=z, e="inoutsine")
+    I.sound(t5 + T(0.24), "tap")
+    a.kick("gun", "pos", t5 + T(0.24), (0, 3, 0), attack=0.03, recover=0.2)
+    return t5 + T(0.36)
+
+
+def _close_long(asset, kind):
     m = asset.model
-    spin = m.name == "deagle"
-    I = _Inspect(asset, 7.0)
+    lo, hi = m.bounds()
+    length = float(hi[2] - lo[2])
+    heavy = kind == "heavy"
+    k = 1.1 if heavy else (0.92 if length < 760 else 1.0)
+    T = lambda x: x * k
+    I = _Inspect(asset, T(9.0))
     a = I.a
-    A = ((-40, 30, 36), (10, -48, -18))
-    B = ((-34, 32, 30), (6, 44, 22))
-    C = ((-18, 44, 14), (-12, 6, 4))          # muzzle down a touch: rear sights, hammer, back of the slide
-    A2 = ((-36, 34, 30), (4, -58, -28))        # right side again, turned further
-    E = ((-22, 46, 20), (26, 10, 6))           # muzzle tipped up towards the crosshair
-    away = (-46, -56, 46)
+    C = _Close(I)
+    ej = m.meta.get("eject", [0, 0, -40])
+    F = np.array([0.0, 0.0, float(ej[2])])
+    d = 0.36 if heavy else (0.27 if length < 760 else 0.30)
+    ang = 0.8 if heavy else 1.0
+    A = C.pose(F, (10 * ang, -60 * ang, 50 * ang), (0.07, 0.08, -d))           # right side, muzzle up
+    B = C.pose(F, (10 * ang, 60 * ang, -50 * ang), (-0.01, 0.08, -d))          # left side
+    DOWN = C.pose(F, (4, -40, 30), (0.16, -0.16, -d - 0.05))                  # dropped away for the magazine
+    MID = C.pose(F, (55 * ang, 0, 0), (0.03, 0.03, -d - 0.02))                # upright, halfway through the turn
+    C.poses[0.0] = (np.zeros(3), np.zeros(3))
+    # 1) snapped up to the eye, right side; the support hand lets go and drops away
     I.sound(0.0, "grip")
-    I.move(0.0, 0.55, *A)
-    I.sound(0.06, "cloth")
-    I.creep(0.55, 1.15, A, ((-3, 2, -3), (2, -5, 3)))
-    t = 1.2
-    # press-check: pinch the front of the slide and draw it back a little
-    if I.has("slide"):
-        lo, hi = _box(m, "slide")
-        I.reach("arm_left", t - 0.45, t + 0.25, (lo[0] - 16, (lo[1] + hi[1]) / 2 + 6, lo[2] + 26))
-        t0 = t + 0.28
-        trav = _peak(asset, "slide", "pos")
-        trav = trav if trav is not None else np.array([0.0, 0.0, 40.0])
-        I.grab("arm_left", "slide", t0, t0 + 0.42, fade_in=0.04, fade_out=0.05)
-        end = I.tug("slide", t0 + 0.02, trav * 0.3, out=0.14, hold=0.14, back=0.07,
-                    snd=("press_check", "slide_forward_light"))
-        a.kick("gun", "rot", end, (1.2, 0, -0.8), attack=0.03, recover=0.2)
-        t = end + 0.06
-    elif I.has("bolt"):   # Ruger Mk III: tug the rear bolt ears
-        lo, hi = _box(m, "bolt")
-        I.reach("arm_left", t - 0.45, t + 0.25, (lo[0] - 10, hi[1] + 6, hi[2] - 8))
-        t0 = t + 0.28
-        trav = _peak(asset, "bolt", "pos")
-        trav = trav if trav is not None else np.array([0.0, 0.0, 30.0])
-        I.grab("arm_left", "bolt", t0, t0 + 0.42, fade_in=0.04, fade_out=0.05)
-        t = I.tug("bolt", t0 + 0.02, trav * 0.35, out=0.14, hold=0.14, back=0.07,
-                  snd=("press_check", "slide_forward_light")) + 0.06
-    a.mv("arm_left", t, t + 0.25, pos=away)
-    # turn it over to the left side and let it sit there
-    I.move(t, t + 0.7, *B)
-    I.sound(t + 0.15, "cloth")
-    I.creep(t + 0.7, t + 1.3, B, ((-2, 3, -3), (1, 5, -3)))
-    t += 1.3
-    # magazine: a tap on the base plate
-    if I.has("magazine"):
-        lo, hi = _box(m, "magazine")
-        base = np.array([(lo[0] + hi[0]) / 2 - 6, lo[1] - 12, (lo[2] + hi[2]) / 2])
-        I.reach("arm_left", t - 0.3, t, base + (0, -14, 0))
-        I.reach("arm_left", t, t + 0.06, base, e="inquad")
-        a.key("magazine", t + 0.04, pos=(0, 0, 0))
-        a.key("magazine", t + 0.07, pos=(0, 2.5, 0), e="outquad")
-        a.key("magazine", t + 0.15, pos=(0, 0, 0))
-        I.sound(t + 0.06, "tap")
-        a.kick("gun", "pos", t + 0.06, (0, 2.5, 0), attack=0.03, recover=0.18)
-        a.mv("arm_left", t + 0.14, t + 0.36, pos=away)
-        t += 0.36
-    # look down at the rear sights and the back of the slide
-    I.move(t, t + 0.55, *C)
-    I.creep(t + 0.55, t + 1.0, C, ((2, 2, -2), (-2, 3, 2)))
-    t += 1.0
-    if spin:
-        # the right side once more, then back near the hip and one clean finger spin
-        I.move(t, t + 0.6, *A2)
-        I.creep(t + 0.6, t + 1.0, A2, ((-2, 2, -2), (1, -3, 2)))
-        t += 1.0
-        I.move(t, t + 0.35, (0, 4, -6), (2, 0, 0))
-        _finger_spin(asset, a, t + 0.38)
-        t += 0.38 + 1.0
-        I.home("arm_left", t - 0.2, t + 0.15)
-        a.length = t + 0.3
-        return a
-    # the right side once more, turned further, then a look down the muzzle, then back to ready
-    I.move(t, t + 0.6, *A2)
-    I.creep(t + 0.6, t + 1.0, A2, ((-2, 2, -2), (1, -3, 2)))
-    t += 1.0
-    I.move(t, t + 0.55, *E)
-    I.creep(t + 0.55, t + 0.9, E, ((0, 2, -2), (2, -2, 1)))
-    t += 0.9
-    I.move(t, t + 0.65, (0, 0, 0), (0, 0, 0))
-    I.home("arm_left", t + 0.05, t + 0.5)
-    I.sound(t + 0.58, "grip")
-    a.length = t + 0.75
+    C.move(0.0, T(0.5), A)
+    C.park(T(0.05), T(0.45))
+    I.sound(T(0.06), "cloth")
+    A1 = C.creep(T(0.5), T(2.0), A, ((-3, 4, -3), (2, -5, 3)))
+    t = T(2.05)
+    # 2) magazine out and up to the eye
+    end = _show_mag(C, t, T, DOWN, A1)
+    if end is None:      # no detachable magazine: a longer look, rolled a little further towards the eye
+        C.creep(t, t + T(1.4), A1, ((2, 4, -4), (4, -8, 6)))
+        end = t + T(1.45)
+    t = end
+    # 3) turned over to the left side through upright (the stock swings down, out of the face), held
+    C.move(t, t + T(0.28), MID, snd=True, e="inoutsine")
+    C.move(t + T(0.28), t + T(0.55), B, snd=False, e="inoutsine")
+    t += T(0.05)
+    C.park(t + T(0.05), t + T(0.5))
+    C.creep(t + T(0.5), t + T(2.0), B, ((3, 3, -3), (1, 5, -3)))
+    t += T(2.0)
+    # 4) press-check with whatever the gun has (the hand comes in big, close to the eye)
+    t = _press_check(I, kind, t, T, C.h0["arm_left"])
+    # 5) selector off and back on
+    sel = _peak(asset, "selector", "rot")
+    if sel is not None:
+        snd = "selector_ak" if m.name in AK else "selector"
+        I.tug("selector", t + T(0.06), sel, out=T(0.1), hold=T(0.16), back=T(0.1), ch="rot", snd=(snd, snd))
+        a.kick("gun", "rot", t + T(0.12), (0.6, 0, -0.8), attack=0.04, recover=0.25)
+        t += T(0.5)
+    # 6) back to ready
+    I.move(t, t + T(0.65), (0, 0, 0), (0, 0, 0))
+    I.home("arm_left", t + T(0.05), t + T(0.55))
+    I.sound(t + T(0.6), "grip")
+    a.length = t + T(0.75)
     return a
 
 
-def _revolver(asset):
+def _hand_pose(asset, I, C):
     m = asset.model
-    I = _Inspect(asset, 7.4)
+    lo, hi = m.bounds()
+    length = float(hi[2] - lo[2])
+    part = next((p for p in ("slide", "cylinder", "bolt") if p in m.bones), None)
+    if part:
+        plo, phi = _box(m, part)
+        F = np.array([0.0, (plo[1] + phi[1]) / 2, (plo[2] + phi[2]) / 2])
+    else:
+        F = np.array([0.0, 0.0, (lo[2] + hi[2]) / 2])
+    d = 0.14 + 0.00038 * length
+    y = 0.04
+    if part == "cylinder":          # revolvers: a little lower and further, so barrel and cylinder both show
+        d, y = d + 0.04, 0.0
+    A = C.pose(F, (8, -80, 30), (0.04, y, -d))              # right side, side-on, muzzle up a little
+    B = C.pose(F, (8, 80, -30), (0.0, y, -d))               # left side
+    DOWN = C.pose(F, (0, -40, 20), (0.12, -0.14, -d - 0.04))
+    B2 = C.pose(F, (-8, 70, -16), (0.0, 0.05, -d - 0.02))   # left side again, muzzle dipped: top of the slide
+    return A, B, DOWN, B2
+
+
+def _close_pistol(asset):
+    m = asset.model
+    T = lambda x: x
+    I = _Inspect(asset, 8.0)
     a = I.a
-    B = ((-34, 30, 30), (6, 42, 24))          # left side: where the cylinder swings out / the gate is
-    A = ((-38, 30, 34), (10, -40, -16))
-    C = ((-18, 44, 14), (-12, 6, 4))          # rear sight and hammer
+    C = _Close(I)
+    A, B, DOWN, REAR = _hand_pose(asset, I, C)
+    C.poses[0.0] = (np.zeros(3), np.zeros(3))
+    # 1) left side up close, held
     I.sound(0.0, "grip")
-    I.move(0.0, 0.55, *B)
+    C.move(0.0, 0.45, B)
+    C.park(0.05, 0.4)
     I.sound(0.06, "cloth")
-    I.creep(0.55, 1.1, B, ((-2, 3, -3), (1, 4, -3)))
-    t = 1.1
+    C.creep(0.45, 1.6, B, ((-2, 3, -2), (2, 5, -3)))
+    t = 1.65
+    # 2) press-check: pinch the front of the slide, draw it back a little
+    part = "slide" if I.has("slide") else ("bolt" if I.has("bolt") else None)
+    if part is not None:
+        lo, hi = _box(m, part)
+        I.reach("arm_left", t, t + 0.3, (lo[0] - 14, (lo[1] + hi[1]) / 2 + 6, lo[2] + 26))
+        t0 = t + 0.32
+        trav = _peak(asset, part, "pos")
+        trav = trav if trav is not None else np.array([0.0, 0.0, 40.0])
+        I.grab("arm_left", part, t0, t0 + 0.45, fade_in=0.04, fade_out=0.05)
+        end = I.tug(part, t0 + 0.02, trav * 0.3, out=0.15, hold=0.18, back=0.07,
+                    snd=("press_check", "slide_forward_light"))
+        a.kick("gun", "rot", end, (1.2, 0, -0.8), attack=0.03, recover=0.2)
+        t = end + 0.1
+        C.park(t, t + 0.3)
+    # 3) turned over, right side held
+    C.move(t, t + 0.45, A)
+    C.park(t + 0.05, t + 0.45)
+    A1 = C.creep(t + 0.45, t + 1.5, A, ((-2, 2, -2), (1, -5, 3)))
+    t += 1.55
+    # 4) magazine out and up to the eye
+    end = _show_mag(C, t, T, DOWN, A1, show_v=(0.0, 0.03, -0.21))
+    t = end if end is not None else t
+    # 5) a look at the rear sights and the back of the slide
+    C.move(t, t + 0.45, REAR)
+    C.park(t + 0.05, t + 0.45)
+    C.creep(t + 0.45, t + 1.2, REAR, ((2, 2, -2), (-2, 3, 2)))
+    t += 1.25
+    I.move(t, t + 0.6, (0, 0, 0), (0, 0, 0))
+    I.home("arm_left", t + 0.05, t + 0.5)
+    I.sound(t + 0.55, "grip")
+    a.length = t + 0.7
+    return a
+
+
+def _close_revolver(asset):
+    m = asset.model
+    I = _Inspect(asset, 8.0)
+    a = I.a
+    C = _Close(I)
+    A, B, DOWN, REAR = _hand_pose(asset, I, C)
+    C.poses[0.0] = (np.zeros(3), np.zeros(3))
+    I.sound(0.0, "grip")
+    C.move(0.0, 0.45, B)
+    C.park(0.05, 0.4)
+    I.sound(0.06, "cloth")
+    C.creep(0.45, 1.3, B, ((-2, 3, -2), (1, 4, -3)))
+    t = 1.35
     cyl = "cylinder"
     if I.has("crane"):
         cr = _peak(asset, "crane", "rot")
         cr = cr if cr is not None else np.array([0.0, 0.0, 80.0])
         lo, hi = _box(m, cyl)
-        I.reach("arm_left", t - 0.4, t + 0.2, (lo[0] - 12, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))
-        t0 = t + 0.24
-        I.grab("arm_left", cyl, t0, t0 + 0.24, fade_in=0.04, fade_out=0.06)
+        I.reach("arm_left", t, t + 0.3, (lo[0] - 12, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))
+        t0 = t + 0.32
+        I.grab("arm_left", cyl, t0, t0 + 0.26, fade_in=0.04, fade_out=0.06)
         a.key("crane", t0, rot=(0, 0, 0))
-        a.key("crane", t0 + 0.22, rot=cr, e="outquad")
+        a.key("crane", t0 + 0.24, rot=cr, e="outquad")
         I.sound(t0 + 0.04, "cylinder_latch")
-        I.sound(t0 + 0.18, "cylinder_open")
-        # flick the cylinder round with a finger and let it run down
-        a.mv("arm_left", t0 + 0.3, t0 + 0.42, pos=(-30, -20, 40))
-        t1 = t0 + 0.4
+        I.sound(t0 + 0.2, "cylinder_open")
+        t1 = t0 + 0.42
+        C.park(t0 + 0.3, t1 + 0.2)
         a.key(cyl, t1, rot=(0, 0, 0))
         a.key(cyl, t1 + 0.35, rot=(0, 0, -400), e="outquad")
-        a.key(cyl, t1 + 0.9, rot=(0, 0, -720), e="outcubic")
+        a.key(cyl, t1 + 1.0, rot=(0, 0, -720), e="outcubic")
         I.sound(t1 + 0.02, "cylinder_spin")
-        # wrist flick shuts it
-        t2 = t1 + 0.95
+        C.creep(t0, t1 + 1.0, B, ((-3, 4, -2), (2, 6, -2)))
+        t2 = t1 + 1.1
         a.key("crane", t2, rot=cr)
         a.key("crane", t2 + 0.12, rot=(0, 0, 0), e="inquad")
         a.kick("gun", "rot", t2, (0, -6, -10), attack=0.1, recover=0.3)
         I.sound(t2 + 0.12, "cylinder_close")
-        t = t2 + 0.3
+        t = t2 + 0.35
     elif I.has("gate"):
         gt = _peak(asset, "gate", "rot")
         gt = gt if gt is not None else np.array([0.0, 0.0, -80.0])
         lo, hi = _box(m, "gate")
-        I.reach("arm_left", t - 0.4, t + 0.2, (hi[0] + 10, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))
-        t0 = t + 0.24
+        I.reach("arm_left", t, t + 0.3, (hi[0] + 10, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))
+        t0 = t + 0.32
         a.key("gate", t0, rot=(0, 0, 0))
         a.key("gate", t0 + 0.12, rot=gt, e="outquad")
         I.sound(t0 + 0.08, "loading_gate")
         step = _peak(asset, cyl, "rot")
         step = step if step is not None else np.array([0.0, 0.0, -60.0])
         n = int(round(360.0 / max(1.0, abs(float(step[2])))))
-        tt = t0 + 0.2
+        tt = t0 + 0.22
         for i in range(n):
             a.key(cyl, tt, rot=step * i)
             a.key(cyl, tt + 0.08, rot=step * (i + 1), e="outquad")
             I.sound(tt + 0.06, "click_small")
-            tt += 0.15
+            tt += 0.16
         a.key("gate", tt + 0.05, rot=gt)
         a.key("gate", tt + 0.15, rot=(0, 0, 0), e="inquad")
         I.sound(tt + 0.13, "loading_gate")
-        t = tt + 0.25
-    a.mv("arm_left", t - 0.1, t + 0.2, pos=(-46, -56, 46))
-    I.creep(t, t + 0.45, B, ((-3, 4, -4), (2, 6, -2)))
-    t += 0.45
-    # show the other side, a look at the rear sight and hammer, back near the hip, one clean finger spin
-    I.move(t, t + 0.6, *A)
-    I.creep(t + 0.6, t + 1.1, A, ((-2, 2, -3), (1, -4, 2)))
-    t += 1.1
-    I.move(t, t + 0.5, *C)
-    I.creep(t + 0.5, t + 0.85, C, ((2, 2, -2), (-2, 3, 2)))
-    t += 0.85
-    I.move(t, t + 0.35, (0, 4, -6), (2, 0, 0))
-    _finger_spin(asset, a, t + 0.38)
-    t += 0.38 + 1.0
+        C.creep(t0, tt + 0.15, B, ((-2, 3, -2), (1, 4, -2)))
+        t = tt + 0.3
+    C.park(t - 0.1, t + 0.25)
+    C.move(t, t + 0.45, A)
+    C.creep(t + 0.45, t + 1.6, A, ((-2, 2, -2), (1, -5, 3)))
+    t += 1.65
+    C.move(t, t + 0.45, REAR)
+    C.creep(t + 0.45, t + 1.2, REAR, ((2, 2, -2), (-2, 3, 2)))
+    t += 1.25
     if m.name == "singlesix" and I.has("hammer"):
         cock = _peak(asset, "hammer", "rot", prefer=("fire",))
         if cock is not None:
-            a.key("hammer", t, rot=(0, 0, 0))
-            a.key("hammer", t + 0.12, rot=cock, e="outquad")
-            a.key("hammer", t + 0.3, rot=cock)
-            a.key("hammer", t + 0.42, rot=(0, 0, 0), e="inquad")
-            I.sound(t + 0.1, "hammer_cock")
-            t += 0.3
-    I.home("arm_left", t - 0.25, t + 0.15)
-    a.length = t + 0.35
+            a.key("hammer", t - 0.6, rot=(0, 0, 0))
+            a.key("hammer", t - 0.48, rot=cock, e="outquad")
+            a.key("hammer", t - 0.3, rot=cock)
+            a.key("hammer", t - 0.18, rot=(0, 0, 0), e="inquad")
+            I.sound(t - 0.5, "hammer_cock")
+    I.move(t, t + 0.6, (0, 0, 0), (0, 0, 0))
+    I.home("arm_left", t + 0.05, t + 0.5)
+    I.sound(t + 0.55, "grip")
+    a.length = t + 0.7
     return a
-
-
-def _finger_spin(asset, a, t0):
-    """One clean turn on the trigger finger, in a plane angled to the eye, slowing into the catch."""
-    hr = np.asarray(asset.model.bones["arm_right"].pivot, dtype=float)
-    rig = motion._Rig(a, t0, (0.0, hr[1] + 24.0, hr[2] - 36.0))
-    spin = motion._scalar([(0.04, 0.0), (0.14, -40.0), (0.36, -210.0), (0.58, -330.0), (0.74, -360.0)])
-    amp = motion._scalar([(0.04, 0.0), (0.2, 1.0), (0.5, 1.0), (0.74, 0.0)])
-    tilt = motion.path([(0.0, (0, 0, 0)), (0.14, (0, 26, 10)), (0.4, (0, 34, 4)), (0.74, (0, 24, 8)),
-                        (1.0, (0, 0, 0))])
-
-    def rot(u):
-        th, w = spin(u), amp(u)
-        r = np.radians(th)
-        return np.array([th, 8.0 * w * np.cos(r), 10.0 * w * np.sin(r)]) + tilt(u)
-
-    base = motion.path([(0.0, (0, 0, 0)), (0.14, (-12, 24, -70)), (0.42, (-14, 40, -90)), (0.74, (-8, 26, -70)),
-                        (1.0, (0, 0, 0))])
-
-    def off(u):
-        r, w = np.radians(spin(u)), amp(u)
-        return base(u) + w * np.array([0.0, 8.0 * np.sin(r), 8.0 * np.cos(r) - 8.0])
-
-    rig.rot, rig.off = rot, off
-    rig.gun()
-    rig.hand("arm_right", off)
-    a.sound(t0 + 0.06, "grip")
-    a.sound(t0 + 0.26, "spin_whoosh")
-    a.sound(t0 + 0.5, "spin_whoosh")
-    a.sound(t0 + 0.74, "grip")
 
 
 # ------------------------------------------------------------------------------------------------
 def cs2_inspect(asset):
     kind = motion.KIND.get(asset.model.name, "rifle")
     if kind == "pistol":
-        return _pistol(asset)
+        return _close_pistol(asset)
     if kind == "revolver":
-        return _revolver(asset)
-    return _long(asset, kind)
+        return _close_revolver(asset)
+    return _close_long(asset, kind)
