@@ -1881,6 +1881,7 @@
   }
  },
  "spare_bones": [],
+ "empty_hidden": [],
  "sockets": {
   "mount_optic": [
    0.0,

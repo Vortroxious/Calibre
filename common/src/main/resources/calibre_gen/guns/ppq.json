@@ -1688,6 +1688,7 @@
   }
  },
  "spare_bones": [],
+ "empty_hidden": [],
  "sockets": {
   "mount_under": [
    0.0,

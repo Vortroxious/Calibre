@@ -1698,6 +1698,7 @@
   }
  },
  "spare_bones": [],
+ "empty_hidden": [],
  "sockets": {
   "muzzle": [
    0.0,

@@ -62,6 +62,10 @@ def build_gun(name, preview=False):
     # the renderer keeps them hidden whenever no animation explicitly shows them
     idle_anim = next(a for a in asset.anims if a.name == "idle")
     meta["spare_bones"] = sorted(idle_anim.hidden)
+    # parts that are not there when the gun is empty (the RPG's rocket): hidden whenever it is, outside reloads
+    empty_anim = next((a for a in asset.anims if a.name == "idle_empty"), None)
+    if empty_anim is not None:
+        meta["empty_hidden"] = sorted(empty_anim.hidden - idle_anim.hidden)
     for s in ("mount_optic", "mount_under", "mount_side", "muzzle"):
         if m.has(s):
             meta.setdefault("sockets", {})[s] = m.socket(s)

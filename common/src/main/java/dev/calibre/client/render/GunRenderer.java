@@ -22,6 +22,7 @@ import software.bernie.geckolib.constant.DataTickets;
 public class GunRenderer extends GeoItemRenderer<GunItem> {
     public static final float SCALE = 0.16f;
     private final String[] spareBones;
+    private final String[] emptyHidden;
 
     public GunRenderer(GunItem item) {
         super(new DefaultedItemGeoModel<GunItem>(Calibre.id(item.def().id())) {
@@ -32,6 +33,7 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
             }
         });
         spareBones = item.meta().spareBones.toArray(String[]::new);
+        emptyHidden = item.meta().emptyHidden.toArray(String[]::new);
         withScale(SCALE);
         withRenderLayer(new ArmsLayer(this));
         withRenderLayer(new AttachmentLayer<>(this));
@@ -73,8 +75,14 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         // are used. Start them collapsed: an animation that uses them keys their scale back to 1, and any frame without
         // an animation (icons, the first frame after a draw, a controller in transition) never shows them floating.
         for (String b : spareBones) snapshots.ifPresent(b, sn -> sn.setScale(0, 0, 0));
+        // an empty gun has no round to show (the RPG's rocket), whatever animation is playing (draw, inspect, dry
+        // fire...); only a reload brings it back (EMPTY is false while reloading)
+        if (Boolean.TRUE.equals(info.getGeckolibData(CalibreTickets.EMPTY)))
+            for (String b : emptyHidden) snapshots.ifPresent(b, sn -> sn.setScale(0, 0, 0));
         if (!fp && !third) return; // icons, item frames, dropped items: static rest pose
         super.applyAnimationControllers(info, snapshots);
+        if (Boolean.TRUE.equals(info.getGeckolibData(CalibreTickets.EMPTY)))
+            for (String b : emptyHidden) snapshots.ifPresent(b, sn -> sn.setScale(0, 0, 0));
         if (third) {
             // in third person the whole-gun motion is carried by the player's arms; keep only the mechanisms
             snapshots.ifPresent("gun", s -> {

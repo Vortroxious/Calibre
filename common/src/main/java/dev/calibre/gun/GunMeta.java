@@ -46,6 +46,8 @@ public final class GunMeta {
     public String integralReticle = null;
     /** bones hidden unless an animation shows them (clip, spare round, ejected brass, shells, speedloader) */
     public final List<String> spareBones = new ArrayList<>();
+    /** bones that do not exist while the gun is empty (e.g. the RPG-7's rocket) */
+    public final List<String> emptyHidden = new ArrayList<>();
     /** CS2-style view motion per animation: flat [pitch, yaw, roll] degrees at cameraRate[anim] samples/s */
     public final Map<String, float[]> camera = new HashMap<>();
     public final Map<String, Float> cameraRate = new HashMap<>();
@@ -109,6 +111,7 @@ public final class GunMeta {
             if (root.has("ads")) meta.adsDist = root.getAsJsonObject("ads").get("dist").getAsFloat();
             if (root.has("sight")) meta.sight = arr(root.get("sight"));
             if (root.has("spare_bones")) for (JsonElement e : root.getAsJsonArray("spare_bones")) meta.spareBones.add(e.getAsString());
+            if (root.has("empty_hidden")) for (JsonElement e : root.getAsJsonArray("empty_hidden")) meta.emptyHidden.add(e.getAsString());
             if (root.has("muzzle")) meta.muzzle = arr(root.get("muzzle"));
             if (root.has("camera")) {
                 for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("camera").entrySet()) {
