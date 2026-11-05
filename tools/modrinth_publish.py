@@ -160,6 +160,7 @@ def publish(args):
     if proj is None:
         data = {k: p[k] for k in ("slug", "title", "description", "categories", "additional_categories",
                                   "client_side", "server_side", "body", "license_id", "project_type")}
+        data.update({k: p[k] for k in ("source_url", "issues_url") if p.get(k)})
         data.update(initial_versions=[], is_draft=True, license_url=p.get("license_url"))
         with open(os.path.join(MR, "icon.png"), "rb") as fh:
             body, ct = multipart({"data": data}, [("icon", "icon.png", fh.read())])
@@ -170,7 +171,8 @@ def publish(args):
     else:
         request("PATCH", f"/project/{proj['id']}", token, json.dumps(
             {k: p[k] for k in ("title", "description", "categories", "additional_categories", "client_side",
-                               "server_side", "body", "license_id")}).encode(), {"Content-Type": "application/json"})
+                               "server_side", "body", "license_id")} | {k: p[k] for k in ("source_url", "issues_url")
+                                                                         if p.get(k)}).encode(), {"Content-Type": "application/json"})
         with open(os.path.join(MR, "icon.png"), "rb") as fh:
             request("PATCH", f"/project/{proj['id']}/icon?ext=png", token, fh.read(), {"Content-Type": "image/png"})
         print(f"updated project page {proj['slug']} ({proj['id']})")

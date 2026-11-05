@@ -84,5 +84,7 @@
       "title": "Settings",
       "description": "Server and client options, including camera motion and recoil"
     }
-  ]
+  ],
+  "source_url": "https://github.com/Vortroxious/Calibre",
+  "issues_url": "https://github.com/Vortroxious/Calibre/issues"
 }
