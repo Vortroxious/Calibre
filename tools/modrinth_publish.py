@@ -185,6 +185,7 @@ def publish(args):
         data = {"project_id": pid, "name": v["name"], "version_number": v["version_number"],
                 "changelog": args.changelog, "game_versions": p["game_versions"], "loaders": [v["loader"]],
                 "version_type": "release", "featured": True, "status": "listed",
+                "environment": p.get("environment", "client_and_server"),   # Modrinth's per-version environment
                 "dependencies": [{"project_id": d["project_id"], "dependency_type": d["dependency_type"]}
                                  for d in v["dependencies"]],
                 "file_parts": ["file0"], "primary_file": "file0"}
