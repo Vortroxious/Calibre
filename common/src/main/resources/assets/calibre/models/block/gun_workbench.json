@@ -1,0 +1,10 @@
+{
+ "parent": "minecraft:block/orientable_with_bottom",
+ "textures": {
+  "top": "calibre:block/gun_workbench_top",
+  "side": "calibre:block/gun_workbench_side",
+  "front": "calibre:block/gun_workbench_front",
+  "bottom": "calibre:block/gun_workbench_bottom",
+  "particle": "calibre:block/gun_workbench_side"
+ }
+}

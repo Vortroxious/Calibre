@@ -1,0 +1,89 @@
+{
+ "type": "minecraft:entity",
+ "pools": [
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:gunpowder",
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": {
+        "min": 0,
+        "max": 2
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "conditions": [
+    {
+     "condition": "minecraft:killed_by_player"
+    },
+    {
+     "condition": "minecraft:random_chance",
+     "chance": 0.08
+    }
+   ],
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "calibre:red_dot"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:holo"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:acog"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:scope_8x"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:suppressor_pistol"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:suppressor_rifle"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:compensator"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:flash_hider"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:vertical_grip"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:angled_grip"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:bipod_att"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:laser"
+    },
+    {
+     "type": "minecraft:item",
+     "name": "calibre:extended_mag"
+    }
+   ]
+  }
+ ]
+}

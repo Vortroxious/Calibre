@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/mosin",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

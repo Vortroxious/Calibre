@@ -1,0 +1,1703 @@
+{
+ "weaponsmith": {
+  "tables": [
+   "minecraft:chests/village/village_weaponsmith"
+  ],
+  "entries": [
+   {
+    "item": "calibre:glock17",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1911",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m9",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rem870",
+    "weight": 3
+   },
+   {
+    "item": "calibre:uzi",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp5",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:win1894",
+    "weight": 3
+   },
+   {
+    "item": "calibre:marlin336",
+    "weight": 3
+   },
+   {
+    "item": "calibre:nova",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cdaly",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mossberg190",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ppq",
+    "weight": 3
+   },
+   {
+    "item": "calibre:bersa",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rugermk3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sw642",
+    "weight": 3
+   },
+   {
+    "item": "calibre:singlesix",
+    "weight": 3
+   },
+   {
+    "item": "calibre:tikka_t3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   }
+  ],
+  "chance": 0.55,
+  "rolls": 2
+ },
+ "outpost": {
+  "tables": [
+   "minecraft:chests/pillager_outpost"
+  ],
+  "entries": [
+   {
+    "item": "calibre:glock17",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1911",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m9",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rem870",
+    "weight": 3
+   },
+   {
+    "item": "calibre:uzi",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp5",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m4a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:hk416",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fal",
+    "weight": 3
+   },
+   {
+    "item": "calibre:scar_h",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m14ebr",
+    "weight": 3
+   },
+   {
+    "item": "calibre:svd",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m249",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ump45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:p90",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aug",
+    "weight": 3
+   },
+   {
+    "item": "calibre:benelli_m4",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mosin",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1917",
+    "weight": 3
+   },
+   {
+    "item": "calibre:arisaka",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sks",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ppsh41",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ak47",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   }
+  ],
+  "chance": 0.7,
+  "rolls": 2
+ },
+ "shipwreck": {
+  "tables": [
+   "minecraft:chests/shipwreck_supply",
+   "minecraft:chests/shipwreck_treasure"
+  ],
+  "entries": [
+   {
+    "item": "calibre:glock17",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1911",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m9",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rem870",
+    "weight": 3
+   },
+   {
+    "item": "calibre:uzi",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp5",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:win1894",
+    "weight": 3
+   },
+   {
+    "item": "calibre:marlin336",
+    "weight": 3
+   },
+   {
+    "item": "calibre:nova",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cdaly",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mossberg190",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1917",
+    "weight": 3
+   },
+   {
+    "item": "calibre:arisaka",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   }
+  ],
+  "chance": 0.35,
+  "rolls": 1
+ },
+ "dungeon": {
+  "tables": [
+   "minecraft:chests/simple_dungeon",
+   "minecraft:chests/abandoned_mineshaft",
+   "minecraft:chests/desert_pyramid",
+   "minecraft:chests/jungle_temple"
+  ],
+  "entries": [
+   {
+    "item": "calibre:glock17",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1911",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m9",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rem870",
+    "weight": 3
+   },
+   {
+    "item": "calibre:uzi",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp5",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m4a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:hk416",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fal",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mosin",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1917",
+    "weight": 3
+   },
+   {
+    "item": "calibre:arisaka",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sks",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ppsh41",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ak47",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   }
+  ],
+  "chance": 0.4,
+  "rolls": 2
+ },
+ "stronghold": {
+  "tables": [
+   "minecraft:chests/stronghold_corridor",
+   "minecraft:chests/stronghold_crossing",
+   "minecraft:chests/woodland_mansion"
+  ],
+  "entries": [
+   {
+    "item": "calibre:m4a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:hk416",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fal",
+    "weight": 3
+   },
+   {
+    "item": "calibre:scar_h",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m14ebr",
+    "weight": 3
+   },
+   {
+    "item": "calibre:svd",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m249",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ump45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:p90",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aug",
+    "weight": 3
+   },
+   {
+    "item": "calibre:benelli_m4",
+    "weight": 3
+   },
+   {
+    "item": "calibre:deagle",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model29",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m24",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mosin",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m1917",
+    "weight": 3
+   },
+   {
+    "item": "calibre:arisaka",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sks",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ppsh41",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ak47",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:savage10",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   },
+   {
+    "item": "calibre:ammo_pg7",
+    "weight": 2,
+    "min": 1,
+    "max": 2
+   }
+  ],
+  "chance": 0.45,
+  "rolls": 2
+ },
+ "endgame": {
+  "tables": [
+   "minecraft:chests/bastion_treasure",
+   "minecraft:chests/bastion_other",
+   "minecraft:chests/ancient_city",
+   "minecraft:chests/end_city_treasure",
+   "minecraft:chests/trial_chambers/reward_rare",
+   "minecraft:chests/trial_chambers/reward_ominous_rare"
+  ],
+  "entries": [
+   {
+    "item": "calibre:m4a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:hk416",
+    "weight": 3
+   },
+   {
+    "item": "calibre:akm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fal",
+    "weight": 3
+   },
+   {
+    "item": "calibre:scar_h",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m14ebr",
+    "weight": 3
+   },
+   {
+    "item": "calibre:svd",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m249",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ump45",
+    "weight": 3
+   },
+   {
+    "item": "calibre:p90",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aug",
+    "weight": 3
+   },
+   {
+    "item": "calibre:benelli_m4",
+    "weight": 3
+   },
+   {
+    "item": "calibre:deagle",
+    "weight": 3
+   },
+   {
+    "item": "calibre:model29",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m24",
+    "weight": 3
+   },
+   {
+    "item": "calibre:awm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m82a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:pkm",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rpg7",
+    "weight": 3
+   },
+   {
+    "item": "calibre:savage10",
+    "weight": 3
+   },
+   {
+    "item": "calibre:tikka_t3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ammo_9mm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_45acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50ae",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_44mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_57x28",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_556",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x39",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x54",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300wm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_50bmg",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_12slug",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_762x25",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3006",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_77x58",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_3030",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_38spl",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_22lr",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_380acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_300blk",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:red_dot",
+    "weight": 2
+   },
+   {
+    "item": "calibre:holo",
+    "weight": 2
+   },
+   {
+    "item": "calibre:acog",
+    "weight": 2
+   },
+   {
+    "item": "calibre:scope_8x",
+    "weight": 2
+   },
+   {
+    "item": "calibre:pso1",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_pistol",
+    "weight": 2
+   },
+   {
+    "item": "calibre:suppressor_rifle",
+    "weight": 2
+   },
+   {
+    "item": "calibre:compensator",
+    "weight": 2
+   },
+   {
+    "item": "calibre:flash_hider",
+    "weight": 2
+   },
+   {
+    "item": "calibre:vertical_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:angled_grip",
+    "weight": 2
+   },
+   {
+    "item": "calibre:bipod_att",
+    "weight": 2
+   },
+   {
+    "item": "calibre:laser",
+    "weight": 2
+   },
+   {
+    "item": "calibre:extended_mag",
+    "weight": 2
+   },
+   {
+    "item": "calibre:ammo_pg7",
+    "weight": 2,
+    "min": 1,
+    "max": 2
+   }
+  ],
+  "chance": 0.6,
+  "rolls": 2
+ }
+}

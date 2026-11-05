@@ -1,0 +1,13 @@
+{
+ "slot": "optic",
+ "eye": [
+  0,
+  26,
+  55
+ ],
+ "zoom": 4.0,
+ "reticle": "acog",
+ "ads_time": 1.15,
+ "texel_density": 1.0,
+ "id": "acog"
+}

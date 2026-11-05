@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/awm",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/red_dot",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

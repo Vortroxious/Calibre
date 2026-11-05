@@ -1,0 +1,13 @@
+Calibre
+Copyright (c) 2026 raffasya.shidqialfarizi5. All rights reserved.
+
+You may download Calibre from its official pages and play with it, including on servers and in modpacks
+that link to or redistribute the unmodified jar from the official Modrinth page. You may not copy, modify,
+redistribute modified versions of, or reuse the source code, models, textures or animations without the
+author's written permission.
+
+Third-party parts keep their own licenses:
+  - GeckoLib, bundled inside the jars: MIT License (https://github.com/bernie-g/geckolib).
+  - Sound recordings: see CREDITS.md. Most are CC0 1.0. The clips cut from "Handling Guns" by Gary
+    (https://opengameart.org/content/handling-guns) are licensed CC-BY-SA 3.0
+    (https://creativecommons.org/licenses/by-sa/3.0/); those clips may be reused under that license.

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "calibre",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["Calibre"],
+  "license": "${mod_license}",
+  "icon": "assets/calibre/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.calibre.fabric.CalibreFabric"],
+    "client": ["dev.calibre.fabric.CalibreFabricClient"],
+    "modmenu": ["dev.calibre.fabric.CalibreModMenu"],
+    "fabric-gametest": ["dev.calibre.fabric.FabricGameTests"]
+  },
+  "mixins": ["calibre.mixins.json"],
+  "accessWidener": "calibre.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*",
+    "geckolib": ">=${geckolib_version}"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

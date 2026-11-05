@@ -1,0 +1,11 @@
+{
+ "replace": false,
+ "entries": [
+  "calibre:weaponsmith",
+  "calibre:outpost",
+  "calibre:shipwreck",
+  "calibre:dungeon",
+  "calibre:stronghold",
+  "calibre:endgame"
+ ]
+}

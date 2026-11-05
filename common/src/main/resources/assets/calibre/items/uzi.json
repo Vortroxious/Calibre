@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/uzi",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

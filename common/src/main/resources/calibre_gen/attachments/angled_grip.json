@@ -1,0 +1,10 @@
+{
+ "slot": "under",
+ "hand": [
+  0,
+  -20,
+  10
+ ],
+ "texel_density": 1.0,
+ "id": "angled_grip"
+}

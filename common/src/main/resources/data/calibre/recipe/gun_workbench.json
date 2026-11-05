@@ -1,0 +1,19 @@
+{
+ "type": "minecraft:crafting_shaped",
+ "category": "misc",
+ "pattern": [
+  "III",
+  "ICI",
+  "PRP"
+ ],
+ "key": {
+  "I": "minecraft:iron_ingot",
+  "C": "minecraft:crafting_table",
+  "P": "#minecraft:planks",
+  "R": "minecraft:redstone"
+ },
+ "result": {
+  "id": "calibre:gun_workbench",
+  "count": 1
+ }
+}

@@ -1,0 +1,314 @@
+{
+ "type": "calibre:add_items",
+ "conditions": [
+  {
+   "condition": "minecraft:any_of",
+   "terms": [
+    {
+     "condition": "neoforge:loot_table_id",
+     "loot_table_id": "minecraft:chests/pillager_outpost"
+    }
+   ]
+  }
+ ],
+ "entries": [
+  {
+   "item": "calibre:glock17",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m1911",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m9",
+   "weight": 3
+  },
+  {
+   "item": "calibre:rem870",
+   "weight": 3
+  },
+  {
+   "item": "calibre:uzi",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mp5",
+   "weight": 3
+  },
+  {
+   "item": "calibre:akm",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m4a1",
+   "weight": 3
+  },
+  {
+   "item": "calibre:hk416",
+   "weight": 3
+  },
+  {
+   "item": "calibre:akm",
+   "weight": 3
+  },
+  {
+   "item": "calibre:fal",
+   "weight": 3
+  },
+  {
+   "item": "calibre:scar_h",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m14ebr",
+   "weight": 3
+  },
+  {
+   "item": "calibre:svd",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m249",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ump45",
+   "weight": 3
+  },
+  {
+   "item": "calibre:p90",
+   "weight": 3
+  },
+  {
+   "item": "calibre:aug",
+   "weight": 3
+  },
+  {
+   "item": "calibre:benelli_m4",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mosin",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m1917",
+   "weight": 3
+  },
+  {
+   "item": "calibre:arisaka",
+   "weight": 3
+  },
+  {
+   "item": "calibre:sks",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ppsh41",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m45",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ak47",
+   "weight": 3
+  },
+  {
+   "item": "calibre:model12",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ammo_9mm",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_45acp",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_50ae",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_44mag",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_57x28",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_556",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_762x39",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_762",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_762x54",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_300wm",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_50bmg",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_12buck",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_12slug",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_762x25",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_3006",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_77x58",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_3030",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_38spl",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_22lr",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_380acp",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_300blk",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_16buck",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:red_dot",
+   "weight": 2
+  },
+  {
+   "item": "calibre:holo",
+   "weight": 2
+  },
+  {
+   "item": "calibre:acog",
+   "weight": 2
+  },
+  {
+   "item": "calibre:scope_8x",
+   "weight": 2
+  },
+  {
+   "item": "calibre:pso1",
+   "weight": 2
+  },
+  {
+   "item": "calibre:suppressor_pistol",
+   "weight": 2
+  },
+  {
+   "item": "calibre:suppressor_rifle",
+   "weight": 2
+  },
+  {
+   "item": "calibre:compensator",
+   "weight": 2
+  },
+  {
+   "item": "calibre:flash_hider",
+   "weight": 2
+  },
+  {
+   "item": "calibre:vertical_grip",
+   "weight": 2
+  },
+  {
+   "item": "calibre:angled_grip",
+   "weight": 2
+  },
+  {
+   "item": "calibre:bipod_att",
+   "weight": 2
+  },
+  {
+   "item": "calibre:laser",
+   "weight": 2
+  },
+  {
+   "item": "calibre:extended_mag",
+   "weight": 2
+  }
+ ],
+ "chance": 0.7,
+ "rolls": 2
+}

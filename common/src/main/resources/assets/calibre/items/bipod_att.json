@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/bipod_att",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

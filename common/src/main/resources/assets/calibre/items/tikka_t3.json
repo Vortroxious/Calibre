@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/tikka_t3",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

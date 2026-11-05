@@ -1,0 +1,1920 @@
+{
+ "_doc": "Maps every Calibre sound event to cuts of CC0 recordings (see CREDITS.md). Paths are relative to <src>/<pack>/x/. 'at' = onset times (one variant each, length 'len'); 'start'/'end' = an explicit cut. 'pitch' = semitones (a list makes extra variants). 'gain' in dB. Events not listed keep their synthesized sound. 'layers' = real cuts mixed at offsets into one clip; '_trains' = click trains built from the _clicks pool.",
+ "_shot_len": {
+  "pistol": 1.5,
+  "smg": 1.6,
+  "rifle": 2.2,
+  "big": 3.0,
+  "shotgun": 2.2
+ },
+ "_shot_style_doc": "Gunshot mastering per class (import_sounds.master_shot): transient/sub/shelf/presence in dB, sub sweep in Hz, decays/lengths in s, crest_db = target loudness (lower = louder/more compressed), mech = action clack layer.",
+ "_shot_style": {
+  "pistol": {
+   "transient_db": 6,
+   "sub_db": -9,
+   "sub_f0": 130,
+   "sub_end": 60,
+   "sub_decay": 0.045,
+   "low_shelf_db": 3,
+   "presence_db": 3,
+   "verb_len": 0.9,
+   "verb_db": -14,
+   "crest_db": 11,
+   "mech_db": -15,
+   "mech_delay": 0.028,
+   "mech_pitch": 1
+  },
+  "magnum": {
+   "transient_db": 7,
+   "sub_db": -4,
+   "sub_f0": 110,
+   "sub_end": 48,
+   "sub_decay": 0.07,
+   "low_shelf_db": 5,
+   "presence_db": 3,
+   "verb_len": 1.4,
+   "verb_db": -12,
+   "crest_db": 9.5,
+   "mech_db": null
+  },
+  "smg": {
+   "transient_db": 5,
+   "sub_db": -10,
+   "sub_f0": 130,
+   "sub_end": 62,
+   "sub_decay": 0.04,
+   "low_shelf_db": 3,
+   "presence_db": 3,
+   "verb_len": 0.9,
+   "verb_db": -15,
+   "crest_db": 11,
+   "mech_db": -14,
+   "mech_delay": 0.025,
+   "mech_pitch": 2
+  },
+  "rifle": {
+   "transient_db": 7,
+   "sub_db": -6,
+   "sub_f0": 120,
+   "sub_end": 52,
+   "sub_decay": 0.06,
+   "low_shelf_db": 4,
+   "presence_db": 3,
+   "verb_len": 1.5,
+   "verb_db": -13,
+   "crest_db": 10,
+   "mech_db": -15,
+   "mech_delay": 0.03,
+   "mech_pitch": 0
+  },
+  "battle": {
+   "transient_db": 7,
+   "sub_db": -4,
+   "sub_f0": 110,
+   "sub_end": 46,
+   "sub_decay": 0.08,
+   "low_shelf_db": 5,
+   "presence_db": 2.5,
+   "verb_len": 1.9,
+   "verb_db": -12,
+   "crest_db": 9.0,
+   "mech_db": -16,
+   "mech_delay": 0.034,
+   "mech_pitch": -1
+  },
+  "sniper": {
+   "transient_db": 8,
+   "sub_db": -3,
+   "sub_f0": 100,
+   "sub_end": 42,
+   "sub_decay": 0.11,
+   "low_shelf_db": 7,
+   "presence_db": 2.5,
+   "verb_len": 2.3,
+   "verb_db": -11,
+   "crest_db": 9.0,
+   "mech_db": null
+  },
+  "heavy": {
+   "transient_db": 8,
+   "sub_db": -1,
+   "sub_f0": 85,
+   "sub_end": 36,
+   "sub_decay": 0.16,
+   "low_shelf_db": 8,
+   "presence_db": 2,
+   "verb_len": 2.8,
+   "verb_db": -9,
+   "crest_db": 8.5,
+   "mech_db": -15,
+   "mech_delay": 0.05,
+   "mech_pitch": -4
+  },
+  "shotgun": {
+   "transient_db": 6,
+   "sub_db": -3,
+   "sub_f0": 100,
+   "sub_end": 44,
+   "sub_decay": 0.1,
+   "low_shelf_db": 7,
+   "presence_db": 2,
+   "verb_len": 1.7,
+   "verb_db": -12,
+   "crest_db": 9.0,
+   "mech_db": null
+  },
+  "lmg": {
+   "transient_db": 6,
+   "sub_db": -6,
+   "sub_f0": 115,
+   "sub_end": 50,
+   "sub_decay": 0.06,
+   "low_shelf_db": 4,
+   "presence_db": 3,
+   "verb_len": 1.6,
+   "verb_db": -13,
+   "crest_db": 9.5,
+   "mech_db": -14,
+   "mech_delay": 0.03,
+   "mech_pitch": -2
+  },
+  "launcher": {
+   "transient_db": 5,
+   "sub_db": 2,
+   "sub_f0": 70,
+   "sub_end": 30,
+   "sub_decay": 0.25,
+   "low_shelf_db": 8,
+   "presence_db": 1,
+   "verb_len": 3.0,
+   "verb_db": -6,
+   "crest_db": 8.5,
+   "mech_db": null
+  },
+  "explosion": {
+   "transient_db": 4,
+   "sub_db": 3,
+   "sub_f0": 60,
+   "sub_end": 25,
+   "sub_decay": 0.4,
+   "low_shelf_db": 9,
+   "presence_db": 0,
+   "verb_len": 3.5,
+   "verb_db": -5,
+   "crest_db": 8.0,
+   "mech_db": null
+  },
+  "rimfire": {
+   "transient_db": 5,
+   "sub_db": -16,
+   "sub_f0": 130,
+   "sub_end": 60,
+   "sub_decay": 0.045,
+   "low_shelf_db": 0,
+   "presence_db": 3,
+   "verb_len": 0.6,
+   "verb_db": -16,
+   "crest_db": 12,
+   "mech_db": -14,
+   "mech_delay": 0.028,
+   "mech_pitch": 1,
+   "out_db": -6
+  },
+  "snub": {
+   "transient_db": 7,
+   "sub_db": -4,
+   "sub_f0": 110,
+   "sub_end": 48,
+   "sub_decay": 0.07,
+   "low_shelf_db": 5,
+   "presence_db": 3,
+   "verb_len": 1.0,
+   "verb_db": -12,
+   "crest_db": 9.5,
+   "mech_db": null,
+   "out_db": -1
+  },
+  "lever": {
+   "transient_db": 7,
+   "sub_db": -4,
+   "sub_f0": 110,
+   "sub_end": 46,
+   "sub_decay": 0.08,
+   "low_shelf_db": 5,
+   "presence_db": 2.5,
+   "verb_len": 1.9,
+   "verb_db": -12,
+   "crest_db": 9.0,
+   "mech_db": -16,
+   "mech_delay": 0.034,
+   "mech_pitch": -1
+  }
+ },
+ "_gun_class": {
+  "fire_glock17": "pistol",
+  "fire_m9": "pistol",
+  "fire_m1911": "pistol",
+  "fire_deagle": "magnum",
+  "fire_model29": "magnum",
+  "fire_mp5": "smg",
+  "fire_uzi": "smg",
+  "fire_ump45": "smg",
+  "fire_p90": "smg",
+  "fire_m4a1": "rifle",
+  "fire_hk416": "rifle",
+  "fire_aug": "rifle",
+  "fire_akm": "rifle",
+  "fire_fal": "battle",
+  "fire_scar_h": "battle",
+  "fire_m14ebr": "battle",
+  "fire_svd": "battle",
+  "fire_m24": "sniper",
+  "fire_awm": "sniper",
+  "fire_m82a1": "heavy",
+  "fire_rem870": "shotgun",
+  "fire_benelli_m4": "shotgun",
+  "fire_m249": "lmg",
+  "fire_pkm": "lmg",
+  "rocket_launch": "launcher",
+  "explosion": "explosion",
+  "fire_mosin": "sniper",
+  "fire_m1917": "sniper",
+  "fire_arisaka": "sniper",
+  "fire_sks": "battle",
+  "fire_ppsh41": "smg",
+  "fire_m45": "smg",
+  "fire_win1894": "lever",
+  "fire_marlin336": "lever",
+  "fire_model12": "shotgun",
+  "fire_nova": "shotgun",
+  "fire_cdaly": "shotgun",
+  "fire_mossberg190": "shotgun",
+  "fire_tikka_t3": "sniper",
+  "fire_savage10": "rifle",
+  "fire_ppq": "pistol",
+  "fire_bersa": "pistol",
+  "fire_rugermk3": "rimfire",
+  "fire_sw642": "snub",
+  "fire_singlesix": "rimfire",
+  "fire_ak47": "rifle"
+ },
+ "_mech": {
+  "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+  "start": 1.25,
+  "end": 1.578
+ },
+ "fire_glock17": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol"
+  }
+ ],
+ "fire_m9": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444
+   ],
+   "len": "pistol",
+   "pitch": -0.8
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Bersa/F_47P.wav",
+   "at": [
+    0.334,
+    4.409
+   ],
+   "len": "pistol",
+   "pitch": -1.5
+  }
+ ],
+ "fire_m1911": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1911/A_42P.wav",
+   "at": [
+    0.94,
+    5.001
+   ],
+   "len": "pistol",
+   "pitch": [
+    0,
+    -0.6
+   ]
+  }
+ ],
+ "fire_deagle": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Smith & Wesson 642/V_27P.wav",
+   "at": [
+    0.804,
+    6.217
+   ],
+   "len": "rifle",
+   "pitch": -2.5
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1911/A_42P.wav",
+   "at": [
+    0.94
+   ],
+   "len": "rifle",
+   "pitch": -3.5
+  }
+ ],
+ "fire_model29": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Smith & Wesson 642/V_27P.wav",
+   "at": [
+    0.804,
+    6.217
+   ],
+   "len": "rifle",
+   "pitch": -1.5
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Ruger Single Six/S_14P.wav",
+   "at": [
+    0.668
+   ],
+   "len": "rifle",
+   "pitch": -4
+  }
+ ],
+ "fire_mp5": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Carl Gustav M45/G_31P.wav",
+   "at": [
+    0.308,
+    3.5,
+    6.725
+   ],
+   "len": "smg"
+  }
+ ],
+ "fire_uzi": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Carl Gustav M45/G_31P.wav",
+   "at": [
+    0.308,
+    3.5
+   ],
+   "len": "smg",
+   "pitch": 0.8
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/PPSh/P_30P.wav",
+   "at": [
+    0.967
+   ],
+   "len": "smg",
+   "pitch": -0.5
+  }
+ ],
+ "fire_ump45": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Carl Gustav M45/G_31P.wav",
+   "at": [
+    0.308,
+    3.5,
+    6.725
+   ],
+   "len": "smg",
+   "pitch": -1.6
+  }
+ ],
+ "fire_p90": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/PPSh/P_30P.wav",
+   "at": [
+    0.967,
+    4.386,
+    8.24
+   ],
+   "len": "smg",
+   "pitch": 1.8
+  }
+ ],
+ "fire_m4a1": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    0.5
+   ]
+  }
+ ],
+ "fire_hk416": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    -0.5,
+    -0.9
+   ]
+  }
+ ],
+ "fire_aug": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": 0.3
+  }
+ ],
+ "fire_akm": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    6.02,
+    9.154
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    0.4,
+    -0.3
+   ]
+  }
+ ],
+ "fire_fal": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1917/B_24P.wav",
+   "at": [
+    1.306,
+    6.731
+   ],
+   "len": "rifle",
+   "pitch": 0.6
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Arisaka/E_25P.wav",
+   "at": [
+    0.522
+   ],
+   "len": "rifle",
+   "pitch": 0.6
+  }
+ ],
+ "fire_scar_h": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Arisaka/E_25P.wav",
+   "at": [
+    0.522,
+    4.029
+   ],
+   "len": "rifle",
+   "pitch": 0.4
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Tikka/W_29P.wav",
+   "at": [
+    0.575
+   ],
+   "len": "rifle",
+   "pitch": 1
+  }
+ ],
+ "fire_m14ebr": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1917/B_24P.wav",
+   "at": [
+    1.306,
+    6.731
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    -0.4
+   ]
+  }
+ ],
+ "fire_svd": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154,
+    14.135
+   ],
+   "len": "rifle",
+   "pitch": 0.4
+  }
+ ],
+ "fire_m24": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Tikka/W_29P.wav",
+   "at": [
+    0.575,
+    5.663
+   ],
+   "len": "big"
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Savage 10 .300 Blackout/T_27P.wav",
+   "at": [
+    0.949
+   ],
+   "len": "big",
+   "pitch": -1
+  }
+ ],
+ "fire_awm": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Tikka/W_29P.wav",
+   "at": [
+    0.575,
+    5.663
+   ],
+   "len": "big",
+   "pitch": -1.8
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Savage 10 .300 Blackout/T_27P.wav",
+   "at": [
+    4.966
+   ],
+   "len": "big",
+   "pitch": -2.5
+  }
+ ],
+ "fire_m82a1": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154
+   ],
+   "len": "big",
+   "pitch": -5,
+   "gain": 2
+  }
+ ],
+ "fire_rem870": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Model 12/K_22P.wav",
+   "at": [
+    0.842,
+    7.445
+   ],
+   "len": "shotgun"
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/CD/H_21P.wav",
+   "at": [
+    0.461
+   ],
+   "len": "shotgun"
+  }
+ ],
+ "fire_benelli_m4": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Nova/O_21P.wav",
+   "at": [
+    0.43,
+    3.463
+   ],
+   "len": "shotgun"
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mossberg/N_30P.wav",
+   "at": [
+    1.695
+   ],
+   "len": "shotgun"
+  }
+ ],
+ "fire_m249": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": 0.9
+  },
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/SKS/U_14P.wav",
+   "at": [
+    3.576
+   ],
+   "len": "rifle",
+   "pitch": 1.8
+  }
+ ],
+ "fire_pkm": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": 1.3
+  }
+ ],
+ "rocket_launch": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Nova/O_21P.wav",
+   "at": [
+    0.43,
+    3.463
+   ],
+   "len": 3.0,
+   "pitch": -8,
+   "gain": 3
+  }
+ ],
+ "explosion": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/CD/H_21P.wav",
+   "at": [
+    0.461,
+    3.074
+   ],
+   "len": 4.0,
+   "pitch": -14,
+   "gain": 6
+  }
+ ],
+ "suppressed_pistol": [
+  {
+   "src": "pistol_silencer/x/silencer.wav",
+   "start": 0.0,
+   "end": 1.2,
+   "pitch": [
+    0,
+    0.8,
+    -0.8
+   ]
+  }
+ ],
+ "suppressed_rifle": [
+  {
+   "src": "pistol_silencer/x/silencer.wav",
+   "start": 0.0,
+   "end": 1.4,
+   "pitch": [
+    -3,
+    -2.4,
+    -3.8
+   ],
+   "gain": 1
+  }
+ ],
+ "mag_out_pistol": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 0.06,
+   "end": 0.42
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 0.03,
+   "end": 0.45
+  }
+ ],
+ "mag_in_pistol": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 0.56,
+   "end": 0.98
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 0.64,
+   "end": 1.12,
+   "gain": 4
+  }
+ ],
+ "slide_release": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.15,
+   "end": 1.59
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 1.25,
+   "end": 1.578
+  }
+ ],
+ "slide_forward_light": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.15,
+   "end": 1.59,
+   "gain": -6,
+   "pitch": 1
+  }
+ ],
+ "press_check": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.0,
+   "end": 1.165,
+   "pitch": [
+    0,
+    1
+   ]
+  }
+ ],
+ "mag_out_rifle": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 0.03,
+   "end": 0.45,
+   "pitch": -2
+  }
+ ],
+ "mag_in_rifle": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.0,
+   "end": 1.555
+  },
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload1.wav",
+   "start": 0.0,
+   "end": 0.255,
+   "pitch": -3
+  }
+ ],
+ "mag_out_smg": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48,
+   "pitch": 2
+  },
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 0.06,
+   "end": 0.42,
+   "pitch": -1
+  }
+ ],
+ "mag_in_smg": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload1.wav",
+   "start": 0.0,
+   "end": 0.255
+  },
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload2.wav",
+   "start": 0.0,
+   "end": 0.209
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.0,
+   "end": 1.555,
+   "pitch": 2
+  }
+ ],
+ "mag_out_p90": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48,
+   "pitch": -1.5
+  }
+ ],
+ "mag_in_p90": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload2.wav",
+   "start": 0.0,
+   "end": 0.209,
+   "pitch": -2.5
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.0,
+   "end": 1.555,
+   "pitch": -1.5
+  }
+ ],
+ "mag_release": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 0.06,
+   "end": 0.22,
+   "pitch": [
+    0,
+    1.5
+   ]
+  }
+ ],
+ "charging_handle_back": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.0,
+   "end": 1.165,
+   "pitch": -3
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.205,
+   "pitch": 3
+  }
+ ],
+ "charging_handle_forward": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.15,
+   "end": 1.59,
+   "pitch": -3
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 1.25,
+   "end": 1.578,
+   "pitch": -2
+  }
+ ],
+ "charging_handle_lock": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload2.wav",
+   "start": 0.0,
+   "end": 0.209,
+   "pitch": -2
+  }
+ ],
+ "bolt_release": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 1.25,
+   "end": 1.578
+  },
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.15,
+   "end": 1.59,
+   "pitch": -1.5
+  }
+ ],
+ "hk_slap": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.18,
+   "end": 1.555,
+   "pitch": -1,
+   "gain": 2
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
+   "start": 1.25,
+   "end": 1.578,
+   "pitch": -2.5,
+   "gain": 2
+  }
+ ],
+ "bolt_open": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Shell in Chamber.mp3",
+   "start": 0.47,
+   "end": 0.66,
+   "pitch": -2
+  }
+ ],
+ "bolt_back": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.205,
+   "pitch": 2
+  },
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Shell in Chamber.mp3",
+   "start": 0.66,
+   "end": 0.98,
+   "pitch": 1
+  }
+ ],
+ "bolt_forward": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.2,
+   "end": 0.473,
+   "pitch": 2
+  }
+ ],
+ "bolt_close": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Shell in Chamber.mp3",
+   "start": 1.0,
+   "end": 1.5
+  },
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload1.wav",
+   "start": 0.0,
+   "end": 0.255,
+   "pitch": -3
+  }
+ ],
+ "round_insert": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/singlebullet1.wav",
+   "start": 0.0,
+   "end": 0.301,
+   "pitch": [
+    0,
+    1
+   ]
+  }
+ ],
+ "shell_insert": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Subsequent Shells.mp3",
+   "start": 0.62,
+   "end": 0.86
+  },
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Subsequent Shells.mp3",
+   "start": 0.85,
+   "end": 1.11
+  },
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Subsequent Shells.mp3",
+   "start": 1.1,
+   "end": 1.45
+  }
+ ],
+ "pump_back": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Rack.mp3",
+   "start": 0.6,
+   "end": 0.815,
+   "gain": -4
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.205
+  }
+ ],
+ "pump_back_light": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.205,
+   "gain": -7
+  }
+ ],
+ "pump_forward": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Rack.mp3",
+   "start": 0.805,
+   "end": 1.128,
+   "gain": -4
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.2,
+   "end": 0.473
+  }
+ ],
+ "pump_rattle": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.473,
+   "pitch": 3,
+   "gain": -6
+  }
+ ],
+ "speedloader_insert": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload1.wav",
+   "start": 0.0,
+   "end": 0.255,
+   "pitch": 2
+  }
+ ],
+ "box_out": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48,
+   "pitch": -4
+  }
+ ],
+ "box_in": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.0,
+   "end": 1.555,
+   "pitch": -4
+  }
+ ],
+ "cover_close": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.18,
+   "end": 1.555,
+   "pitch": -5,
+   "gain": 2
+  }
+ ],
+ "cover_open": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload2.wav",
+   "start": 0.0,
+   "end": 0.209,
+   "pitch": -5
+  }
+ ],
+ "rocket_seat": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.18,
+   "end": 1.555,
+   "pitch": -7,
+   "gain": 2
+  }
+ ],
+ "stock_lock": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload2.wav",
+   "start": 0.0,
+   "end": 0.209,
+   "pitch": -1
+  }
+ ],
+ "cylinder_close": [
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Shell in Chamber.mp3",
+   "start": 1.0,
+   "end": 1.5,
+   "pitch": 3
+  }
+ ],
+ "_clicks": {
+  "src": [
+   "equipment_clicks_2_lfa/x/equipmentclicks.wav",
+   "equipment_clicks_3_lfa/x/equipment_clicks3.wav"
+  ],
+  "events": {
+   "selector": [
+    3,
+    0
+   ],
+   "selector_ak": [
+    3,
+    -4
+   ],
+   "safety": [
+    3,
+    1
+   ],
+   "click_small": [
+    4,
+    3
+   ],
+   "decocker": [
+    2,
+    -1
+   ],
+   "hammer_cock": [
+    3,
+    -1.5
+   ],
+   "dry_fire": [
+    3,
+    2
+   ],
+   "tap": [
+    3,
+    -6
+   ],
+   "cylinder_latch": [
+    2,
+    1
+   ],
+   "cylinder_open": [
+    2,
+    -1
+   ],
+   "forward_assist": [
+    2,
+    -5
+   ],
+   "dust_cover": [
+    2,
+    2.5
+   ],
+   "stock_unlock": [
+    2,
+    -2
+   ],
+   "stock_adjust": [
+    2,
+    -3
+   ],
+   "speedloader_release": [
+    2,
+    0.5
+   ],
+   "belt_seat": [
+    2,
+    -2.5
+   ],
+   "clip_eject": [
+    2,
+    4
+   ],
+   "hammer_thumb": [
+    3,
+    -2.5
+   ]
+  }
+ },
+ "fire_mosin": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154,
+    14.135
+   ],
+   "len": "big",
+   "pitch": 0
+  }
+ ],
+ "fire_m1917": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1917/B_24P.wav",
+   "at": [
+    1.306,
+    6.731
+   ],
+   "len": "big",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_arisaka": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Arisaka/E_25P.wav",
+   "at": [
+    0.522,
+    4.029
+   ],
+   "len": "big",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_sks": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/SKS/U_14P.wav",
+   "at": [
+    3.576,
+    6.754,
+    10.208,
+    13.291,
+    16.776
+   ],
+   "len": "rifle",
+   "pitch": 0
+  }
+ ],
+ "fire_ppsh41": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/PPSh/P_30P.wav",
+   "at": [
+    0.967,
+    4.386,
+    8.24,
+    11.418,
+    15.09
+   ],
+   "len": "smg",
+   "pitch": 0
+  }
+ ],
+ "fire_m45": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Carl Gustav M45/G_31P.wav",
+   "at": [
+    0.308,
+    3.5,
+    6.725
+   ],
+   "len": "smg",
+   "pitch": 0
+  }
+ ],
+ "fire_win1894": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Model 1894/L_23P.wav",
+   "at": [
+    0.572,
+    4.122
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_marlin336": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Marlin 336/I_22P.wav",
+   "at": [
+    0.737,
+    7.001
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_model12": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Model 12/K_22P.wav",
+   "at": [
+    0.842,
+    7.445
+   ],
+   "len": "shotgun",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_nova": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Nova/O_21P.wav",
+   "at": [
+    0.43,
+    3.463
+   ],
+   "len": "shotgun",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_cdaly": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/CD/H_21P.wav",
+   "at": [
+    0.461,
+    3.074
+   ],
+   "len": "shotgun",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_mossberg190": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mossberg/N_30P.wav",
+   "at": [
+    1.695,
+    4.96
+   ],
+   "len": "shotgun",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_tikka_t3": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Tikka/W_29P.wav",
+   "at": [
+    0.575,
+    5.663
+   ],
+   "len": "big",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_savage10": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Savage 10 .300 Blackout/T_27P.wav",
+   "at": [
+    0.949,
+    4.966
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_ppq": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol",
+   "pitch": 0
+  }
+ ],
+ "fire_bersa": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Bersa/F_47P.wav",
+   "at": [
+    0.334,
+    4.409
+   ],
+   "len": "pistol",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_rugermk3": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Ruger Mark III/R_35P.wav",
+   "at": [
+    0.479,
+    4.481
+   ],
+   "len": "pistol",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_sw642": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Smith & Wesson 642/V_27P.wav",
+   "at": [
+    0.804,
+    6.217
+   ],
+   "len": "pistol",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_singlesix": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Ruger Single Six/S_14P.wav",
+   "at": [
+    0.668,
+    5.454
+   ],
+   "len": "pistol",
+   "pitch": [
+    0,
+    -0.5
+   ]
+  }
+ ],
+ "fire_ak47": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    0,
+    -0.6
+   ]
+  }
+ ],
+ "clip_insert": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/clipload1.wav",
+   "start": 0.0,
+   "end": 0.255,
+   "pitch": [
+    1,
+    -1
+   ]
+  }
+ ],
+ "clip_strip": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48,
+   "pitch": [
+    -3,
+    -4
+   ]
+  }
+ ],
+ "drum_out": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 0.02,
+   "end": 0.48,
+   "pitch": -5
+  }
+ ],
+ "drum_in": [
+  {
+   "src": "gun_reload_sounds_springyspringo/x/assaultriflereload1_0.wav",
+   "start": 1.0,
+   "end": 1.555,
+   "pitch": -5,
+   "gain": 2
+  }
+ ],
+ "lever_open": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.0,
+   "end": 1.165,
+   "pitch": -5
+  },
+  {
+   "src": "gun_reload_sounds_springyspringo/x/shotguncock_0.wav",
+   "start": 0.03,
+   "end": 0.205,
+   "pitch": 1
+  }
+ ],
+ "lever_close": [
+  {
+   "src": "handgun_reload_zer0sol/x/reload.wav",
+   "start": 1.15,
+   "end": 1.59,
+   "pitch": -5
+  },
+  {
+   "src": "shotgun_reload_zer0sol/x/ShotgunSounds/Shell in Chamber.mp3",
+   "start": 1.0,
+   "end": 1.5,
+   "pitch": 1
+  }
+ ],
+ "loading_gate": [
+  {
+   "src": "gun_reload_sfx_bmaczero/x/singlebullet1.wav",
+   "start": 0.0,
+   "end": 0.301,
+   "pitch": [
+    -2,
+    -3
+   ]
+  }
+ ],
+ "cloth": [
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 0.72,
+   "end": 1.0,
+   "gain": -14
+  },
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 1.09,
+   "end": 1.48,
+   "gain": -14
+  },
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 10.4,
+   "end": 10.9,
+   "gain": -14
+  },
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 13.39,
+   "end": 13.85,
+   "gain": -14
+  },
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 16.61,
+   "end": 17.05,
+   "gain": -14
+  },
+  {
+   "src": "fabric_rustling/x/rustling.ogg",
+   "start": 17.42,
+   "end": 17.8,
+   "gain": -14
+  },
+  {
+   "src": "more_sounds_202/x/Cloth/Cloth_04.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  },
+  {
+   "src": "more_sounds_202/x/Cloth/Cloth_05.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  },
+  {
+   "src": "kenney_rpg/x/OGG/cloth1.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  },
+  {
+   "src": "kenney_rpg/x/OGG/cloth2.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  },
+  {
+   "src": "kenney_rpg/x/OGG/cloth4.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  },
+  {
+   "src": "rpg_pack_artisticdude/x/RPG Sound Pack/inventory/cloth.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -14
+  }
+ ],
+ "grip": [
+  {
+   "src": "kenney_rpg/x/OGG/handleSmallLeather.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -6
+  },
+  {
+   "src": "kenney_rpg/x/OGG/handleSmallLeather2.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -6
+  },
+  {
+   "src": "kenney_rpg/x/OGG/beltHandle1.ogg",
+   "start": 0.0,
+   "end": null,
+   "gain": -7
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45ACP_Loading.wav",
+   "start": 0.3,
+   "end": 0.56,
+   "gain": -6
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 7.85,
+   "end": 8.08,
+   "gain": -6
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/12ga_load_chamber.wav",
+   "start": 0.6,
+   "end": 0.75,
+   "gain": -6
+  }
+ ],
+ "handle_rifle": [
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_accessories.wav",
+   "start": 0.09,
+   "end": 0.4,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_accessories.wav",
+   "start": 1.47,
+   "end": 1.8,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 0.26,
+   "end": 0.66,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 0.86,
+   "end": 1.24,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/12ga_load_chamber.wav",
+   "start": 0.96,
+   "end": 1.1,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 13.83,
+   "end": 14.02,
+   "gain": -5
+  }
+ ],
+ "handle_heavy": [
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_accessories.wav",
+   "start": 0.09,
+   "end": 0.4,
+   "gain": -3,
+   "pitch": -4
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_accessories.wav",
+   "start": 1.47,
+   "end": 1.8,
+   "gain": -3,
+   "pitch": -4
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 0.26,
+   "end": 0.66,
+   "gain": -3,
+   "pitch": -4
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+   "start": 0.86,
+   "end": 1.24,
+   "gain": -3,
+   "pitch": -4
+  }
+ ],
+ "handle_pistol": [
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_unload_rounds.wav",
+   "start": 0.54,
+   "end": 0.76,
+   "gain": -5,
+   "pitch": 1
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_unload_rounds.wav",
+   "start": 1.51,
+   "end": 1.74,
+   "gain": -5,
+   "pitch": 1
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_unload_rounds.wav",
+   "start": 2.01,
+   "end": 2.24,
+   "gain": -5,
+   "pitch": 1
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_add_rounds.wav",
+   "start": 2.62,
+   "end": 2.82,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_add_rounds.wav",
+   "start": 8.96,
+   "end": 9.18,
+   "gain": -5
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/45_add_rounds.wav",
+   "start": 9.36,
+   "end": 9.55,
+   "gain": -5
+  }
+ ],
+ "mag_check": [
+  {
+   "src": "handling_guns_gary/x/Gary Guns/22_mag.wav",
+   "start": 0.32,
+   "end": 0.47,
+   "gain": -5,
+   "pitch": [
+    0,
+    -2
+   ]
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/22_mag.wav",
+   "start": 0.59,
+   "end": 0.76,
+   "gain": -5,
+   "pitch": [
+    0,
+    -2
+   ]
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/22_mag.wav",
+   "start": 0.94,
+   "end": 1.18,
+   "gain": -5,
+   "pitch": [
+    0,
+    -2
+   ]
+  },
+  {
+   "src": "handling_guns_gary/x/Gary Guns/22_mag.wav",
+   "start": 1.21,
+   "end": 1.35,
+   "gain": -5,
+   "pitch": [
+    0,
+    -2
+   ]
+  }
+ ],
+ "spin_whoosh": [
+  {
+   "src": "rpg_pack_artisticdude/x/RPG Sound Pack/battle/swing.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -8,
+   "pitch": 3
+  },
+  {
+   "src": "rpg_pack_artisticdude/x/RPG Sound Pack/battle/swing2.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -8,
+   "pitch": 3
+  },
+  {
+   "src": "rpg_pack_artisticdude/x/RPG Sound Pack/battle/swing3.wav",
+   "start": 0.0,
+   "end": null,
+   "gain": -8,
+   "pitch": 3
+  }
+ ],
+ "draw_pistol": [
+  {
+   "layers": [
+    {
+     "src": "kenney_rpg/x/OGG/cloth2.ogg",
+     "at": 0.0,
+     "gain": -3
+    },
+    {
+     "src": "handling_guns_gary/x/Gary Guns/45_unload_rounds.wav",
+     "start": 0.06,
+     "end": 0.16,
+     "at": 0.16,
+     "gain": -2
+    }
+   ]
+  },
+  {
+   "layers": [
+    {
+     "src": "kenney_rpg/x/OGG/cloth4.ogg",
+     "at": 0.0,
+     "gain": -3
+    },
+    {
+     "src": "handling_guns_gary/x/Gary Guns/45_unload_rounds.wav",
+     "start": 1.13,
+     "end": 1.22,
+     "at": 0.14,
+     "gain": -2
+    }
+   ]
+  }
+ ],
+ "draw_rifle": [
+  {
+   "layers": [
+    {
+     "src": "fabric_rustling/x/rustling.ogg",
+     "start": 10.4,
+     "end": 10.85,
+     "at": 0.0,
+     "gain": -3
+    },
+    {
+     "src": "handling_guns_gary/x/Gary Guns/30-06_accessories.wav",
+     "start": 0.09,
+     "end": 0.4,
+     "at": 0.25
+    }
+   ]
+  },
+  {
+   "layers": [
+    {
+     "src": "fabric_rustling/x/rustling.ogg",
+     "start": 13.39,
+     "end": 13.8,
+     "at": 0.0,
+     "gain": -3
+    },
+    {
+     "src": "handling_guns_gary/x/Gary Guns/30-06_load.wav",
+     "start": 0.26,
+     "end": 0.66,
+     "at": 0.22
+    }
+   ]
+  }
+ ],
+ "pouch": [
+  {
+   "layers": [
+    {
+     "src": "kenney_rpg/x/OGG/clothBelt.ogg",
+     "at": 0.0,
+     "gain": -2
+    },
+    {
+     "src": "kenney_rpg/x/OGG/beltHandle2.ogg",
+     "at": 0.1,
+     "gain": -4
+    }
+   ]
+  },
+  {
+   "layers": [
+    {
+     "src": "kenney_rpg/x/OGG/clothBelt2.ogg",
+     "at": 0.0,
+     "gain": -2
+    },
+    {
+     "src": "kenney_rpg/x/OGG/beltHandle1.ogg",
+     "at": 0.08,
+     "gain": -4
+    }
+   ]
+  }
+ ],
+ "_trains": {
+  "cylinder_spin": {
+   "n": 16,
+   "dt0": 0.028,
+   "grow": 0.09,
+   "decay_db": 1.3,
+   "semis": 5,
+   "gain": -3,
+   "variants": 3
+  }
+ }
+}

@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/mossberg190",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

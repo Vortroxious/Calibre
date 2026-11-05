@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/pso1",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

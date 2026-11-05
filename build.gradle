@@ -1,0 +1,19 @@
+// Calibre: one shared codebase (common/) built into a NeoForge jar (neoforge/) and a Fabric jar (fabric/).
+// ./gradlew buildAll  ->  calibre-neoforge-<version>.jar and calibre-fabric-<version>.jar in the project root
+
+tasks.register('buildAll', Copy) {
+    group = 'build'
+    description = 'Builds the NeoForge and Fabric jars and copies them to the project root.'
+    dependsOn ':neoforge:build', ':fabric:build'
+    from(project(':neoforge').layout.buildDirectory.file("libs/${mod_id}-neoforge-${mod_version}.jar"))
+    from(project(':fabric').layout.buildDirectory.file("libs/${mod_id}-fabric-${mod_version}.jar"))
+    into(layout.projectDirectory)
+}
+
+// ./gradlew publishModrinth  ->  builds both jars and uploads them with tools/modrinth_publish.py (needs MODRINTH_TOKEN)
+tasks.register('publishModrinth', Exec) {
+    group = 'publishing'
+    description = 'Builds both jars and publishes them to Modrinth (token from the MODRINTH_TOKEN environment variable).'
+    dependsOn 'buildAll'
+    commandLine 'python3', 'tools/modrinth_publish.py', 'publish'
+}

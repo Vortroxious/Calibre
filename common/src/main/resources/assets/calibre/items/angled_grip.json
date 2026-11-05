@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/angled_grip",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

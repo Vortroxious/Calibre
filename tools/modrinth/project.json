@@ -1,0 +1,88 @@
+{
+  "slug": "calibre",
+  "title": "Calibre",
+  "description": "45 real firearms with fully animated first-person reloads, CS2-style inspects, real recorded gunshots, bullet ballistics, attachments, a gunsmithing workbench and armed mercenaries. NeoForge and Fabric.",
+  "categories": [
+    "equipment",
+    "adventure"
+  ],
+  "additional_categories": [
+    "game-mechanics",
+    "mobs"
+  ],
+  "client_side": "required",
+  "server_side": "required",
+  "license_id": "LicenseRef-All-Rights-Reserved",
+  "license_url": null,
+  "project_type": "mod",
+  "game_versions": [
+    "1.21.11"
+  ],
+  "versions": [
+    {
+      "loader": "fabric",
+      "jar": "calibre-fabric-{version}.jar",
+      "name": "Calibre {version} (Fabric)",
+      "version_number": "{version}+fabric",
+      "dependencies": [
+        {
+          "slug": "fabric-api",
+          "dependency_type": "required"
+        },
+        {
+          "slug": "modmenu",
+          "dependency_type": "optional"
+        },
+        {
+          "slug": "geckolib",
+          "dependency_type": "embedded"
+        }
+      ]
+    },
+    {
+      "loader": "neoforge",
+      "jar": "calibre-neoforge-{version}.jar",
+      "name": "Calibre {version} (NeoForge)",
+      "version_number": "{version}+neoforge",
+      "dependencies": [
+        {
+          "slug": "geckolib",
+          "dependency_type": "embedded"
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "file": "gallery/01_akm.png",
+      "title": "AKM",
+      "description": "45 real firearms, each with its own model, stats and sounds",
+      "featured": true
+    },
+    {
+      "file": "gallery/02_inspect.png",
+      "title": "CS2-style inspects",
+      "description": "CS2-style inspects: here the Model 29's cylinder swings out and spins"
+    },
+    {
+      "file": "gallery/03_scope.png",
+      "title": "Optics",
+      "description": "Red dots, holo, ACOG and magnified scopes with full-screen reticles"
+    },
+    {
+      "file": "gallery/04_reload.png",
+      "title": "Reloads",
+      "description": "Stripper clips, speedloaders, shell-by-shell and magazine reloads"
+    },
+    {
+      "file": "gallery/05_lineup.png",
+      "title": "Handguns",
+      "description": "Pistols and revolvers with slide press-checks, cylinder work and a clean finger spin"
+    },
+    {
+      "file": "gallery/06_config.png",
+      "title": "Settings",
+      "description": "Server and client options, including camera motion and recoil"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "slot": "under",
+ "hand": [
+  0,
+  -55,
+  0
+ ],
+ "texel_density": 1.0,
+ "id": "vertical_grip"
+}

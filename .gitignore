@@ -1,0 +1,32 @@
+# Gradle / IDE
+.gradle/
+build/
+**/build/
+**/.gradle/
+out/
+.idea/
+*.iml
+.vscode/
+
+# local test runs (worlds, logs, screenshots, configs)
+run/
+**/run/
+
+# release artefacts: published on Modrinth, rebuilt with ./gradlew buildAll
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+publish/
+
+# Python
+__pycache__/
+*.pyc
+
+# review images and audio from development
+/inspect_*.png
+/flourish_spins.png
+/freestyle_combos.png
+/camera_motion_akm.png
+/sound_*.mp3
+/sound_reel_new_guns.txt
+/screenshots_fabric/
+/screenshots_new_guns/
