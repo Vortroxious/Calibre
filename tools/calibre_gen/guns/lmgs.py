@@ -10,11 +10,14 @@ LMG_FP = {"hip": {"pos": [0.13, -0.15, -0.2], "rot": [0, 3.5, 0]}, "ads": {"dist
 
 def _belt(bone, x0, y0, z, n=8, dx=-7.0, dy=-9.0, case="brass", tip="copper", d=8.0, length=56.0):
     """A dangling belt: n rounds stepping from the feed tray down to the box."""
+    # one child bone per round (feed tray first) so the renderer can drop rounds from the tail as the box empties
     for i in range(n):
         x = x0 + dx * i
         y = y0 + dy * i
-        bone.round_((x, y, z), length, d, case=case, tip=tip)
-        bone.box(x - 3, x + 3, y - d / 2 - 1, y + d / 2 + 1, z + length * 0.15, z + length * 0.3, "steel_dark")
+        r = bone.bone(f"belt_r{i}", pivot=(x, y, z))
+        r.round_((x, y, z), length, d, case=case, tip=tip)
+        r.box(x - 3, x + 3, y - d / 2 - 1, y + d / 2 + 1, z + length * 0.15, z + length * 0.3, "steel_dark")
+    bone.model.meta["belt_rounds"] = [f"belt_r{i}" for i in range(n)]
 
 
 def _belt_feed(a, step, sway=4.0):

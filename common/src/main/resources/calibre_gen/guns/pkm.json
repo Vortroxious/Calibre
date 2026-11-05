@@ -1,4 +1,12 @@
 {
+ "belt_rounds": [
+  "belt_r0",
+  "belt_r1",
+  "belt_r2",
+  "belt_r3",
+  "belt_r4",
+  "belt_r5"
+ ],
  "muzzle": [
   0,
   0,
@@ -43,6 +51,12 @@
   "charging_handle",
   "box",
   "belt",
+  "belt_r0",
+  "belt_r1",
+  "belt_r2",
+  "belt_r3",
+  "belt_r4",
+  "belt_r5",
   "arm_right",
   "arm_left",
   "muzzle",

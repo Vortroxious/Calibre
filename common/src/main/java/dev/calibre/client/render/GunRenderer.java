@@ -23,6 +23,7 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
     public static final float SCALE = 0.16f;
     private final String[] spareBones;
     private final String[] emptyHidden;
+    private final String[] beltRounds;
 
     public GunRenderer(GunItem item) {
         super(new DefaultedItemGeoModel<GunItem>(Calibre.id(item.def().id())) {
@@ -34,6 +35,7 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         });
         spareBones = item.meta().spareBones.toArray(String[]::new);
         emptyHidden = item.meta().emptyHidden.toArray(String[]::new);
+        beltRounds = item.meta().beltRounds.toArray(String[]::new);
         withScale(SCALE);
         withRenderLayer(new ArmsLayer(this));
         withRenderLayer(new AttachmentLayer<>(this));
@@ -46,6 +48,7 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         ItemStack stack = data.itemStack();
         boolean fp = FirstPersonRenderer.RENDERING && data.renderPerspective().firstPerson();
         state.addGeckolibData(CalibreTickets.EMPTY, GunItem.state(stack).total() == 0 && !ClientGun.isBusy(stack));
+        state.addGeckolibData(CalibreTickets.ROUNDS, ClientGun.isBusy(stack) ? Integer.MAX_VALUE : GunItem.state(stack).total());
         state.addGeckolibData(CalibreTickets.FIRST_PERSON, fp);
         state.addGeckolibData(CalibreTickets.ATTACHMENTS, GunItem.attachments(stack));
         float flash = 0;
@@ -79,10 +82,12 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         // fire...); only a reload brings it back (EMPTY is false while reloading)
         if (Boolean.TRUE.equals(info.getGeckolibData(CalibreTickets.EMPTY)))
             for (String b : emptyHidden) snapshots.ifPresent(b, sn -> sn.setScale(0, 0, 0));
+        hideSpentBelt(info, snapshots);
         if (!fp && !third) return; // icons, item frames, dropped items: static rest pose
         super.applyAnimationControllers(info, snapshots);
         if (Boolean.TRUE.equals(info.getGeckolibData(CalibreTickets.EMPTY)))
             for (String b : emptyHidden) snapshots.ifPresent(b, sn -> sn.setScale(0, 0, 0));
+        hideSpentBelt(info, snapshots);
         if (third) {
             // in third person the whole-gun motion is carried by the player's arms; keep only the mechanisms
             snapshots.ifPresent("gun", s -> {
@@ -90,5 +95,13 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
                 s.setRotation(0, 0, 0);
             });
         }
+    }
+
+    /** The belt gets shorter as the box runs dry: rounds past the ones left disappear from the tail end. */
+    private void hideSpentBelt(RenderPassInfo<GeoRenderState> info, BoneSnapshots snapshots) {
+        if (beltRounds.length == 0) return;
+        Integer left = info.getGeckolibData(CalibreTickets.ROUNDS);
+        if (left == null) return;
+        for (int i = Math.max(0, left); i < beltRounds.length; i++) snapshots.ifPresent(beltRounds[i], sn -> sn.setScale(0, 0, 0));
     }
 }
