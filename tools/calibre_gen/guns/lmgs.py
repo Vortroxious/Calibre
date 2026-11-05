@@ -1,4 +1,5 @@
 """FN M249 SAW and Kalashnikov PKM - belt fed from ammo boxes."""
+import numpy as np
 from ..core import Anim
 from ..common import GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, apply_hidden
 from ..templates import belt_reload, _settle
@@ -14,6 +15,19 @@ def _belt(bone, x0, y0, z, n=8, dx=-7.0, dy=-9.0, case="brass", tip="copper", d=
         y = y0 + dy * i
         bone.round_((x, y, z), length, d, case=case, tip=tip)
         bone.box(x - 3, x + 3, y - d / 2 - 1, y + d / 2 + 1, z + length * 0.15, z + length * 0.3, "steel_dark")
+
+
+def _belt_feed(a, step, sway=4.0):
+    """Every shot pulls the belt one link into the gun. The links are identical, so the belt steps up one link and
+    snaps back when the animation restarts for the next shot: it reads as a belt running through the feed tray."""
+    step = np.asarray(step, dtype=float)
+    a.key("belt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
+    a.key("belt", 0.045, pos=step, e="outquad")
+    a.key("belt", 0.07, rot=(0, 0, sway), e="outquad")
+    a.key("belt", a.length - 0.002, pos=step, rot=(0, 0, 0), e="inoutsine")
+    a.key("belt", a.length, pos=(0, 0, 0), rot=(0, 0, 0), e="linear")
+    a.shake("belt", "rot", 0.02, min(0.16, a.length - 0.01), (2.5, 0, 3.0), freq=18, seed=3)
+    return a
 
 
 def m249():
@@ -86,8 +100,9 @@ def m249():
         return a
 
     anims = [idle(m), draw(m, 0.95, sound="draw_rifle"),
-             fire_basic(m, "fire", kick=(2.8, 0.6, 1.2), push=12, recover=0.12, length=0.2),
-             fire_basic(m, "fire_aim", kick=(2.8, 0.6, 1.2), push=12, recover=0.1, length=0.18, aim=True),
+             _belt_feed(fire_basic(m, "fire", kick=(2.8, 0.6, 1.2), push=12, recover=0.12, length=0.2), (5, 7, 0)),
+             _belt_feed(fire_basic(m, "fire_aim", kick=(2.8, 0.6, 1.2), push=12, recover=0.1, length=0.18, aim=True),
+                        (5, 7, 0), sway=2.5),
              belt_reload(m, "reload", False, cover_rot=(75, 0, 0)),
              belt_reload(m, "reload_empty", True, cover_rot=(75, 0, 0), ch_travel=(0, 0, 110)),
              inspect(), dry_fire(m)]
@@ -168,8 +183,10 @@ def pkm():
         return a
 
     anims = [idle(m), draw(m, 0.95, sound="draw_rifle"),
-             fire_basic(m, "fire", kick=(3.4, 0.7, 1.4), push=13, recover=0.14, length=0.22),
-             fire_basic(m, "fire_aim", kick=(3.4, 0.7, 1.4), push=13, recover=0.12, length=0.2, aim=True),
+             _belt_feed(fire_basic(m, "fire", kick=(3.4, 0.7, 1.4), push=13, recover=0.14, length=0.22), (-4, 7, 0),
+                        sway=-4.0),
+             _belt_feed(fire_basic(m, "fire_aim", kick=(3.4, 0.7, 1.4), push=13, recover=0.12, length=0.2, aim=True),
+                        (-4, 7, 0), sway=-2.5),
              belt_reload(m, "reload", False, cover_rot=(-70, 0, 0), box_drop=(30, -260, 20)),
              belt_reload(m, "reload_empty", True, cover_rot=(-70, 0, 0), box_drop=(30, -260, 20),
                          ch_travel=(0, 0, 120)),
