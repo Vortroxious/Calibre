@@ -128,6 +128,40 @@ public final class GunsmithingRecipes {
         gun("sw642", in(Items.IRON_INGOT, 5), in(Items.BLACK_DYE, 1), in(Items.COPPER_INGOT, 2), pistol);
         gun("singlesix", in(Items.IRON_INGOT, 6), in(Items.SPRUCE_PLANKS, 2), in(Items.GOLD_NUGGET, 2), pistol);
 
+        // expansion 2
+        gun("vector", in(Items.IRON_INGOT, 10), in(Items.BLACK_DYE, 5), in(Items.COPPER_INGOT, 4), trig);
+        gun("mp7", in(Items.IRON_INGOT, 10), in(Items.BLACK_DYE, 5), in(Items.COPPER_INGOT, 4), trig);
+        gun("g36c", in(Items.IRON_INGOT, 10), in(Items.BLACK_DYE, 5), in(Items.COPPER_INGOT, 4), trig);
+        gun("famas", in(Items.IRON_INGOT, 10), in(Items.BLACK_DYE, 5), in(Items.COPPER_INGOT, 4), trig);
+        gun("x95", in(Items.IRON_INGOT, 10), in(Items.BLACK_DYE, 5), in(Items.COPPER_INGOT, 4), trig);
+        gun("fiveseven", in(Items.IRON_INGOT, 5), in(Items.BLACK_DYE, 2), in(Items.COPPER_INGOT, 2), pistol);
+        gun("usp", in(Items.IRON_INGOT, 5), in(Items.BLACK_DYE, 2), in(Items.COPPER_INGOT, 2), pistol);
+        gun("cz75", in(Items.IRON_INGOT, 5), in(Items.BLACK_DYE, 2), in(Items.COPPER_INGOT, 2), pistol);
+        gun("spas12", in(Items.IRON_INGOT, 14), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 4), trig);
+        gun("aa12", in(Items.IRON_INGOT, 14), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 4), trig);
+        gun("kar98k", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("garand", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("enfield", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("thompson", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("mp40", in(Items.IRON_INGOT, 12), in(Items.COPPER_INGOT, 3), trig);
+        gun("stg44", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("mg42", in(Items.IRON_INGOT, 28), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 10), in(Items.REDSTONE, 10));
+        gun("bar", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("intervention", in(Items.IRON_INGOT, 20), in(Items.GRAY_DYE, 4), in(Items.GLASS, 3), sniper, rifle);
+        gun("l96", in(Items.IRON_INGOT, 20), in(Items.GRAY_DYE, 4), in(Items.GLASS, 3), sniper, rifle);
+        gun("rem700", in(Items.IRON_INGOT, 14), in(Items.OAK_PLANKS, 8), in(Items.COPPER_INGOT, 4), rifle);
+        gun("sr25", in(Items.IRON_INGOT, 20), in(Items.GRAY_DYE, 4), in(Items.GLASS, 3), sniper, rifle);
+        gun("svu", in(Items.IRON_INGOT, 20), in(Items.GRAY_DYE, 4), in(Items.GLASS, 3), sniper, rifle);
+        gun("dsr1", in(Items.IRON_INGOT, 20), in(Items.GRAY_DYE, 4), in(Items.GLASS, 3), sniper, rifle);
+        gun("m60", in(Items.IRON_INGOT, 28), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 10), in(Items.REDSTONE, 10));
+        gun("m16a1", in(Items.IRON_INGOT, 16), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 6), rifle);
+        gun("galil", in(Items.IRON_INGOT, 16), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 6), rifle);
+        gun("g3a3", in(Items.IRON_INGOT, 16), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 6), rifle);
+        gun("sten", in(Items.IRON_INGOT, 12), in(Items.COPPER_INGOT, 3), trig);
+        gun("python", in(Items.IRON_INGOT, 5), in(Items.BLACK_DYE, 2), in(Items.COPPER_INGOT, 2), pistol);
+        gun("skorpion", in(Items.IRON_INGOT, 12), in(Items.COPPER_INGOT, 3), trig);
+        gun("ks23", in(Items.IRON_INGOT, 14), in(Items.BLACK_DYE, 4), in(Items.COPPER_INGOT, 4), trig);
+
         // ammo: brass (copper) case + gunpowder + lead (iron nugget) projectile
         ammo(Caliber.NINE_MM, 24, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 1), in(Items.IRON_NUGGET, 2));
         ammo(Caliber.ACP45, 20, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 1), in(Items.IRON_NUGGET, 3));
@@ -151,6 +185,15 @@ public final class GunsmithingRecipes {
         ammo(Caliber.ACP380, 28, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 1), in(Items.IRON_NUGGET, 2));
         ammo(Caliber.BLK300, 20, in(Items.COPPER_INGOT, 2), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 3));
         ammo(Caliber.BUCK16, 12, in(Items.PAPER, 2), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 5), in(Items.COPPER_INGOT, 1));
+        ammo(Caliber.HK46, 30, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 1), in(Items.IRON_NUGGET, 2));
+        ammo(Caliber.MAUSER792, 16, in(Items.COPPER_INGOT, 2), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 3));
+        ammo(Caliber.KURZ792, 24, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 3));
+        ammo(Caliber.BRIT303, 16, in(Items.COPPER_INGOT, 2), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 3));
+        ammo(Caliber.CHEY408, 6, in(Items.COPPER_INGOT, 3), in(Items.GUNPOWDER, 3), in(Items.IRON_NUGGET, 4));
+        ammo(Caliber.LAPUA338, 8, in(Items.COPPER_INGOT, 3), in(Items.GUNPOWDER, 3), in(Items.IRON_NUGGET, 4));
+        ammo(Caliber.MAG357, 14, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 3));
+        ammo(Caliber.ACP32, 30, in(Items.COPPER_INGOT, 1), in(Items.GUNPOWDER, 1), in(Items.IRON_NUGGET, 1));
+        ammo(Caliber.SHELL23, 6, in(Items.PAPER, 2), in(Items.GUNPOWDER, 2), in(Items.IRON_NUGGET, 8), in(Items.COPPER_INGOT, 2));
         ammo(Caliber.PG7, 1, in(Items.TNT, 1), in(Items.IRON_INGOT, 2), in(Items.GUNPOWDER, 4), in(Items.GREEN_DYE, 1));
 
         att(Attachment.RED_DOT, in(Items.IRON_INGOT, 2), in(Items.GLASS_PANE, 1), in(Items.REDSTONE, 1));

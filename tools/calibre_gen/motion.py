@@ -13,14 +13,14 @@ from .core import HOLD, bone_local_matrix, cube_matrix, ease, euler_mat
 RATE = 120.0
 
 FLOURISH = {
-    "pistol": ["glock17", "m9", "ppq", "m1911", "bersa", "deagle", "rugermk3"],
-    "revolver": ["model29", "sw642", "singlesix"],
+    "pistol": ["glock17", "m9", "ppq", "m1911", "bersa", "deagle", "rugermk3", "fiveseven", "usp", "cz75"],
+    "revolver": ["model29", "sw642", "singlesix", "python"],
     "rifle": ["ak47", "akm", "aug", "fal", "hk416", "m14ebr", "m4a1", "scar_h", "mp5", "p90", "ump45", "uzi", "m45",
-              "ppsh41", "sks", "svd", "benelli_m4"],
-    "shotgun": ["rem870", "model12", "nova", "cdaly"],
+              "ppsh41", "sks", "svd", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "aa12", "garand", "thompson", "mp40", "stg44", "bar", "sr25", "svu", "m16a1", "galil", "g3a3", "sten", "skorpion"],
+    "shotgun": ["rem870", "model12", "nova", "cdaly", "spas12", "ks23"],
     "lever": ["win1894", "marlin336"],
-    "bolt": ["mosin", "arisaka", "m1917", "m24", "awm", "savage10", "tikka_t3", "mossberg190"],
-    "heavy": ["m249", "pkm", "rpg7", "m82a1"],
+    "bolt": ["mosin", "arisaka", "m1917", "m24", "awm", "savage10", "tikka_t3", "mossberg190", "kar98k", "enfield", "intervention", "l96", "rem700", "dsr1"],
+    "heavy": ["m249", "pkm", "rpg7", "m82a1", "mg42", "m60"],
 }
 KIND = {g: k for k, gs in FLOURISH.items() for g in gs}
 

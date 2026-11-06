@@ -1,7 +1,7 @@
 {
   "slug": "calibre",
   "title": "Calibre",
-  "description": "45 real firearms with fully animated first-person reloads, CS2-style inspects, real recorded gunshots, bullet ballistics, attachments, a gunsmithing workbench and armed mercenaries. NeoForge and Fabric.",
+  "description": "77 real firearms with fully animated first-person reloads, CS2-style inspects, real recorded gunshots, bullet ballistics, attachments, a gunsmithing workbench and armed mercenaries. NeoForge and Fabric.",
   "categories": [
     "equipment",
     "adventure"
@@ -56,7 +56,7 @@
     {
       "file": "gallery/01_akm.png",
       "title": "AKM",
-      "description": "45 real firearms, each with its own model, stats and sounds",
+      "description": "77 real firearms, each with its own model, stats and sounds",
       "featured": true
     },
     {

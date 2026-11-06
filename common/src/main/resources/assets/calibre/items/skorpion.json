@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/skorpion",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

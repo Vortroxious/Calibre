@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/intervention",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

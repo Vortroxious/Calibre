@@ -45,7 +45,7 @@ import java.util.List;
 public class MercenaryEntity extends Monster {
     private static final List<String> LOADOUT = List.of(
             "glock17", "glock17", "m9", "m1911", "mp5", "mp5", "uzi", "ump45", "akm", "akm", "m4a1", "m4a1", "rem870", "fal", "svd",
-            "ak47", "sks", "mosin", "ppsh41", "nova", "win1894", "ppq", "m45");
+            "ak47", "sks", "mosin", "ppsh41", "nova", "win1894", "ppq", "m45", "stg44", "mp40", "g3a3", "galil", "sten", "kar98k");
 
     public MercenaryEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);

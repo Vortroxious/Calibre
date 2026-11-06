@@ -53,6 +53,26 @@
    "weight": 3
   },
   {
+   "item": "calibre:usp",
+   "weight": 3
+  },
+  {
+   "item": "calibre:cz75",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mp40",
+   "weight": 3
+  },
+  {
+   "item": "calibre:sten",
+   "weight": 3
+  },
+  {
+   "item": "calibre:spas12",
+   "weight": 3
+  },
+  {
    "item": "calibre:m4a1",
    "weight": 3
   },
@@ -98,6 +118,38 @@
   },
   {
    "item": "calibre:model12",
+   "weight": 3
+  },
+  {
+   "item": "calibre:kar98k",
+   "weight": 3
+  },
+  {
+   "item": "calibre:garand",
+   "weight": 3
+  },
+  {
+   "item": "calibre:enfield",
+   "weight": 3
+  },
+  {
+   "item": "calibre:thompson",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mp40",
+   "weight": 3
+  },
+  {
+   "item": "calibre:stg44",
+   "weight": 3
+  },
+  {
+   "item": "calibre:bar",
+   "weight": 3
+  },
+  {
+   "item": "calibre:sten",
    "weight": 3
   },
   {
@@ -228,6 +280,60 @@
   },
   {
    "item": "calibre:ammo_16buck",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_46x30",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_792x57",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_792x33",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_303",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_408",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_338lm",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_357mag",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_32acp",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_23mm",
    "weight": 4,
    "min": 8,
    "max": 32

@@ -1,11 +1,11 @@
 # Calibre
 
-**45 real firearms for Minecraft 1.21.11, on NeoForge and Fabric.** Every gun has its own model, real-world stats, its own recorded gunshot and fully animated first-person handling, from the draw to an empty reload to a CS2-style inspect.
+**77 real firearms for Minecraft 1.21.11, on NeoForge and Fabric.** Every gun has its own model, real-world stats, its own recorded gunshot and fully animated first-person handling, from the draw to an empty reload to a CS2-style inspect.
 
 ## Features
-- **45 guns:** pistols, revolvers, SMGs, assault rifles, battle rifles and DMRs, bolt-action snipers, pump, semi-auto and bolt shotguns, lever actions, WWII and Cold War rifles, two belt-fed LMGs and an RPG-7.
-- **Real mechanics:** stripper clips for the Mosin, Enfield, Arisaka and SKS; speedloaders; shell-by-shell loading; lever throws; slam fire on the Model 12; a single-action Ruger you thumb-cock and load through its gate.
-- **CS2-style inspects (H):** the gun is turned to show both sides while the hands check the magazine, press-check the chamber, tug the charging handle and flick the selector. Handguns finish with a clean finger spin.
+- **77 guns:** pistols, revolvers, SMGs, assault rifles, bullpups, battle rifles and DMRs, bolt-action snipers, pump, semi-auto, full-auto and bolt shotguns, lever actions, WWII and Cold War rifles, four belt-fed machine guns and an RPG-7.
+- **Real mechanics:** stripper clips for the Mosin, Kar98k, both Enfields, Arisaka and SKS; the M1 Garand's en-bloc ping; speedloaders; shell-by-shell loading; lever throws; slam fire on the Model 12; a single-action Ruger you thumb-cock and load through its gate.
+- **Close-up inspects (H):** the gun is brought up close and turned to show both sides, the magazine is pulled and held up to the eye, and pistols and revolvers show off the slide or the cylinder.
 - **Real sounds:** gunshots, reloads and handling are cut from real recordings.
 - **CS2-style camera motion** during reloads, inspects and shots. It can be turned down or off.
 - **Ballistics:** bullets are real projectiles with drop, travel time, armour piercing, over-penetration, headshots and glass breaking, plus tracers and a supersonic whiz when rounds pass close.
@@ -14,7 +14,7 @@
   - suppressors, compensator and flash hider
   - grips, bipod and laser
   - extended magazines
-- **Gun Workbench:** craft guns, ammo (23 calibres) and parts, and fit attachments.
+- **Gun Workbench:** craft guns, ammo (32 calibres) and parts, and fit attachments.
 - **Mercenaries:** armed hostile mobs spawn at night, fire in bursts, strafe and reload.
 - **Loot:** guns, ammo and attachments turn up in structure chests.
 - **HUD:** ammo counter, fire mode, a dynamic crosshair, and hit and headshot markers.

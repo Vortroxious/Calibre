@@ -28,7 +28,16 @@ public enum Caliber {
     LR22("22lr", ".22 Long Rifle", 3.0f, 330, 1, 0.2f, 0.0f, 0xFFB040),
     ACP380("380acp", ".380 ACP", 4.8f, 290, 1, 0.4f, 0.05f, 0xFFB040),
     BLK300("300blk", ".300 AAC Blackout", 8.0f, 670, 1, 1.3f, 0.25f, 0xFF7A30),
-    BUCK16("16buck", "16 Gauge Buckshot", 2.2f, 390, 8, 0.2f, 0.0f, 0xFFB040);
+    BUCK16("16buck", "16 Gauge Buckshot", 2.2f, 390, 8, 0.2f, 0.0f, 0xFFB040),
+    HK46("46x30", "4.6×30mm", 5.0f, 735, 1, 1.1f, 0.35f, 0xFFB040),
+    MAUSER792("792x57", "7.92×57mm Mauser", 11.0f, 760, 1, 2.2f, 0.42f, 0xFF7A30),
+    KURZ792("792x33", "7.92×33mm Kurz", 8.5f, 685, 1, 1.5f, 0.3f, 0xFF7A30),
+    BRIT303("303", ".303 British", 10.5f, 744, 1, 2.1f, 0.38f, 0xFF7A30),
+    CHEY408("408", ".408 CheyTac", 24.0f, 900, 1, 4.0f, 0.7f, 0xFF7A30),
+    LAPUA338("338lm", ".338 Lapua Magnum", 20.0f, 915, 1, 3.5f, 0.6f, 0xFF7A30),
+    MAG357("357mag", ".357 Magnum", 8.5f, 440, 1, 0.8f, 0.15f, 0xFFB040),
+    ACP32("32acp", ".32 ACP", 4.0f, 300, 1, 0.3f, 0.03f, 0xFFB040),
+    SHELL23("23mm", "23×75mmR Buckshot", 3.6f, 300, 10, 0.2f, 0.0f, 0xFFB040);
 
     public final String id;
     public final String displayName;

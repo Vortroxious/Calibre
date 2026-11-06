@@ -851,6 +851,662 @@
   ],
   "subtitle": "subtitles.calibre.fire"
  },
+ "fire_vector": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_vector_0",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "calibre:real/fire_vector_1",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "calibre:real/fire_vector_2",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "calibre:real/fire_vector_3",
+    "attenuation_distance": 90
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_mp7": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_mp7_0",
+    "attenuation_distance": 83
+   },
+   {
+    "name": "calibre:real/fire_mp7_1",
+    "attenuation_distance": 83
+   },
+   {
+    "name": "calibre:real/fire_mp7_2",
+    "attenuation_distance": 83
+   },
+   {
+    "name": "calibre:real/fire_mp7_3",
+    "attenuation_distance": 83
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_g36c": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_g36c_0",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_g36c_1",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_g36c_2",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_g36c_3",
+    "attenuation_distance": 108
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_famas": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_famas_0",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_famas_1",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_famas_2",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_famas_3",
+    "attenuation_distance": 108
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_x95": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_x95_0",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_x95_1",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_x95_2",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_x95_3",
+    "attenuation_distance": 108
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_fiveseven": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_fiveseven_0",
+    "attenuation_distance": 83
+   },
+   {
+    "name": "calibre:real/fire_fiveseven_1",
+    "attenuation_distance": 83
+   },
+   {
+    "name": "calibre:real/fire_fiveseven_2",
+    "attenuation_distance": 83
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_usp": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_usp_0",
+    "attenuation_distance": 92
+   },
+   {
+    "name": "calibre:real/fire_usp_1",
+    "attenuation_distance": 92
+   },
+   {
+    "name": "calibre:real/fire_usp_2",
+    "attenuation_distance": 92
+   },
+   {
+    "name": "calibre:real/fire_usp_3",
+    "attenuation_distance": 92
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_cz75": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_cz75_0",
+    "attenuation_distance": 86
+   },
+   {
+    "name": "calibre:real/fire_cz75_1",
+    "attenuation_distance": 86
+   },
+   {
+    "name": "calibre:real/fire_cz75_2",
+    "attenuation_distance": 86
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_spas12": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_spas12_0",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_spas12_1",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_spas12_2",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_spas12_3",
+    "attenuation_distance": 131
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_aa12": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_aa12_0",
+    "attenuation_distance": 129
+   },
+   {
+    "name": "calibre:real/fire_aa12_1",
+    "attenuation_distance": 129
+   },
+   {
+    "name": "calibre:real/fire_aa12_2",
+    "attenuation_distance": 129
+   },
+   {
+    "name": "calibre:real/fire_aa12_3",
+    "attenuation_distance": 129
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_kar98k": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_kar98k_0",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_kar98k_1",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_kar98k_2",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_kar98k_3",
+    "attenuation_distance": 134
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_garand": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_garand_0",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_garand_1",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_garand_2",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_garand_3",
+    "attenuation_distance": 131
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_enfield": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_enfield_0",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_enfield_1",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_enfield_2",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_enfield_3",
+    "attenuation_distance": 134
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_thompson": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_thompson_0",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "calibre:real/fire_thompson_1",
+    "attenuation_distance": 90
+   },
+   {
+    "name": "calibre:real/fire_thompson_2",
+    "attenuation_distance": 90
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_mp40": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_mp40_0",
+    "attenuation_distance": 85
+   },
+   {
+    "name": "calibre:real/fire_mp40_1",
+    "attenuation_distance": 85
+   },
+   {
+    "name": "calibre:real/fire_mp40_2",
+    "attenuation_distance": 85
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_stg44": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_stg44_0",
+    "attenuation_distance": 115
+   },
+   {
+    "name": "calibre:real/fire_stg44_1",
+    "attenuation_distance": 115
+   },
+   {
+    "name": "calibre:real/fire_stg44_2",
+    "attenuation_distance": 115
+   },
+   {
+    "name": "calibre:real/fire_stg44_3",
+    "attenuation_distance": 115
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_mg42": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_mg42_0",
+    "attenuation_distance": 124
+   },
+   {
+    "name": "calibre:real/fire_mg42_1",
+    "attenuation_distance": 124
+   },
+   {
+    "name": "calibre:real/fire_mg42_2",
+    "attenuation_distance": 124
+   },
+   {
+    "name": "calibre:real/fire_mg42_3",
+    "attenuation_distance": 124
+   },
+   {
+    "name": "calibre:real/fire_mg42_4",
+    "attenuation_distance": 124
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_bar": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_bar_0",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_bar_1",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_bar_2",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_bar_3",
+    "attenuation_distance": 131
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_intervention": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_intervention_0",
+    "attenuation_distance": 163
+   },
+   {
+    "name": "calibre:real/fire_intervention_1",
+    "attenuation_distance": 163
+   },
+   {
+    "name": "calibre:real/fire_intervention_2",
+    "attenuation_distance": 163
+   },
+   {
+    "name": "calibre:real/fire_intervention_3",
+    "attenuation_distance": 163
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_l96": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_l96_0",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_l96_1",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_l96_2",
+    "attenuation_distance": 134
+   },
+   {
+    "name": "calibre:real/fire_l96_3",
+    "attenuation_distance": 134
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_rem700": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_rem700_0",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_rem700_1",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_rem700_2",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_rem700_3",
+    "attenuation_distance": 131
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_sr25": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_sr25_0",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_sr25_1",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_sr25_2",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_sr25_3",
+    "attenuation_distance": 128
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_svu": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_svu_0",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_svu_1",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_svu_2",
+    "attenuation_distance": 131
+   },
+   {
+    "name": "calibre:real/fire_svu_3",
+    "attenuation_distance": 131
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_dsr1": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_dsr1_0",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_dsr1_1",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_dsr1_2",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_dsr1_3",
+    "attenuation_distance": 150
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_m60": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_m60_0",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_m60_1",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_m60_2",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_m60_3",
+    "attenuation_distance": 128
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_m16a1": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_m16a1_0",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_m16a1_1",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_m16a1_2",
+    "attenuation_distance": 108
+   },
+   {
+    "name": "calibre:real/fire_m16a1_3",
+    "attenuation_distance": 108
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_galil": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_galil_0",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_galil_1",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_galil_2",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_galil_3",
+    "attenuation_distance": 112
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_g3a3": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_g3a3_0",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_g3a3_1",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_g3a3_2",
+    "attenuation_distance": 128
+   },
+   {
+    "name": "calibre:real/fire_g3a3_3",
+    "attenuation_distance": 128
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_sten": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_sten_0",
+    "attenuation_distance": 86
+   },
+   {
+    "name": "calibre:real/fire_sten_1",
+    "attenuation_distance": 86
+   },
+   {
+    "name": "calibre:real/fire_sten_2",
+    "attenuation_distance": 86
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_python": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_python_0",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_python_1",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_python_2",
+    "attenuation_distance": 112
+   },
+   {
+    "name": "calibre:real/fire_python_3",
+    "attenuation_distance": 112
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_skorpion": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_skorpion_0",
+    "attenuation_distance": 80
+   },
+   {
+    "name": "calibre:real/fire_skorpion_1",
+    "attenuation_distance": 80
+   },
+   {
+    "name": "calibre:real/fire_skorpion_2",
+    "attenuation_distance": 80
+   },
+   {
+    "name": "calibre:real/fire_skorpion_3",
+    "attenuation_distance": 80
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
+ "fire_ks23": {
+  "sounds": [
+   {
+    "name": "calibre:real/fire_ks23_0",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_ks23_1",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_ks23_2",
+    "attenuation_distance": 150
+   },
+   {
+    "name": "calibre:real/fire_ks23_3",
+    "attenuation_distance": 150
+   }
+  ],
+  "subtitle": "subtitles.calibre.fire"
+ },
  "mag_out_pistol": {
   "sounds": [
    {

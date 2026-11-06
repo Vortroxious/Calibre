@@ -41,6 +41,39 @@ GUN_NAMES = {
     "nova": "Benelli Nova", "cdaly": "Charles Daly 300 Field", "mossberg190": "Mossberg 190", "ppq": "Walther PPQ",
     "bersa": "Bersa Thunder 380", "rugermk3": "Ruger Mark III", "sw642": "S&W 642 Airweight",
     "singlesix": "Ruger Single-Six",
+    # expansion 2
+    "vector": "Kriss Vector .45",
+    "mp7": "H&K MP7A1",
+    "g36c": "H&K G36C",
+    "famas": "FAMAS F1",
+    "x95": "IWI Tavor X95",
+    "fiveseven": "FN Five-seveN",
+    "usp": "H&K USP .45",
+    "cz75": "CZ 75 SP-01",
+    "spas12": "Franchi SPAS-12",
+    "aa12": "Atchisson AA-12",
+    "kar98k": "Mauser Kar98k",
+    "garand": "M1 Garand",
+    "enfield": "Lee-Enfield No.4 Mk I",
+    "thompson": "Thompson M1A1",
+    "mp40": "MP 40",
+    "stg44": "StG 44",
+    "mg42": "MG 42",
+    "bar": "M1918 BAR",
+    "intervention": "CheyTac M200 Intervention",
+    "l96": "Accuracy International L96A1",
+    "rem700": "Remington 700",
+    "sr25": "KAC SR-25",
+    "svu": "SVU",
+    "dsr1": "DSR-Precision DSR-1",
+    "m60": "M60",
+    "m16a1": "M16A1",
+    "galil": "IMI Galil ARM",
+    "g3a3": "H&K G3A3",
+    "sten": "Sten Mk II",
+    "python": "Colt Python",
+    "skorpion": "Skorpion vz. 61",
+    "ks23": "KS-23",
 }
 AMMO = {
     "9mm": ("9×19mm Parabellum", (196, 152, 62), (178, 102, 58), 6, 0.45),
@@ -66,6 +99,15 @@ AMMO = {
     "380acp": (".380 ACP", (196, 152, 62), (178, 102, 58), 5, 0.38),
     "300blk": (".300 AAC Blackout", (196, 152, 62), (60, 60, 70), 5, 0.75),
     "16buck": ("16 Gauge Buckshot", (200, 170, 40), (205, 165, 70), 7, 0.68),
+    "46x30": ("4.6×30mm", (196, 152, 62), (60, 60, 70), 4, 0.55),
+    "792x57": ("7.92×57mm Mauser", (120, 110, 70), (178, 102, 58), 5, 1.0),
+    "792x33": ("7.92×33mm Kurz", (120, 110, 70), (178, 102, 58), 5, 0.75),
+    "303": (".303 British", (196, 152, 62), (178, 102, 58), 5, 1.0),
+    "408": (".408 CheyTac", (205, 165, 70), (60, 60, 60), 6, 1.1),
+    "338lm": (".338 Lapua Magnum", (205, 165, 70), (178, 102, 58), 6, 1.08),
+    "357mag": (".357 Magnum", (196, 152, 62), (120, 120, 126), 6, 0.55),
+    "32acp": (".32 ACP", (196, 152, 62), (178, 102, 58), 4, 0.34),
+    "23mm": ("23×75mmR Buckshot", (60, 70, 60), (205, 165, 70), 9, 0.8),
 }
 ATT_NAMES = {
     "red_dot": "Red Dot Sight", "holo": "Holographic Sight", "acog": "ACOG 4× Scope", "scope_8x": "8× Rifle Scope",
@@ -413,13 +455,13 @@ def loot():
         return [{"condition": "minecraft:any_of", "terms": [
             {"condition": "neoforge:loot_table_id", "loot_table_id": t} for t in tables]}]
 
-    guns_common = ["glock17", "m1911", "m9", "rem870", "uzi", "mp5", "akm"]
+    guns_common = ["glock17", "m1911", "m9", "rem870", "uzi", "mp5", "akm", "usp", "cz75", "mp40", "sten", "spas12"]
     # hunting / civilian guns turn up where villagers and sailors live, old service arms in ruins and strongholds
     guns_civ = ["win1894", "marlin336", "nova", "cdaly", "mossberg190", "ppq", "bersa", "rugermk3", "sw642", "singlesix",
-                "tikka_t3"]
-    guns_ww2 = ["mosin", "m1917", "arisaka", "sks", "ppsh41", "m45", "ak47", "model12"]
-    guns_mil = ["m4a1", "hk416", "akm", "fal", "scar_h", "m14ebr", "svd", "m249", "ump45", "p90", "aug", "benelli_m4"]
-    guns_rare = ["deagle", "model29", "m24", "awm", "m82a1", "pkm", "rpg7"]
+                "tikka_t3", "rem700", "python"]
+    guns_ww2 = ["mosin", "m1917", "arisaka", "sks", "ppsh41", "m45", "ak47", "model12", "kar98k", "garand", "enfield", "thompson", "mp40", "stg44", "bar", "sten"]
+    guns_mil = ["m4a1", "hk416", "akm", "fal", "scar_h", "m14ebr", "svd", "m249", "ump45", "p90", "aug", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "fiveseven", "m16a1", "galil", "g3a3", "sr25", "aa12", "skorpion"]
+    guns_rare = ["deagle", "model29", "m24", "awm", "m82a1", "pkm", "rpg7", "mg42", "m60", "intervention", "l96", "dsr1", "svu", "ks23"]
     ammo_all = [f"ammo_{k}" for k in AMMO if k != "pg7"]
     atts = [k for k in ATT_NAMES]
     mods = {

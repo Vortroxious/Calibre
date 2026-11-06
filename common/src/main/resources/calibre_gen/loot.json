@@ -33,6 +33,26 @@
     "weight": 3
    },
    {
+    "item": "calibre:usp",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cz75",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
+    "weight": 3
+   },
+   {
+    "item": "calibre:spas12",
+    "weight": 3
+   },
+   {
     "item": "calibre:win1894",
     "weight": 3
    },
@@ -74,6 +94,14 @@
    },
    {
     "item": "calibre:tikka_t3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:rem700",
+    "weight": 3
+   },
+   {
+    "item": "calibre:python",
     "weight": 3
    },
    {
@@ -204,6 +232,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32
@@ -302,6 +384,26 @@
     "weight": 3
    },
    {
+    "item": "calibre:usp",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cz75",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
+    "weight": 3
+   },
+   {
+    "item": "calibre:spas12",
+    "weight": 3
+   },
+   {
     "item": "calibre:m4a1",
     "weight": 3
    },
@@ -350,6 +452,54 @@
     "weight": 3
    },
    {
+    "item": "calibre:vector",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp7",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g36c",
+    "weight": 3
+   },
+   {
+    "item": "calibre:famas",
+    "weight": 3
+   },
+   {
+    "item": "calibre:x95",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fiveseven",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m16a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:galil",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g3a3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sr25",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aa12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:skorpion",
+    "weight": 3
+   },
+   {
     "item": "calibre:mosin",
     "weight": 3
    },
@@ -379,6 +529,38 @@
    },
    {
     "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:kar98k",
+    "weight": 3
+   },
+   {
+    "item": "calibre:garand",
+    "weight": 3
+   },
+   {
+    "item": "calibre:enfield",
+    "weight": 3
+   },
+   {
+    "item": "calibre:thompson",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:stg44",
+    "weight": 3
+   },
+   {
+    "item": "calibre:bar",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
     "weight": 3
    },
    {
@@ -509,6 +691,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32
@@ -608,6 +844,26 @@
     "weight": 3
    },
    {
+    "item": "calibre:usp",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cz75",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
+    "weight": 3
+   },
+   {
+    "item": "calibre:spas12",
+    "weight": 3
+   },
+   {
     "item": "calibre:win1894",
     "weight": 3
    },
@@ -767,6 +1023,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32
@@ -868,6 +1178,26 @@
     "weight": 3
    },
    {
+    "item": "calibre:usp",
+    "weight": 3
+   },
+   {
+    "item": "calibre:cz75",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
+    "weight": 3
+   },
+   {
+    "item": "calibre:spas12",
+    "weight": 3
+   },
+   {
     "item": "calibre:m4a1",
     "weight": 3
    },
@@ -913,6 +1243,38 @@
    },
    {
     "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:kar98k",
+    "weight": 3
+   },
+   {
+    "item": "calibre:garand",
+    "weight": 3
+   },
+   {
+    "item": "calibre:enfield",
+    "weight": 3
+   },
+   {
+    "item": "calibre:thompson",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:stg44",
+    "weight": 3
+   },
+   {
+    "item": "calibre:bar",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
     "weight": 3
    },
    {
@@ -1043,6 +1405,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32
@@ -1163,6 +1579,54 @@
     "weight": 3
    },
    {
+    "item": "calibre:vector",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp7",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g36c",
+    "weight": 3
+   },
+   {
+    "item": "calibre:famas",
+    "weight": 3
+   },
+   {
+    "item": "calibre:x95",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fiveseven",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m16a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:galil",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g3a3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sr25",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aa12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:skorpion",
+    "weight": 3
+   },
+   {
     "item": "calibre:deagle",
     "weight": 3
    },
@@ -1204,6 +1668,38 @@
    },
    {
     "item": "calibre:model12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:kar98k",
+    "weight": 3
+   },
+   {
+    "item": "calibre:garand",
+    "weight": 3
+   },
+   {
+    "item": "calibre:enfield",
+    "weight": 3
+   },
+   {
+    "item": "calibre:thompson",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp40",
+    "weight": 3
+   },
+   {
+    "item": "calibre:stg44",
+    "weight": 3
+   },
+   {
+    "item": "calibre:bar",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sten",
     "weight": 3
    },
    {
@@ -1338,6 +1834,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32
@@ -1467,6 +2017,54 @@
     "weight": 3
    },
    {
+    "item": "calibre:vector",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mp7",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g36c",
+    "weight": 3
+   },
+   {
+    "item": "calibre:famas",
+    "weight": 3
+   },
+   {
+    "item": "calibre:x95",
+    "weight": 3
+   },
+   {
+    "item": "calibre:fiveseven",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m16a1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:galil",
+    "weight": 3
+   },
+   {
+    "item": "calibre:g3a3",
+    "weight": 3
+   },
+   {
+    "item": "calibre:sr25",
+    "weight": 3
+   },
+   {
+    "item": "calibre:aa12",
+    "weight": 3
+   },
+   {
+    "item": "calibre:skorpion",
+    "weight": 3
+   },
+   {
     "item": "calibre:deagle",
     "weight": 3
    },
@@ -1492,6 +2090,34 @@
    },
    {
     "item": "calibre:rpg7",
+    "weight": 3
+   },
+   {
+    "item": "calibre:mg42",
+    "weight": 3
+   },
+   {
+    "item": "calibre:m60",
+    "weight": 3
+   },
+   {
+    "item": "calibre:intervention",
+    "weight": 3
+   },
+   {
+    "item": "calibre:l96",
+    "weight": 3
+   },
+   {
+    "item": "calibre:dsr1",
+    "weight": 3
+   },
+   {
+    "item": "calibre:svu",
+    "weight": 3
+   },
+   {
+    "item": "calibre:ks23",
     "weight": 3
    },
    {
@@ -1630,6 +2256,60 @@
    },
    {
     "item": "calibre:ammo_16buck",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_46x30",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x57",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_792x33",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_303",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_408",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_338lm",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_357mag",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_32acp",
+    "weight": 4,
+    "min": 8,
+    "max": 32
+   },
+   {
+    "item": "calibre:ammo_23mm",
     "weight": 4,
     "min": 8,
     "max": 32

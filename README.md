@@ -1,6 +1,6 @@
 # Calibre: realistic firearms for Minecraft 1.21.11 (NeoForge and Fabric) + GeckoLib 5
 
-Calibre is a gun mod with 45 real-world firearms. Every gun has fully animated first-person handling built on GeckoLib 5.4.5:
+Calibre is a gun mod with 77 real-world firearms. Every gun has fully animated first-person handling built on GeckoLib 5.4.5:
 - a draw, fire and dry-fire animation
 - a tactical and an empty reload
 - fire-mode switching
@@ -19,8 +19,8 @@ Pick the jar for your loader. GeckoLib 5.4.5 is bundled inside both (jar-in-jar)
 
 | Loader | Jar | You also need |
 |---|---|---|
-| NeoForge 21.11.48+ | `calibre-neoforge-1.0.0.jar` | nothing else |
-| Fabric Loader 0.18+ | `calibre-fabric-1.0.0.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
+| NeoForge 21.11.48+ | `calibre-neoforge-1.1.0.jar` | nothing else |
+| Fabric Loader 0.18+ | `calibre-fabric-1.1.0.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
 
 Both versions have the same guns, animations, sounds, attachments, workbench, mobs and loot. A server and its players must use the same loader's jar.
 
@@ -42,7 +42,12 @@ Both versions have the same guns, animations, sounds, attachments, workbench, mo
 | More shotguns | Winchester Model 12 trench gun (**slam fire**: hold the trigger and it fires every time the slide closes), Benelli Nova, Charles Daly 300 Field, Mossberg 190 (16-gauge bolt-action with box magazine) |
 | More handguns | Walther PPQ, Bersa Thunder 380, Ruger Mark III (.22), S&W 642 Airweight (.38 snub, speedloader), Ruger Single-Six (**single action**: thumb-cock every shot, loaded one chamber at a time through the gate) |
 
-The 20 guns in the lower rows each fire their **own recorded gunshot** from the Free Firearm Sound Library.
+| Modern | Kriss Vector (.45, 2-round burst), H&K MP7A1 (4.6×30), H&K G36C, FAMAS F1 (bullpup), IWI Tavor X95 (bullpup), FN Five-seveN, H&K USP, CZ 75 SP-01, Franchi SPAS-12 (pump), Atchisson AA-12 (full-auto shotgun) |
+| WWII | Karabiner 98k and Lee-Enfield No.4 (stripper clips), M1 Garand (8-round en-bloc clip that **pings** out on the last shot), Thompson M1A1, MP40, StG 44, MG42 (belt-fed, 1200 rpm), M1918 BAR |
+| Sniper / precision | CheyTac M200 Intervention (.408), AI L96A1, Remington 700 (internal magazine, loaded round by round), KAC SR-25, SVU (bullpup Dragunov), DSR-1 (bullpup, .338 Lapua) |
+| Cold War | M60 (belt-fed), M16A1, IMI Galil ARM, H&K G3A3 (HK slap), Sten Mk II (**side-mounted magazine**), Colt Python (.357), Skorpion vz. 61 (.32 ACP), KS-23 (23 mm pump) |
+
+The 20 guns from Lever actions to More handguns each fire their **own recorded gunshot** from the Free Firearm Sound Library. The 32 guns in the last four rows use the closest of those recordings, re-pitched for their calibre and mastered for their class.
 
 Stats come from the real weapons:
 - magazine capacity, plus one round in the chamber for closed-bolt guns
@@ -51,7 +56,7 @@ Stats come from the real weapons:
 - available fire modes
 - weight, which affects aim time and sway
 
-Ammunition comes in 23 calibres.
+Ammunition comes in 32 calibres.
 
 ### Inspects (H)
 Every inspect is a close-up presentation (in the style of modern shooters such as MW3) of about 7–9 seconds,
@@ -145,7 +150,7 @@ You can open the generated `.geo.json` / `.animation.json` files in Blockbench (
 ```bash
 ./gradlew buildAll
 ```
-This builds both jars and copies `calibre-neoforge-1.0.0.jar` and `calibre-fabric-1.0.0.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
+This builds both jars and copies `calibre-neoforge-1.1.0.jar` and `calibre-fabric-1.1.0.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
 
 ```bash
 ./gradlew :neoforge:runGameTestServer

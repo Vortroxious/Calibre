@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/rem700",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}
