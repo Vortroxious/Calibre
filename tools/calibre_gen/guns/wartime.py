@@ -224,8 +224,9 @@ def thompson():
     trigger_group(m, body, -10, y_top=-34, guard_depth=28, guard_len=60, guard_mat=st)
     sel = body.bone("selector", pivot=(-17, -20, 30))
     sel.box(-21, -17, -24, -16, 24, 38, "steel")
-    ch = body.bone("charging_handle", pivot=(0, 22, -40))
-    ch.box(-6, 6, 22, 34, -50, -30, "steel")
+    ch = body.bone("charging_handle", pivot=(17, 4, -40))                  # M1A1: actuator knob on the right
+    ch.box(17, 28, 0, 8, -46, -34, "steel")
+    ch.cyl((30, 4, -40), 12, 6, "steel", axis="x")
     bolt = body.bone("bolt", pivot=(0, 0, 0))
     bolt.box(2, 17, -4, 10, -58, -12, "steel_light")
     stock = m["gun"].bone("stock", pivot=(0, 0, 110))
@@ -233,6 +234,7 @@ def thompson():
     stock.box(-18, 18, -116, -2, 416, 428, st)
     mag = m["gun"].bone("magazine", pivot=(0, -40, -80))
     straight_mag(mag, -36, -102, -58, 220, width=24, mat="steel_dark", round_d=11, round_len=30)
+    _thompson_detail(m, body)
     add_arms(m, right_hand=(8, -94, 50), left_hand=(-10, -40, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
     add_sockets(m, muzzle=(0, 0, -386), eject=(17, 4, -30), sight=(0, 32, 86))
     cyc = dict(bone="bolt", travel=(0, 0, 80), t_back=0.016, t_fwd=0.05)
@@ -268,6 +270,7 @@ def mp40():
     stock.box(-16, 16, -80, -60, -132, -118, st)
     mag = m["gun"].bone("magazine", pivot=(0, -60, -110))
     straight_mag(mag, -58, -122, -98, 220, width=20, mat="steel_dark", round_d=9, round_len=28)
+    _mp40_detail(m, body)
     add_arms(m, right_hand=(8, -88, 50), left_hand=(-10, -110, -110), right_rot=(34, 14, 6), left_rot=(10, -18, -4))
     add_sockets(m, muzzle=(0, 0, -296), eject=(15, 2, -50), sight=(0, 24, 76))
     cyc = dict(bone="bolt", travel=(0, 0, 60), t_back=0.016, t_fwd=0.05)
@@ -305,6 +308,7 @@ def stg44():
     mag = m["gun"].bone("magazine", pivot=(0, -40, -70))
     curved_mag(mag, -36, -96, 46, 240, curve=12, segs=4, width=24, mat="steel_dark", rib_mat="steel", round_d=9,
                round_len=36)
+    _stg44_detail(m, body)
     add_arms(m, right_hand=(8, -94, 60), left_hand=(-10, -40, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
     add_sockets(m, muzzle=(0, 0, -456), eject=(16, 2, -40), sight=(0, 30, -86))
     cyc = dict(bone="bolt", travel=(0, 0, 70), t_back=0.018, t_fwd=0.054)
@@ -387,12 +391,130 @@ def bar():
     stock.box(-18, 18, -134, -18, 446, 458, st)
     mag = m["gun"].bone("magazine", pivot=(0, -46, -96))
     straight_mag(mag, -42, -140, -52, 150, width=30, mat="steel_dark", round_d=12, round_len=60)
+    _bar_detail(m, body)
     add_arms(m, right_hand=(8, -100, 60), left_hand=(-10, -40, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
     add_sockets(m, muzzle=(0, 0, -742), eject=(18, 4, -40), sight=(0, 34, 80))
     cyc = dict(bone="bolt", travel=(0, 0, 90), t_back=0.02, t_fwd=0.06)
     anims = _rifle_anims(m, 0.0, (3.6, 0.6, 1.4), 13, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 90),
                          selector=(-40, 0, 0), rec=0.16, length=0.24, draw_len=0.95)
     return GunAsset(m, anims, _fp(pos=(0.125, -0.14, -0.2), ads=0.3))
+
+
+
+def _thompson_detail(m, body, st="steel_parked", wd="wood"):
+    body.box(-17.3, 17.3, -22, -19, -118, 108, "steel_dark")             # receiver / frame seam
+    body.box(-14, 14, 22, 25, -118, 108, st)                             # rounded top
+    body.box(-19, -17, -30, -22, 60, 80, "steel")                         # frame latch
+    body.box(-19, -17, -30, -24, -100, -88, "steel")                      # magazine catch
+    body.box(-21, -17, -14, -6, 40, 52, "steel")                          # safety lever
+    body.box(17, 17.6, 0, 8, -60, 30, "rubber")                           # actuator slot
+    body.box(-3, 3, 25, 36, 80, 88, st)                                   # fixed peep between the ears
+    body.box(-1.4, 1.4, 30, 33, 79.6, 88.4, "rubber")
+    body.cyl((0, 0, -128), 26, 16, st)                                    # barrel shoulder at the receiver
+    body.box(-5, 5, 10, 16, -372, -356, st)                               # front sight base + blade
+    body.box(-1.4, 1.4, 16, 27, -368, -362, st)
+    body.cyl((0, 0, -381), 22, 4, "steel_dark")                           # crown
+    body.box(-5, 5, -5, 5, -383.5, -383, "rubber")
+    for z in range(-312, -160, 24):                                       # finger grooves in the handguard
+        body.box(-20.4, 20.4, -36, -24, z, z + 10, "wood_light")
+    body.box(-21, 21, -46, -10, -326, -320, st)                           # handguard nose cap
+    body.box(-4, 4, -52, -42, -306, -294, "steel")                        # front sling swivel
+    stock = m["stock"]
+    stock.box(-11, 11, 2, 12, 110, 160, st)                               # upper tang
+    stock.box(-11, 11, -40, -32, 110, 150, st)                            # lower tang
+    stock.box(-17.4, 17.4, -30, -26, 150, 400, "wood_light")              # grain line
+    stock.box(-4, 4, -106, -96, 360, 372, "steel")                        # rear sling swivel
+    stock.box(-12, 12, -100, -16, 428, 430, "steel_dark")                 # butt-trap door
+    stock.box(-15, 15, -8, -2, 426, 429, "steel")
+    m["magazine"].box(-12.4, 12.4, -250, -244, -60, -56, "steel")          # mag spine/base detail
+    m["magazine"].box(-12.4, 12.4, -60, -52, -102, -98, "steel")
+
+
+def _mp40_detail(m, body, st="steel_dark"):
+    body.box(-15.4, -14.6, -3, 4, -120, -10, "rubber")                    # cocking slot (left)
+    body.box(-15.4, -14.6, 4, 11, -16, -8, "rubber")                      # safety notch
+    for y in (8, -8):                                                     # receiver flutes
+        body.box(14.6, 15.4, y - 1.5, y + 1.5, 0, 100, "rubber")
+        body.box(-15.4, -14.6, y - 1.5, y + 1.5, 10, 100, "rubber")
+    body.cyl((0, 0, 112), 32, 6, st, sides=12)                            # end cap
+    body.box(-6, 6, -6, 6, 115, 120, "steel")
+    body.box(-8, 8, 14, 20, 60, 92, st)                                   # rear sight base + flip leaves
+    body.box(-6, 6, 20, 30, 70, 74, st)
+    body.box(-6, 6, 20, 23, 74, 90, st)
+    body.box(-1.2, 1.2, 25, 29, 69.6, 74.4, "rubber")
+    body.box(-9, -7, 10, 30, -292, -278, st)                              # front sight hood
+    body.box(7, 9, 10, 30, -292, -278, st)
+    body.box(-9, 9, 28, 30, -292, -278, st)
+    body.box(-1.2, 1.2, 10, 26, -286, -284, "steel")
+    body.cyl((0, 0, -154), 26, 10, st)                                    # barrel nut
+    body.cyl((0, 0, -294), 18, 8, "steel")                                # muzzle cap
+    body.box(-6, 6, -26, -16, -300, -292, st)                             # barrel rest loop
+    for z in range(-146, -36, 14):                                        # bakelite ribs
+        body.box(-15.4, 15.4, -52, -22, z, z + 5, "rubber")
+    for z in (-124, -114, -104):                                          # mag housing ribs
+        body.box(-13.4, 13.4, -58, -22, z, z + 4, "rubber")
+    body.box(-16, -13, -34, -26, -104, -96, "steel")                      # mag release
+    body.box(-17, -15, -8, 8, 88, 98, "steel")                            # sling bar
+    body.box(-14, 14, -30, -14, 96, 120, st)                              # stock hinge block
+    stock = m["stock"]
+    stock.box(-14, 14, -66, -56, 110, 124, st)
+    stock.box(-16, -12, -68, -62, 100, 108, "steel")                      # lock button
+    stock.box(-18, 18, -86, -56, -136, -132, "steel")                     # shoulder pad
+    stock.box(-14, 14, -78, -74, -120, 110, "steel_dark")                 # cross brace line
+
+
+def _stg44_detail(m, body, st="steel_dark", wd="wood"):
+    for z in (-120, -20, 60):                                             # stamped ribs
+        body.box(-16.4, 16.4, -30, 10, z, z + 8, "steel")
+    body.box(16, 18, -14, -8, -64, -6, "steel")                           # hinged port cover (open)
+    body.box(-6, 6, 26, 30, -104, -64, st)                                # tangent leaf + slider
+    body.box(-8, 8, 26, 32, -90, -82, "steel")
+    body.box(-1.2, 1.2, 28, 31, -104.4, -100, "rubber")
+    body.cyl((0, 22, -472), 26, 10, st)                                   # gas tube nut
+    body.box(-8, 8, 8, 16, -444, -426, st)                                # gas block
+    body.box(-10, -8, 10, 36, -444, -424, st)                             # hooded front sight
+    body.box(8, 10, 10, 36, -444, -424, st)
+    body.box(-10, 10, 34, 36, -444, -424, st)
+    body.box(-1.2, 1.2, 10, 30, -436, -434, "steel")
+    body.cyl((0, 0, -458), 20, 12, "steel")                               # thread protector
+    for z in range(-290, -140, 30):                                       # handguard grooves
+        body.box(-14.4, 14.4, -18, -6, z, z + 12, "wood_light")
+    body.box(-15, 15, -48, -34, -20, 90, st)                              # trigger housing sheet
+    body.box(-14, 14, -60, -44, -100, -40, st)                            # long magazine well
+    body.box(14, 18, -54, -46, -44, -36, "steel")                         # mag release
+    body.box(-19, -16, -30, -22, 60, 72, "steel")                         # safety lever
+    body.box(-17, -15, -8, 8, -126, -118, "steel")                        # front sling loop
+    stock = m["stock"]
+    stock.box(-12, 12, 4, 12, 120, 150, st)                               # receiver tang
+    stock.box(-4, 4, -104, -94, 330, 342, "steel")                        # rear sling loop
+    stock.box(-12, 12, -100, -16, 408, 410, "steel")                      # butt-plate trap
+    stock.box(-16.4, 16.4, -40, -36, 150, 390, "wood_light")
+
+
+def _bar_detail(m, body, st="steel_parked", wd="wood"):
+    body.box(-18.4, 18.4, -10, -6, -160, 110, "rubber")                   # receiver lightening groove
+    body.box(-6, 6, 34, 40, 76, 84, "steel")                              # rear aperture slider
+    body.box(-1.2, 1.2, 36, 39, 75.6, 84.4, "rubber")
+    body.box(-10, -8, 18, 40, 94, 100, st)                                # rear sight ears
+    body.box(8, 10, 18, 40, 94, 100, st)
+    body.box(18, 19.5, -12, -6, -70, -10, "steel")                        # ejection port cover (open)
+    body.box(-5, 5, -46, -40, -48, -40, "steel")                          # magazine release
+    body.cyl((0, -22, -612), 22, 12, st)                                  # gas cylinder nut
+    body.box(-10, 10, -32, -12, -630, -616, st)                           # gas regulator
+    body.box(-14, 14, -34, 6, -560, -550, st)                             # barrel / gas band
+    body.box(-8, -6, 10, 34, -694, -680, st)                              # front sight wings
+    body.box(6, 8, 10, 34, -694, -680, st)
+    for z in range(-370, -180, 26):                                       # handguard ridges
+        body.box(-17.4, 17.4, -24, -6, z, z + 10, "wood_light")
+    body.box(-4, 4, -38, -28, -540, -530, "steel")                        # front sling swivel
+    body.box(-15, 15, -46, -40, -50, 70, st)                              # trigger housing
+    body.box(-22, -18, -8, 0, 70, 90, "steel")                            # rate selector detent
+    stock = m["stock"]
+    stock.box(-10, 10, -8, -2, 116, 180, st)                              # upper tang
+    stock.box(-10, 10, -66, -58, 116, 170, st)                            # lower tang
+    stock.box(-16, 16, -60, -40, 458, 470, "steel")                       # hinged shoulder rest
+    stock.box(-4, 4, -120, -110, 380, 392, "steel")                       # rear sling swivel
+    stock.box(-17.4, 17.4, -60, -56, 230, 440, "wood_light")
 
 
 GUNS = {"kar98k": kar98k, "garand": garand, "enfield": enfield, "thompson": thompson, "mp40": mp40,

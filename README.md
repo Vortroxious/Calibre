@@ -19,8 +19,8 @@ Pick the jar for your loader. GeckoLib 5.4.5 is bundled inside both (jar-in-jar)
 
 | Loader | Jar | You also need |
 |---|---|---|
-| NeoForge 21.11.48+ | `calibre-neoforge-1.1.0.jar` | nothing else |
-| Fabric Loader 0.18+ | `calibre-fabric-1.1.0.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
+| NeoForge 21.11.48+ | `calibre-neoforge-1.1.1.jar` | nothing else |
+| Fabric Loader 0.18+ | `calibre-fabric-1.1.1.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
 
 Both versions have the same guns, animations, sounds, attachments, workbench, mobs and loot. A server and its players must use the same loader's jar.
 
@@ -150,7 +150,7 @@ You can open the generated `.geo.json` / `.animation.json` files in Blockbench (
 ```bash
 ./gradlew buildAll
 ```
-This builds both jars and copies `calibre-neoforge-1.1.0.jar` and `calibre-fabric-1.1.0.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
+This builds both jars and copies `calibre-neoforge-1.1.1.jar` and `calibre-fabric-1.1.1.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
 
 ```bash
 ./gradlew :neoforge:runGameTestServer

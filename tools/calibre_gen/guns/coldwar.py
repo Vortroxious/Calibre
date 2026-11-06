@@ -65,6 +65,48 @@ def m60():
     return GunAsset(m, anims, LMG_FP)
 
 
+
+def _m16a1_detail(m, body, al="alloy"):
+    body.box(13.2, 15.2, -2, 15, -66, -6, al, rot=(0, 0, -100), pivot=(15, -2, -36))   # dust cover, open
+    for z in (-100, 90):                                                  # takedown + pivot pins
+        body.box(-13, -12, -26, -18, z - 4, z + 4, "steel")
+        body.box(12, 13, -26, -18, z - 4, z + 4, "steel")
+    body.box(-6, 6, -36, -28, 96, 104, al)                                # rear lug
+    body.box(12, 15, -32, -24, -40, -30, "steel_dark")                    # mag release
+    body.box(-5, 5, -24, -12, -450, -430, "steel_dark")                   # bayonet lug
+    body.box(-2, 2, -34, -24, -446, -436, "steel")                        # front sling swivel
+    body.box(-17.3, 17.3, -5, -3, -388, -132, "rubber")                   # handguard halves seam
+    for z in range(-380, -150, 20):                                       # top cooling holes
+        body.box(-4, 4, 12.6, 13.4, z, z + 6, "rubber")
+    body.cyl((0, -4, -392), 30, 6, "steel_dark")                          # handguard cap
+    body.cyl((14, 58, 70), 8, 6, "steel_dark", axis="x")                  # windage drum
+    body.box(-6.4, 6.4, 26, 44, -80, 40, "rubber")                        # carry-handle opening
+    body.box(-14, -13, -10, 6, 30, 50, al)                                # forward-assist housing fins
+    stock = m["stock"]
+    stock.box(-10, 10, -80, -10, 370, 371, "steel_dark")                  # butt trap door
+    stock.box(-3, 3, -86, -74, 300, 312, "steel")                        # rear sling swivel
+    stock.box(-11.5, 11.5, -20, -12, 118, 126, "steel")                   # stock screw plate
+    m["magazine"].box(-12, 12, -162, -158, -100, -32, "steel_dark")        # mag floorplate lip
+
+
+def _bolt_catch(anims, up=(0, 4, 0)):
+    """The bolt catch pops up when the last round goes and drops when the bolt is released."""
+    for a in anims:
+        if a.name in ("fire_last",):
+            a.key("bolt_catch", 0.0, pos=(0, 0, 0))
+            a.key("bolt_catch", 0.04, pos=up, e="outquad")
+        elif a.name == "idle_empty":
+            a.key("bolt_catch", 0.0, pos=up)
+        elif a.name == "reload_empty":
+            tr = a.tracks.get(("bolt", "pos"))
+            if tr:
+                t_rel = max(t for t, v, _ in tr.keys)
+                a.key("bolt_catch", 0.0, pos=up)
+                a.key("bolt_catch", max(0.0, t_rel - 0.05), pos=up)
+                a.key("bolt_catch", t_rel, pos=(0, 0, 0), e="inquad")
+    return anims
+
+
 # =================================================================================================
 # M16A1 (carry handle, triangle handguard, 20-round mag, fixed A1 stock)
 # =================================================================================================
@@ -111,12 +153,14 @@ def m16a1():
     bolt.box(1, 12.8, -1, 13, -62, -10, "steel_light")
     mag = m["gun"].bone("magazine", pivot=(0, -46, -66))
     straight_mag(mag, -40, -100, -32, 120, width=23, mat="alloy", base_mat="steel_dark", round_d=8, round_len=56)
+    _m16a1_detail(m, body)
     add_arms(m, right_hand=(8, -92, 54), left_hand=(-10, -44, -280), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
     add_sockets(m, muzzle=(0, 0, -610), under=(0, -22, -280), eject=(15, 6, -38), sight=(0, 72, 70))
     cyc = dict(bone="bolt", travel=(0, 0, 78), t_back=0.018, t_fwd=0.052)
     anims = _rifle_anims(m, 0.0, (2.4, 0.4, 1.0), 11, "ar", cyc, bolt="bolt", bolt_travel=(0, 0, 78), lock=True,
                          selector=(-90, 0, 0))
     anims.insert(1, idle(m, "idle_empty", locked={"bolt": (0, 0, 78)}))
+    _bolt_catch(anims)
     return GunAsset(m, anims, _fp(pos=(0.118, -0.135, -0.2), ads=0.11))
 
 
