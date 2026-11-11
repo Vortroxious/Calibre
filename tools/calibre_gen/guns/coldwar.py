@@ -89,24 +89,6 @@ def _m16a1_detail(m, body, al="alloy"):
     m["magazine"].box(-12, 12, -162, -158, -100, -32, "steel_dark")        # mag floorplate lip
 
 
-def _bolt_catch(anims, up=(0, 4, 0)):
-    """The bolt catch pops up when the last round goes and drops when the bolt is released."""
-    for a in anims:
-        if a.name in ("fire_last",):
-            a.key("bolt_catch", 0.0, pos=(0, 0, 0))
-            a.key("bolt_catch", 0.04, pos=up, e="outquad")
-        elif a.name == "idle_empty":
-            a.key("bolt_catch", 0.0, pos=up)
-        elif a.name == "reload_empty":
-            tr = a.tracks.get(("bolt", "pos"))
-            if tr:
-                t_rel = max(t for t, v, _ in tr.keys)
-                a.key("bolt_catch", 0.0, pos=up)
-                a.key("bolt_catch", max(0.0, t_rel - 0.05), pos=up)
-                a.key("bolt_catch", t_rel, pos=(0, 0, 0), e="inquad")
-    return anims
-
-
 # =================================================================================================
 # M16A1 (carry handle, triangle handguard, 20-round mag, fixed A1 stock)
 # =================================================================================================
@@ -160,7 +142,6 @@ def m16a1():
     anims = _rifle_anims(m, 0.0, (2.4, 0.4, 1.0), 11, "ar", cyc, bolt="bolt", bolt_travel=(0, 0, 78), lock=True,
                          selector=(-90, 0, 0))
     anims.insert(1, idle(m, "idle_empty", locked={"bolt": (0, 0, 78)}))
-    _bolt_catch(anims)
     return GunAsset(m, anims, _fp(pos=(0.118, -0.135, -0.2), ads=0.11))
 
 

@@ -105,6 +105,8 @@ class Cube:
     uv: dict = field(default_factory=dict)
     # faces painted without the bevel outline (polygon end caps, the inner pieces of tapered shapes)
     plain: tuple = ()
+    # faces buried inside a compound shape (the wide faces of polygon slabs): packed as one texel, so they cost no atlas
+    hidden: tuple = ()
 
     @property
     def size(self):
@@ -148,19 +150,34 @@ class Bone:
         return self.box(x - w / 2, x + w / 2, y - h / 2, y + h / 2, z - d / 2, z + d / 2, mat,
                         rot=rot, pivot=pivot if pivot else (c if rot else None), inflate=inflate)
 
-    def cyl(self, c, d, length, mat, axis="z", sides=8, d2=None):
+    def cyl(self, c, d, length, mat, axis="z", sides=None, d2=None, steps=3):
         """
-        Regular polygon prism with flat-to-flat diameter d: an octagon (sides <= 8) or a 16-gon (sides > 8).
-        A 2n-gon is exactly the union of n rectangles of width d and thickness d*tan(pi/2n), each rotated by pi/n
-        about the axis, so the silhouette is clean (no star points). The end caps of the pieces are inset by a
-        hair so they never z-fight, and painted without outlines.
+        Regular polygon prism with flat-to-flat diameter d. A 2n-gon is exactly the union of n rectangles of width d
+        and thickness d*tan(pi/2n), each rotated by pi/n about the axis, so the silhouette is clean (no star points).
+        The end caps of the pieces are inset by a hair so they never z-fight, and painted without outlines; the wide
+        faces are buried inside the prism and take no atlas space.
+        sides: None picks by size (octagon under 12 mm, 16-gon under 40 mm, 24-gon above); 8 / 16 / 24 force one.
+        d2: diameter at the far (+axis) end -> a cone in `steps` stepped sections.
         """
+        if d2 is not None and abs(d2 - d) > 0.5:
+            out = []
+            x, y, z = c
+            seg = length / steps
+            for k in range(steps):
+                dk = d + (d2 - d) * (k + 0.5) / steps
+                off = -length / 2 + seg * (k + 0.5)
+                ck = (x, y, z + off) if axis == "z" else ((x + off, y, z) if axis == "x" else (x, y + off, z))
+                out += self.cyl(ck, dk, seg + 0.05, mat, axis=axis, sides=sides)
+            return out
+        if sides is None:
+            sides = 8 if d < 12 else (16 if d < 40 else 24)
         if d < 3.5 or sides <= 4:
             s = (d, d, length) if axis == "z" else ((length, d, d) if axis == "x" else (d, length, d))
             return [self.bc(c, s, mat)]
-        n = 4 if sides <= 8 else 8
+        n = 4 if sides <= 8 else (8 if sides <= 16 else 12)
         t = d * math.tan(math.pi / (2 * n))
         caps = {"z": ("north", "south"), "x": ("east", "west"), "y": ("up", "down")}[axis]
+        inner = {"z": ("up", "down"), "x": ("up", "down"), "y": ("north", "south")}[axis]
         out = []
         for k in range(n):
             ang = 180.0 / n * k
@@ -173,7 +190,80 @@ class Bone:
                 s, r = (d, ln, t), (0, ang, 0)
             cube = self.bc(c, s, mat, rot=r if ang else None, pivot=c if ang else None)
             cube.plain = caps
+            cube.hidden = inner
             out.append(cube)
+        return out
+
+    def tube(self, c, d, length, mat, bore=None, axis="z", sides=None, ends="front"):
+        """A cyl with a dark bore showing at one or both ends ('front' = the -axis end, 'back', 'both')."""
+        out = self.cyl(c, d, length, mat, axis=axis, sides=sides)
+        bd = bore or d * 0.55
+        x, y, z = c
+        for sgn, name in ((-1, "front"), (1, "back")):
+            if ends not in (name, "both"):
+                continue
+            off = sgn * (length / 2 + 0.25)
+            ck = (x, y, z + off) if axis == "z" else ((x + off, y, z) if axis == "x" else (x, y + off, z))
+            out += self.cyl(ck, bd, 0.6, "rubber", axis=axis, sides=8 if bd < 12 else 16)
+        return out
+
+    def chamfer_box(self, x0, x1, y0, y1, z0, z1, mat, ch=3.0, edges="top"):
+        """
+        A box running along Z with bevelled long edges. edges: 'top', 'bottom' or 'all'. Built from two boxes plus one
+        45-degree slab per bevel; the slab's far corners sit inside the boxes, so the outline is an exact chamfer.
+        """
+        xa, xb = sorted((x0, x1))
+        ya, yb = sorted((y0, y1))
+        za, zb = sorted((z0, z1))
+        ch = min(ch, (xb - xa) / 2 - 0.2, (yb - ya) / 2 - 0.2)
+        if ch < 0.8:
+            return [self.box(xa, xb, ya, yb, za, zb, mat)]
+        top = edges in ("top", "all")
+        bot = edges in ("bottom", "all")
+        ylo = ya + (ch if bot else 0)
+        yhi = yb - (ch if top else 0)
+        out = [self.box(xa, xb, ylo, yhi, za, zb, mat),                       # full width, short
+               self.box(xa + ch, xb - ch, ya, yb, za + 0.03, zb - 0.03, mat)]    # full height, narrow
+        out[0].hidden = (("up",) if top else ()) + (("down",) if bot else ())
+        out[1].plain = ("north", "south", "east", "west")
+        out[1].hidden = ("east", "west")
+        w, th = ch * math.sqrt(2), ch / math.sqrt(2)
+        corners = []
+        if top:
+            corners += [(xb - ch / 2, yb - ch / 2, -45), (xa + ch / 2, yb - ch / 2, 45)]
+        if bot:
+            corners += [(xb - ch / 2, ya + ch / 2, 45), (xa + ch / 2, ya + ch / 2, -45)]
+        for cx, cy, ang in corners:
+            # slab lying on the bevel: its outer face is the chamfer, the rest is buried
+            sx = 1 if cx > (xa + xb) / 2 else -1
+            sy = 1 if cy > (ya + yb) / 2 else -1
+            mx, my = cx - sx * th / 2 / math.sqrt(2), cy - sy * th / 2 / math.sqrt(2)
+            cube = self.box(mx - w / 2, mx + w / 2, my - th / 2, my + th / 2, za + 0.06, zb - 0.06, mat,
+                            rot=(0, 0, ang), pivot=(mx, my, (za + zb) / 2))
+            outer = "up" if sy > 0 else "down"
+            cube.plain = tuple(f for f in FACES if f != outer)
+            cube.hidden = tuple(f for f in FACES if f not in (outer, "north", "south"))
+            out.append(cube)
+        return out
+
+    def profile(self, x0, x1, top, bot, mat):
+        """
+        Side silhouette extruded across X: `top` and `bot` are polylines [(z, y), ...] over the same z range (z
+        ascending). Each span between breakpoints becomes a `taper`, so stocks, grips and receivers follow the real
+        outline instead of one straight wedge.
+        """
+        def at(line, z):
+            for (za, ya), (zb, yb) in zip(line, line[1:]):
+                if za - 1e-6 <= z <= zb + 1e-6:
+                    return ya + (yb - ya) * (z - za) / max(1e-6, zb - za)
+            return line[-1][1] if z > line[-1][0] else line[0][1]
+
+        zs = sorted({round(z, 3) for z, _ in top} | {round(z, 3) for z, _ in bot})
+        out = []
+        for za, zb in zip(zs, zs[1:]):
+            if zb - za < 0.5:
+                continue
+            out += self.taper(x0, x1, za, zb, at(top, za), at(top, zb), at(bot, za), at(bot, zb), mat)
         return out
 
     def taper(self, x0, x1, z0, z1, top0, top1, bot0, bot1, mat, plain=True):
@@ -266,17 +356,44 @@ class Bone:
                     self.box(xs, xs + sgn * 2.2, y - width / 2 - 0.4, y + width / 2 + 0.4, z, z + 5.2, mat)
                     z += 10.0
 
-    def round_(self, c, length, d, case="brass", tip="copper", axis="z"):
-        """A cartridge lying along -Z (bullet forward)."""
+    def round_(self, c, length, d, case="brass", tip="copper", axis="z", detail=2):
+        """
+        A cartridge lying along -Z (bullet forward), centred on c. Long thin cartridges are bottlenecked (shoulder +
+        neck), short ones straight-walled. detail 2 adds the rim, extractor groove and primer; detail 1 is for
+        belts and stacks where dozens are visible.
+        """
         x, y, z = c
-        bl = length * 0.38
-        self.cyl((x, y, z + bl / 2), d, length - bl, case)
-        self.cyl((x, y, z - (length - bl) / 2 + 0.0), d * 0.82, bl, tip)
+        bottleneck = length / d > 3.6
+        zb = z + length / 2                                   # case head
+        if bottleneck:
+            body = length * 0.52
+            sh = length * 0.06
+            neck = length * 0.1
+            self.cyl((x, y, zb - body / 2), d, body, case, sides=8)
+            self.cyl((x, y, zb - body - sh / 2), d * 0.84, sh + 0.05, case, sides=8)
+            self.cyl((x, y, zb - body - sh - neck / 2), d * 0.68, neck + 0.05, case, sides=8)
+            b0 = zb - body - sh - neck
+            bl = length - body - sh - neck
+            bd = d * 0.62
+        else:
+            body = length * 0.62
+            self.cyl((x, y, zb - body / 2), d, body, case, sides=8)
+            b0 = zb - body
+            bl = length - body
+            bd = d * 0.9
+        self.cyl((x, y, b0 - bl * 0.3), bd, bl * 0.6 + 0.05, tip, sides=8)          # bullet shank
+        self.cyl((x, y, b0 - bl * 0.8), bd * 0.62, bl * 0.4, tip, sides=8)          # ogive
+        if detail >= 2:
+            self.cyl((x, y, zb - 0.35), d * 1.06 if not bottleneck else d, 0.9, case, sides=8)    # rim
+            self.cyl((x, y, zb + 0.2), d * 0.42, 0.5, "steel_light", sides=8)                      # primer
 
     def shell12(self, c, length=70.0, d=19.0):
         x, y, z = c
-        self.cyl((x, y, z), d, length * 0.8, "shell_red")
-        self.cyl((x, y, z + length * 0.4), d + 1, length * 0.2, "brass")
+        self.cyl((x, y, z), d, length * 0.8, "shell_red", sides=8)
+        self.cyl((x, y, z + length * 0.4), d + 1, length * 0.2, "brass", sides=8)
+        self.cyl((x, y, z + length * 0.5 - 0.2), d + 2, 1.2, "brass", sides=8)                       # rim
+        self.cyl((x, y, z + length * 0.5 + 0.5), d * 0.3, 0.5, "steel_light", sides=8)              # primer
+        self.cyl((x, y, z - length * 0.4 - 0.3), d * 0.7, 0.6, "rubber", sides=8)                   # crimp
 
 
 class Model:
@@ -286,6 +403,8 @@ class Model:
         self.order: list[Bone] = []
         self.root = self._add_bone("root", None, (0, 0, 0), (0, 0, 0))
         self.meta: dict = {}
+        # how small controls move when worked: bone -> {"pos": .., "rot": ..} (see common.moving / auto_moving_parts)
+        self.moves: dict = {}
         self.tex_w = 0
         self.tex_h = 0
 
@@ -323,6 +442,61 @@ class Model:
         m = self.rest_matrix(name)
         p = m @ np.array([*self.bones[name].pivot, 1.0])
         return [r6(v) for v in p[:3]]
+
+    def warp_z(self, pts):
+        """
+        Re-proportion the finished model along the bore: pts = [(z_old, z_new), ...] is a piecewise-linear map
+        (slope 1 outside the outer points). Straight parts stretch; parts set at an angle (grips, curved magazines)
+        move rigidly with their pivot. Bone pivots, sockets and the eye point follow. Call it last in a gun builder.
+        """
+        pts = sorted(pts)
+
+        def f(z):
+            if z <= pts[0][0]:
+                return z + pts[0][1] - pts[0][0]
+            if z >= pts[-1][0]:
+                return z + pts[-1][1] - pts[-1][0]
+            for (za, fa), (zb, fb) in zip(pts, pts[1:]):
+                if za <= z <= zb:
+                    return fa + (fb - fa) * (z - za) / (zb - za)
+
+        for b in self.order:
+            b.pivot = (b.pivot[0], b.pivot[1], f(b.pivot[2]))
+            for c in b.cubes:
+                if c.rot[0] or c.rot[1]:
+                    pz = c.pivot[2] if c.pivot else c.center[2]
+                    dz = f(pz) - pz
+                    c.z0 += dz
+                    c.z1 += dz
+                    if c.pivot:
+                        c.pivot = (c.pivot[0], c.pivot[1], c.pivot[2] + dz)
+                else:
+                    c.z0, c.z1 = sorted((f(c.z0), f(c.z1)))
+                    if c.pivot:
+                        c.pivot = (c.pivot[0], c.pivot[1], f(c.pivot[2]))
+        for k in ("muzzle", "eject", "sight"):
+            if k in self.meta:
+                v = self.meta[k]
+                self.meta[k] = [v[0], v[1], f(v[2])]
+        io = self.meta.get("integral_optic")
+        if io and "eye" in io:
+            io["eye"] = [io["eye"][0], io["eye"][1], f(io["eye"][2])]
+        return f
+
+    def length(self, skip=()):
+        """Overall length along the bore, ignoring the arms and the bones in `skip` (and their children)."""
+        lo, hi = 1e9, -1e9
+        for b in self.order:
+            p, bad = b, False
+            while p:
+                if p.name.startswith("arm_") or p.name in skip:
+                    bad = True
+                p = p.parent
+            if bad:
+                continue
+            for c in b.cubes:
+                lo, hi = min(lo, c.z0), max(hi, c.z1)
+        return hi - lo
 
     def bounds(self):
         lo = np.array([1e9] * 3)
@@ -369,8 +543,8 @@ def face_dims(c: Cube):
     }
 
 
-def pack_uv(model: Model, density=1.0, max_size=1024):
-    """Shelf-pack every face of every cube. Picks the highest texel density that fits."""
+def pack_uv(model: Model, density=1.0, max_size=2048):
+    """Shelf-pack every face of every cube. Picks the highest texel density that fits. Buried faces take one texel."""
     faces = []
     for b in model.order:
         for c in b.cubes:
@@ -378,11 +552,14 @@ def pack_uv(model: Model, density=1.0, max_size=1024):
                 faces.append((c, f, w, h))
     d = density
     while True:
-        for width in (256, 512, 1024):
+        for width in (256, 512, 1024, 2048):
             if width > max_size:
                 break
             rects = []
             for c, f, w, h in faces:
+                if f in c.hidden:
+                    rects.append((c, f, 1, 1))
+                    continue
                 pw = max(1, int(math.ceil(w * d - 1e-6)))
                 ph = max(1, int(math.ceil(h * d - 1e-6)))
                 rects.append((c, f, pw, ph))

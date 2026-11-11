@@ -46,6 +46,63 @@ def add_sockets(m: Model, muzzle, optic=None, under=None, side=None, eject=None,
         m.meta["sight"] = list(sight)
 
 
+# ------------------------------------------------------------------------------------------------
+# Small controls that move by themselves wherever a gun has the bone
+# ------------------------------------------------------------------------------------------------
+def moving(m: Model, bone, pos=None, rot=None):
+    """Declare how a small control moves when it is worked (pressed / flipped / popped up)."""
+    m.moves[bone] = {k: tuple(v) for k, v in (("pos", pos), ("rot", rot)) if v is not None}
+
+
+def part_move(m: Model, bone, default):
+    return m.moves.get(bone) or default
+
+
+def _sound_time(a, prefix):
+    ts = [t for t, n in a.sounds if n.startswith(prefix)]
+    return min(ts) if ts else None
+
+
+def auto_moving_parts(asset):
+    """
+    mag_release: pressed as the magazine leaves.  bolt_catch / slide_stop: up on the last round and while the gun is
+    empty, down when the bolt or slide is let go. Any gun that has the bone gets the motion; a gun that keys the bone
+    itself is left alone.
+    """
+    m = asset.model
+    for a in asset.anims:
+        def free(bone):
+            return m.has(bone) and (bone, "pos") not in a.tracks and (bone, "rot") not in a.tracks
+
+        if a.name in ("reload", "reload_empty") and free("mag_release"):
+            ts = _sound_time(a, "mag_out")
+            if ts is not None:
+                px = m["mag_release"].pivot[0]
+                d = part_move(m, "mag_release", {"pos": (-1.6 if px > 1 else (1.6 if px < -1 else 0), 0 if abs(px) > 1 else 1.6, 0)})
+                zero = {k: (0, 0, 0) for k in d}
+                a.key("mag_release", max(0.0, ts - 0.07), **zero)
+                a.key("mag_release", ts, e="outquad", **d)
+                a.key("mag_release", ts + 0.16, **d)
+                a.key("mag_release", ts + 0.24, e="outquad", **zero)
+        for bone, snd, default in (("bolt_catch", "bolt_release", {"pos": (0, 3.5, 0)}),
+                                   ("slide_stop", "slide_release", {"pos": (0, 2.5, 0)})):
+            if not free(bone):
+                continue
+            d = part_move(m, bone, default)
+            zero = {k: (0, 0, 0) for k in d}
+            if a.name == "fire_last":
+                a.key(bone, 0.0, **zero)
+                a.key(bone, 0.045, e="outquad", **d)
+            elif a.name == "idle_empty":
+                a.key(bone, 0.0, **d)
+            elif a.name == "reload_empty":
+                tr = _sound_time(a, snd) or _sound_time(a, "charging_handle_forward") or a.length * 0.8
+                a.key(bone, 0.0, **d)
+                a.key(bone, max(0.01, tr - 0.05), **d)
+                a.key(bone, tr, e="inquad", **zero)
+    return asset
+
+
 def axis_vec(rx_deg):
     """Unit vector pointing 'down the magazine' for a mag well tilted by rx (neg = bottom goes back)."""
     a = math.radians(rx_deg)

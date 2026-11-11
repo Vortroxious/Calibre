@@ -25,8 +25,14 @@ RES = os.path.join(ROOT, "common", "src", "main", "resources")  # shared by the 
 ASSETS = os.path.join(RES, "assets", "calibre")
 
 from calibre_gen import camera, core, cs2, materials, motion  # noqa: E402
-from calibre_gen.common import meta_actions  # noqa: E402
+from calibre_gen.common import auto_moving_parts, meta_actions  # noqa: E402
 import calibre_gen.guns as guns_pkg  # noqa: E402
+
+
+def _finished(fn):
+    def build():
+        return auto_moving_parts(fn())
+    return build
 
 
 def all_guns():
@@ -34,7 +40,7 @@ def all_guns():
     for info in pkgutil.iter_modules(guns_pkg.__path__):
         if not info.name.startswith("_"):
             mod = importlib.import_module(f"calibre_gen.guns.{info.name}")
-            out.update(getattr(mod, "GUNS", {}))
+            out.update({k: _finished(v) for k, v in getattr(mod, "GUNS", {}).items()})
     return out
 
 

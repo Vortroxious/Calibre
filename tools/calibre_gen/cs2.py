@@ -135,6 +135,27 @@ class _Inspect:
         self.a.sound(t, name)
 
 
+def _fidget(I, t, T=lambda x: x):
+    """Work the small controls the gun has (safety, dust cover, forward assist, bolt catch, slide stop), one after
+    the other, with a click each. Returns the end time."""
+    from .common import part_move
+    m, a = I.m, I.a
+    for bone, default, snd in (("safety", {"rot": (-35, 0, 0)}, "selector"),
+                               ("dust_cover", {"rot": (0, 0, 100)}, "dust_cover"),
+                               ("forward_assist", {"pos": (-5, 0, 0)}, "forward_assist"),
+                               ("bolt_catch", {"pos": (0, 3.5, 0)}, "click_small"),
+                               ("slide_stop", {"pos": (0, 2.5, 0)}, "click_small")):
+        if not I.has(bone):
+            continue
+        d = part_move(m, bone, default)
+        for ch, v in d.items():
+            I.tug(bone, t + T(0.04), np.asarray(v, dtype=float), out=T(0.08), hold=T(0.14), back=T(0.08), ch=ch,
+                  snd=(snd, snd) if ch == list(d)[0] else None)
+        a.kick("gun", "rot", t + T(0.1), (0.4, 0, -0.5), attack=0.04, recover=0.2)
+        t += T(0.36)
+    return t
+
+
 # ------------------------------------------------------------------------------------------------
 # long guns
 # ------------------------------------------------------------------------------------------------
@@ -412,6 +433,7 @@ def _close_long(asset, kind):
     t += T(2.0)
     # 4) press-check with whatever the gun has (the hand comes in big, close to the eye)
     t = _press_check(I, kind, t, T, C.h0["arm_left"])
+    t = _fidget(I, t, T)
     # 5) selector off and back on
     sel = _peak(asset, "selector", "rot")
     if sel is not None:
@@ -485,6 +507,7 @@ def _close_pistol(asset):
     # 4) magazine out and up to the eye
     end = _show_mag(C, t, T, DOWN, A1, show_v=(0.0, 0.03, -0.21))
     t = end if end is not None else t
+    t = _fidget(I, t)
     # 5) a look at the rear sights and the back of the slide
     C.move(t, t + 0.45, REAR)
     C.park(t + 0.05, t + 0.45)
