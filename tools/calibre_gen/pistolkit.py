@@ -27,11 +27,8 @@ def grip_frame(body: Bone, gp, A, hw, y_bot, z_f, z_b, mat, y_top=None, hump=0.0
     yt = gp[1] if y_top is None else y_top
     H = yt - y_bot
     sm = strap_mat or mat
-    body.box(-hw, hw, y_bot, yt, z_f + 2.2, z_b - 2.2, mat, **r)
-    body.box(-hw + 2.6, hw - 2.6, y_bot, yt, z_f, z_f + 2.4, mat, **r)                 # rounded front strap
-    body.box(-hw + 1.2, hw - 1.2, y_bot, yt, z_f + 1.0, z_f + 2.4, mat, **r)
-    body.box(-hw + 2.6, hw - 2.6, y_bot, yt, z_b - 2.4, z_b, mat, **r)                 # rounded back strap
-    body.box(-hw + 1.2, hw - 1.2, y_bot, yt, z_b - 2.4, z_b - 1.0, mat, **r)
+    # one rounded section: front and back straps roll over into the sides
+    body.rbox(-hw, hw, y_bot, yt, z_f, z_b, mat, r=min(5.5, hw * 0.4), axis="y", edges="all", rot=(A, 0, 0), pivot=gp)
     if hump:
         body.box(-hw + 3, hw - 3, y_bot + H * 0.08, y_bot + H * 0.5, z_b, z_b + hump, mat, **r)
         body.box(-hw + 3.6, hw - 3.6, y_bot + H * 0.18, y_bot + H * 0.4, z_b + hump, z_b + hump * 1.6, mat, **r)

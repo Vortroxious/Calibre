@@ -92,7 +92,8 @@ def pistol_grip(b: Bone, top_z, top_y=-22.0, length=90.0, width=28.0, depth=34.0
     piv = (0, top_y, top_z)
     r = dict(rot=(angle, 0, 0), pivot=piv)
     hw, hd = width / 2, depth / 2
-    b.box(-hw, hw, top_y - length, top_y, top_z - hd, top_z + hd, mat, **r)
+    b.rbox(-hw, hw, top_y - length, top_y, top_z - hd, top_z + hd, mat, r=min(6.0, hw * 0.42), axis="y", edges="all",
+           rot=(angle, 0, 0), pivot=piv)
     b.box(-hw + 1, hw - 1, top_y - length + 6, top_y - 14, top_z + hd, top_z + hd + 5, mat, **r)       # palm swell
     b.box(-hw + 3, hw - 3, top_y - length + 16, top_y - 30, top_z + hd + 5, top_z + hd + 7.5, mat, **r)
     b.box(-hw - 1, hw + 1, top_y - length - 4, top_y - length, top_z - hd - 2, top_z + hd + 5, mat, **r)  # base flare
@@ -354,41 +355,54 @@ def bipod(b: Bone, z, y=-10.0, legs_len=180.0, folded=True, mat="steel_dark", fo
 
 def scope(b: Bone, z_center, y_axis, length=300.0, tube_d=30.0, obj_d=50.0, eye_d=42.0, mat="alloy", mount_y=None,
           turrets=True):
-    """Riflescope along Z centred on z_center at height y_axis: bells, lenses, turrets, zoom ring, rings and base."""
-    zc, ya = z_center, y_axis
-    L = length
-    b.cyl((0, ya, zc), tube_d, L * 0.55, mat)                                                  # main tube
-    # objective: cone up from the tube, bell, sunshade lip, recessed lens
-    b.cyl((0, ya, zc - L * 0.255), obj_d, L * 0.05, mat, d2=tube_d + 1, steps=3)
-    b.cyl((0, ya, zc - L * 0.375), obj_d, L * 0.2, mat)
-    b.cyl((0, ya, zc - L * 0.482), obj_d * 1.04, L * 0.02, mat)
-    b.cyl((0, ya, zc - L * 0.4915), obj_d * 0.9, 0.8, "rubber")
-    b.cyl((0, ya, zc - L * 0.4935), obj_d * 0.82, 1.2, "glass")
-    # eyepiece: cone, ocular housing, zoom ring, rubber eye ring, lens
-    b.cyl((0, ya, zc + L * 0.265), tube_d + 1, L * 0.04, mat, d2=eye_d, steps=3)
-    b.cyl((0, ya, zc + L * 0.375), eye_d, L * 0.18, mat)
-    b.cyl((0, ya, zc + L * 0.3), eye_d * 0.94, L * 0.035, "steel_dark")                        # zoom ring
-    for ang in (0, 45, 90, 135):
-        b.box(-1.6, 1.6, ya - eye_d * 0.49, ya + eye_d * 0.49, zc + L * 0.285, zc + L * 0.315, "steel_dark",
-              rot=(0, 0, ang), pivot=(0, ya, zc + L * 0.3))
-    b.cyl((0, ya, zc + L * 0.472), eye_d * 1.05, L * 0.03, "rubber")
-    b.cyl((0, ya, zc + L * 0.488), eye_d * 0.76, 1.2, "glass")
+    """
+    Riflescope along Z centred on z_center at height y_axis. Smooth round sections: objective bell flaring out of the
+    tube through a cone, recessed lenses, a slim turret collar with low drums, the ocular with its zoom ring and
+    rubber eye ring, and two slim rings on a base.
+    """
+    zc, ya, L = z_center, y_axis, length
+    zf, zr = zc - L / 2, zc + L / 2                       # objective end, ocular end
+    ob_len, ob_cone = L * 0.17, L * 0.1
+    ey_len, ey_cone = L * 0.19, L * 0.055
+    t0, t1 = zf + ob_len + ob_cone, zr - ey_len - ey_cone
+    b.cyl((0, ya, (t0 + t1) / 2), tube_d, t1 - t0 + 1.0, mat)                                  # main tube
+    # objective
+    b.cyl((0, ya, zf + ob_len + ob_cone / 2), obj_d, ob_cone + 0.4, mat, d2=tube_d, steps=4, sides=24)
+    b.cyl((0, ya, zf + ob_len / 2), obj_d, ob_len, mat, sides=24)
+    b.cyl((0, ya, zf + 3), obj_d + 1.6, 6, mat, sides=24)                                      # front ring
+    b.cyl((0, ya, zf - 0.2), obj_d * 0.9, 0.6, "rubber", sides=16)                             # shadowed bezel
+    b.cyl((0, ya, zf - 0.6), obj_d * 0.8, 0.5, "glass", sides=16)
+    b.box(-obj_d * 0.24, -obj_d * 0.08, ya + obj_d * 0.1, ya + obj_d * 0.22, zf - 1.0, zf - 0.84, "white")   # glint
+    # ocular
+    b.cyl((0, ya, zr - ey_len - ey_cone / 2), tube_d, ey_cone + 0.4, mat, d2=eye_d, steps=3, sides=24)
+    b.cyl((0, ya, zr - ey_len / 2), eye_d, ey_len, mat, sides=24)
+    zz = zr - ey_len + L * 0.03
+    b.cyl((0, ya, zz), eye_d + 1.8, L * 0.045, "steel_dark", sides=24)                         # zoom ring
+    b.box(-2.2, 2.2, ya + eye_d / 2, ya + eye_d / 2 + 3.2, zz - L * 0.018, zz + L * 0.018, "steel_dark")   # its fin
+    b.cyl((0, ya, zr - 4), eye_d + 2.4, 8, "rubber", sides=24)                                 # eye ring
+    b.cyl((0, ya, zr + 0.2), eye_d * 0.86, 0.6, "rubber", sides=16)
+    b.cyl((0, ya, zr + 0.6), eye_d * 0.72, 0.5, "glass", sides=16)
     if turrets:
-        for axis, c in (("y", (0, ya + tube_d / 2 + 2, zc)), ("x", (tube_d / 2 + 2, ya, zc))):
-            off = (0, 6, 0) if axis == "y" else (6, 0, 0)
-            b.cyl((c[0] + off[0] * 0.3, c[1] + off[1] * 0.3, c[2]), 24, 5, mat, axis=axis)          # turret base
-            b.cyl((c[0] + off[0], c[1] + off[1], c[2]), 20, 9, "steel_dark", axis=axis)             # knurled drum
-            b.cyl((c[0] + off[0] * 1.9, c[1] + off[1] * 1.9, c[2]), 17, 2.4, mat, axis=axis)        # cap
-        b.cyl((-tube_d / 2 - 4, ya, zc), 18, 7, "steel_dark", axis="x")                            # parallax knob
-        b.box(-tube_d / 2 - 1, tube_d / 2 + 1, ya - 7, ya + 7, zc - 13, zc + 13, mat)              # saddle
+        b.cyl((0, ya, zc), tube_d + 6, 24, mat)                                                # turret collar
+        for axis, sgn in (("y", 1), ("x", 1)):
+            def at(o):
+                return (0, ya + sgn * (tube_d / 2 + o), zc) if axis == "y" else (sgn * (tube_d / 2 + o), ya, zc)
+            b.cyl(at(4.5), 19, 5, mat, axis=axis, sides=16)                                    # turret base
+            b.cyl(at(10.5), 16.5, 8, mat, axis=axis, sides=16)                                 # drum
+            b.cyl(at(10.5), 17.4, 2.4, "steel_dark", axis=axis, sides=16)                      # knurl band
+            b.cyl(at(15.2), 14, 1.6, "steel_dark", axis=axis, sides=16)                        # cap
+        if tube_d >= 29:
+            b.cyl((-tube_d / 2 - 6.5, ya, zc), 19, 9, mat, axis="x", sides=16)                 # parallax knob (left)
+            b.cyl((-tube_d / 2 - 11.6, ya, zc), 15, 1.4, "steel_dark", axis="x", sides=16)
     if mount_y is not None:
-        for dz in (-L * 0.16, L * 0.16):
+        for dz in (-L * 0.15, L * 0.15):
             z = zc + dz
-            b.box(-12, 12, mount_y, ya - tube_d / 2 + 2, z - 9, z + 9, "alloy")                    # ring base
-            b.cyl((0, ya, z), tube_d + 7, 16, "alloy")                                             # ring
-            b.box(-tube_d / 2 - 6, tube_d / 2 + 6, ya - 2.5, ya + 2.5, z - 8.5, z + 8.5, "alloy")  # split flanges
+            b.cyl((0, ya, z), tube_d + 6.5, 13, "alloy")                                       # ring
+            b.box(-tube_d / 2 - 5, tube_d / 2 + 5, ya - 1.6, ya + 1.6, z - 6.2, z + 6.2, "alloy")   # split lugs
             for sx in (-1, 1):
-                for zz in (z - 5, z + 5):
-                    b.bc((sx * (tube_d / 2 + 4), ya + 3, zz), (3, 1.4, 3), "steel")                 # cap screws
-            b.box(-13, -12, mount_y + 1, mount_y + 6, z - 4, z + 4, "steel")                       # clamp nut
-        b.box(-10, 10, mount_y - 3, mount_y, zc - L * 0.25, zc + L * 0.25, "steel_dark")           # base rail
+                for zs in (z - 3.4, z + 3.4):
+                    b.cyl((sx * (tube_d / 2 + 3.6), ya + 2.2, zs), 3.4, 1.4, "steel", axis="y", sides=8)   # cap screws
+            b.box(-7, 7, mount_y + 5, ya - tube_d / 2 + 1, z - 6, z + 6, "alloy")              # ring stem
+            b.rbox(-12.5, 12.5, mount_y, mount_y + 7, z - 6.5, z + 6.5, "alloy", r=2.4, edges="top")   # clamp
+            b.cyl((-14, mount_y + 3.5, z), 9, 4, "steel", axis="x", sides=8)                   # clamp nut
+        b.rbox(-9.5, 9.5, mount_y - 3, mount_y, zc - L * 0.24, zc + L * 0.24, "steel_dark", r=1.5, edges="top")   # base

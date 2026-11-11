@@ -87,6 +87,25 @@ def S(v):
     return m
 
 
+def lit(n_y):
+    """Baked brightness of a facet from the vertical part of its normal: matches the flat-face table at the extremes
+    (up 1.07, sides ~0.98, down 0.86), so a run of facets shades smoothly from a side face into a top face."""
+    return 0.98 + (0.09 if n_y >= 0 else 0.12) * float(n_y)
+
+
+# canonical frame of a shape that runs along one axis: (u, v, w) with w the long axis
+_RP = {
+    "z": np.eye(3),
+    "y": np.array([[1, 0, 0], [0, 0, 1], [0, -1, 0]], dtype=float),     # u->x, v->-z, w->y
+    "x": np.array([[0, 0, 1], [0, 1, 0], [-1, 0, 0]], dtype=float),     # u->-z, v->y, w->x
+}
+_CANON_FACE = {
+    "z": {"+u": "east", "-u": "west", "+v": "up", "-v": "down", "+w": "south", "-w": "north"},
+    "y": {"+u": "east", "-u": "west", "+v": "north", "-v": "south", "+w": "up", "-w": "down"},
+    "x": {"+u": "north", "-u": "south", "+v": "up", "-v": "down", "+w": "east", "-w": "west"},
+}
+
+
 # ----------------------------------------------------------------------------------------------
 # Geometry
 # ----------------------------------------------------------------------------------------------
@@ -107,6 +126,8 @@ class Cube:
     plain: tuple = ()
     # faces buried inside a compound shape (the wide faces of polygon slabs): packed as one texel, so they cost no atlas
     hidden: tuple = ()
+    # baked brightness per face for facets of curved shapes (by their true normal), overriding the per-face table
+    light: dict = field(default_factory=dict)
 
     @property
     def size(self):
@@ -150,7 +171,7 @@ class Bone:
         return self.box(x - w / 2, x + w / 2, y - h / 2, y + h / 2, z - d / 2, z + d / 2, mat,
                         rot=rot, pivot=pivot if pivot else (c if rot else None), inflate=inflate)
 
-    def cyl(self, c, d, length, mat, axis="z", sides=None, d2=None, steps=3):
+    def cyl(self, c, d, length, mat, axis="z", sides=None, d2=None, steps=None):
         """
         Regular polygon prism with flat-to-flat diameter d. A 2n-gon is exactly the union of n rectangles of width d
         and thickness d*tan(pi/2n), each rotated by pi/n about the axis, so the silhouette is clean (no star points).
@@ -162,6 +183,7 @@ class Bone:
         if d2 is not None and abs(d2 - d) > 0.5:
             out = []
             x, y, z = c
+            steps = steps or max(3, min(8, int(abs(d2 - d) / 1.6) + 1))
             seg = length / steps
             for k in range(steps):
                 dk = d + (d2 - d) * (k + 0.5) / steps
@@ -169,12 +191,15 @@ class Bone:
                 ck = (x, y, z + off) if axis == "z" else ((x + off, y, z) if axis == "x" else (x, y + off, z))
                 out += self.cyl(ck, dk, seg + 0.05, mat, axis=axis, sides=sides)
             return out
+        auto = 8 if d < 7 else (16 if d < 16 else (24 if d < 34 else 32))
         if sides is None:
-            sides = 8 if d < 12 else (16 if d < 40 else 24)
+            sides = auto
+        elif sides == 12:                       # callers that asked for "the round one" get as round as the size wants
+            sides = max(16, auto)
         if d < 3.5 or sides <= 4:
             s = (d, d, length) if axis == "z" else ((length, d, d) if axis == "x" else (d, length, d))
             return [self.bc(c, s, mat)]
-        n = 4 if sides <= 8 else (8 if sides <= 16 else 12)
+        n = 4 if sides <= 8 else (8 if sides <= 16 else (12 if sides <= 24 else 16))
         t = d * math.tan(math.pi / (2 * n))
         caps = {"z": ("north", "south"), "x": ("east", "west"), "y": ("up", "down")}[axis]
         inner = {"z": ("up", "down"), "x": ("up", "down"), "y": ("north", "south")}[axis]
@@ -182,15 +207,21 @@ class Bone:
         for k in range(n):
             ang = 180.0 / n * k
             ln = max(0.2, length - 0.06 * k)
+            sa, ca = math.sin(math.radians(ang)), math.cos(math.radians(ang))
             if axis == "z":
                 s, r = (d, t, ln), (0, 0, ang)
+                light = {"east": lit(sa), "west": lit(-sa)}
             elif axis == "x":
                 s, r = (ln, t, d), (ang, 0, 0)
+                light = {"south": lit(-sa), "north": lit(sa)}
             else:
                 s, r = (d, ln, t), (0, ang, 0)
+                light = {"east": 0.98 + 0.05 * ca, "west": 0.98 - 0.05 * ca}
             cube = self.bc(c, s, mat, rot=r if ang else None, pivot=c if ang else None)
-            cube.plain = caps
+            # a tube reads as one smooth surface: no outlines on the facets, each lit by its own normal
+            cube.plain = FACES if n > 4 else caps
             cube.hidden = inner
+            cube.light = light
             out.append(cube)
         return out
 
@@ -207,44 +238,95 @@ class Bone:
             out += self.cyl(ck, bd, 0.6, "rubber", axis=axis, sides=8 if bd < 12 else 16)
         return out
 
-    def chamfer_box(self, x0, x1, y0, y1, z0, z1, mat, ch=3.0, edges="top"):
+    def obox(self, c, size, R, mat):
+        """Oriented box: centre c, size along its own axes, orientation matrix R."""
+        x, y, z = (float(v) for v in c)
+        sx, sy, sz = size
+        if np.allclose(R, np.eye(3), atol=1e-7):
+            return self.box(x - sx / 2, x + sx / 2, y - sy / 2, y + sy / 2, z - sz / 2, z + sz / 2, mat)
+        rot = tuple(float(v) for v in mat_euler(R))
+        return self.box(x - sx / 2, x + sx / 2, y - sy / 2, y + sy / 2, z - sz / 2, z + sz / 2, mat, rot=rot,
+                        pivot=(x, y, z))
+
+    def rbox(self, x0, x1, y0, y1, z0, z1, mat, r=3.0, axis="z", edges="all", rot=None, pivot=None, facets=None):
         """
-        A box running along Z with bevelled long edges. edges: 'top', 'bottom' or 'all'. Built from two boxes plus one
-        45-degree slab per bevel; the slab's far corners sit inside the boxes, so the outline is an exact chamfer.
+        Box with rounded long edges: the four edges that run along `axis`. edges: 'all', 'top' / 'hi' (the two on the
+        high side of the shape's v axis: +Y for axis z or x, the front for axis y) or 'bottom' / 'lo'.
+        Each rounded corner is a fan of flat facets tangent to the fillet, lit by their own normals and painted without
+        outlines, over a buried filler. rot / pivot tilt the whole shape (a raked grip, a sloped comb).
         """
         xa, xb = sorted((x0, x1))
         ya, yb = sorted((y0, y1))
         za, zb = sorted((z0, z1))
-        ch = min(ch, (xb - xa) / 2 - 0.2, (yb - ya) / 2 - 0.2)
-        if ch < 0.8:
-            return [self.box(xa, xb, ya, yb, za, zb, mat)]
-        top = edges in ("top", "all")
-        bot = edges in ("bottom", "all")
-        ylo = ya + (ch if bot else 0)
-        yhi = yb - (ch if top else 0)
-        out = [self.box(xa, xb, ylo, yhi, za, zb, mat),                       # full width, short
-               self.box(xa + ch, xb - ch, ya, yb, za + 0.03, zb - 0.03, mat)]    # full height, narrow
-        out[0].hidden = (("up",) if top else ()) + (("down",) if bot else ())
-        out[1].plain = ("north", "south", "east", "west")
-        out[1].hidden = ("east", "west")
-        w, th = ch * math.sqrt(2), ch / math.sqrt(2)
-        corners = []
-        if top:
-            corners += [(xb - ch / 2, yb - ch / 2, -45), (xa + ch / 2, yb - ch / 2, 45)]
-        if bot:
-            corners += [(xb - ch / 2, ya + ch / 2, 45), (xa + ch / 2, ya + ch / 2, -45)]
-        for cx, cy, ang in corners:
-            # slab lying on the bevel: its outer face is the chamfer, the rest is buried
-            sx = 1 if cx > (xa + xb) / 2 else -1
-            sy = 1 if cy > (ya + yb) / 2 else -1
-            mx, my = cx - sx * th / 2 / math.sqrt(2), cy - sy * th / 2 / math.sqrt(2)
-            cube = self.box(mx - w / 2, mx + w / 2, my - th / 2, my + th / 2, za + 0.06, zb - 0.06, mat,
-                            rot=(0, 0, ang), pivot=(mx, my, (za + zb) / 2))
-            outer = "up" if sy > 0 else "down"
-            cube.plain = tuple(f for f in FACES if f != outer)
-            cube.hidden = tuple(f for f in FACES if f not in (outer, "north", "south"))
-            out.append(cube)
+        if axis == "z":
+            U, V, W = (xa, xb), (ya, yb), (za, zb)
+        elif axis == "y":
+            U, V, W = (xa, xb), (-zb, -za), (ya, yb)
+        else:
+            U, V, W = (-zb, -za), (ya, yb), (xa, xb)
+        r = min(r, (U[1] - U[0]) / 2 - 0.2, (V[1] - V[0]) / 2 - 0.2)
+        Ro = euler_mat(rot) if rot else np.eye(3)
+        piv = np.asarray(pivot if pivot else ((xa + xb) / 2, (ya + yb) / 2, (za + zb) / 2), dtype=float)
+        Rp = _RP[axis]
+        fn = _CANON_FACE[axis]
+
+        def plain_box(u0, u1, v0, v1, w0, w1):
+            if axis == "z":
+                e = (u0, u1, v0, v1, w0, w1)
+            elif axis == "y":
+                e = (u0, u1, w0, w1, -v1, -v0)
+            else:
+                e = (w0, w1, v0, v1, -u1, -u0)
+            return self.box(*e, mat, rot=rot, pivot=tuple(piv) if rot else None)
+
+        if r < 0.8:
+            return [plain_box(U[0], U[1], V[0], V[1], W[0], W[1])]
+        hi = edges in ("all", "top", "hi")
+        lo = edges in ("all", "bottom", "lo")
+        k = facets or (1 if r < 2.2 else (2 if r < 4.5 else 3))
+        wide = plain_box(U[0], U[1], V[0] + (r if lo else 0), V[1] - (r if hi else 0), W[0], W[1])
+        narrow = plain_box(U[0] + r, U[1] - r, V[0], V[1], W[0] + 0.03, W[1] - 0.03)
+        wide.hidden = ((fn["+v"],) if hi else ()) + ((fn["-v"],) if lo else ())
+        narrow.hidden = (fn["+u"], fn["-u"])
+        narrow.plain = (fn["+u"], fn["-u"], fn["+w"], fn["-w"])
+        out = [wide, narrow]
+        delta = 45.0 / k
+        rr = r * math.cos(math.radians(delta)) if k > 1 else r / math.sqrt(2)
+        wt = 2 * rr * math.tan(math.radians(delta)) + (0.3 if k > 1 else 0.0)
+        th = 0.42 * r if k > 1 else r / math.sqrt(2)
+        Lw = W[1] - W[0] - 0.12
+        wc = (W[0] + W[1]) / 2
+        corners = ([(1, 1), (-1, 1)] if hi else []) + ([(1, -1), (-1, -1)] if lo else [])
+        for su, sv in corners:
+            cu = (U[1] - r) if su > 0 else (U[0] + r)
+            cv = (V[1] - r) if sv > 0 else (V[0] + r)
+            if k > 1:                                           # buried filler under the fan
+                f = plain_box(*sorted((cu - su * 0.3, cu + su * 0.68 * r)), *sorted((cv - sv * 0.3, cv + sv * 0.68 * r)),
+                              W[0] + 0.05, W[1] - 0.05)
+                f.plain = FACES
+                f.hidden = tuple(x for x in FACES if x not in (fn["+w"], fn["-w"]))
+                out.append(f)
+            for i in range(k):
+                th_deg = (i + 0.5) * 90.0 / k
+                ct, st = math.cos(math.radians(th_deg)), math.sin(math.radians(th_deg))
+                n = np.array([su * ct, sv * st, 0.0])
+                T = np.array([cu, cv, wc]) + rr * n
+                cen = T - n * th / 2
+                phi = -su * sv * (90.0 - th_deg)
+                R = Ro @ Rp @ rot_z(phi)
+                cw = piv + Ro @ (Rp @ cen - piv)
+                cube = self.obox(cw, (wt, th, Lw), R, mat)
+                outer = "up" if sv > 0 else "down"
+                cube.plain = FACES
+                cube.hidden = tuple(x for x in FACES if x not in (outer, "north", "south"))
+                nw = R @ np.array([0.0, 1.0 if sv > 0 else -1.0, 0.0])
+                cube.light = {outer: lit(nw[1])}
+                out.append(cube)
         return out
+
+    def chamfer_box(self, x0, x1, y0, y1, z0, z1, mat, ch=3.0, edges="top"):
+        """A box running along Z with its long top and / or bottom edges rounded over (see rbox)."""
+        return self.rbox(x0, x1, y0, y1, z0, z1, mat, r=ch, axis="z", edges=edges)
 
     def path(self, pts, width, thick, mat, x=0.0, overlap=0.6):
         """
@@ -285,7 +367,7 @@ class Bone:
             out += self.taper(x0, x1, za, zb, at(top, za), at(top, zb), at(bot, za), at(bot, zb), mat)
         return out
 
-    def taper(self, x0, x1, z0, z1, top0, top1, bot0, bot1, mat, plain=True):
+    def taper(self, x0, x1, z0, z1, top0, top1, bot0, bot1, mat, plain=True, round=None):
         """
         A solid whose side profile is a trapezoid: top edge from (z0, top0) to (z1, top1), bottom edge from (z0, bot0)
         to (z1, bot1), vertical front/back. Built from a slab along each edge plus axis-aligned fillers, so stocks,
@@ -299,11 +381,57 @@ class Bone:
         tt = tb = min(7.0, max(2.0, h_min * 0.5 + 0.5))
         lt = L / math.cos(math.radians(a_top))
         lb = L / math.cos(math.radians(a_bot))
+        xa, xb = sorted((x0, x1))
+        x0, x1 = xa, xb
+        rd = round
+        if rd is None:                       # stocks, butts and fore-ends get their long edges rounded over
+            rd = min(4.5, (x1 - x0) * 0.2, h_min * 0.3) if (x1 - x0) >= 14 else 0.0
+        rd = min(rd, tt - 1.5)
+        if rd < 1.5:
+            rd = 0.0
         cubes = []
-        c = self.box(x0, x1, top0 - tt, top0, z0, z0 + lt, mat, rot=(a_top, 0, 0), pivot=(0, top0, z0))
+        c = self.box(x0 + rd, x1 - rd, top0 - tt, top0, z0, z0 + lt, mat, rot=(a_top, 0, 0), pivot=(0, top0, z0))
         cubes.append(c)
-        c = self.box(x0 + 0.15, x1 - 0.15, bot0, bot0 + tb, z0, z0 + lb, mat, rot=(a_bot, 0, 0), pivot=(0, bot0, z0))
+        c = self.box(x0 + 0.15 + rd, x1 - 0.15 - rd, bot0, bot0 + tb, z0, z0 + lb, mat, rot=(a_bot, 0, 0),
+                     pivot=(0, bot0, z0))
         cubes.append(c)
+        if rd:
+            k = 2
+            delta = 45.0 / k
+            rr = rd * math.cos(math.radians(delta))
+            wt = 2 * rr * math.tan(math.radians(delta)) + 0.3
+            th = 0.42 * rd
+            for sv, y_edge, ang, ln, tk in ((1, top0, a_top, lt, tt), (-1, bot0, a_bot, lb, tb)):
+                P = np.array([0.0, y_edge, z0])
+                Rx_ = rot_x(ang)
+                inset = 0.0 if sv > 0 else 0.15
+                # the full-width slab, set back by the fillet radius
+                ys = sorted((y_edge - sv * tk, y_edge - sv * rd))
+                c = self.box(x0 + inset, x1 - inset, ys[0], ys[1], z0, z0 + ln, mat, rot=(ang, 0, 0), pivot=tuple(P))
+                cubes.append(c)
+                for su in (1, -1):
+                    cu = (x1 - inset - rd) if su > 0 else (x0 + inset + rd)
+                    cv = y_edge - sv * rd
+                    fu = sorted((cu - su * 0.3, cu + su * 0.68 * rd))
+                    fv = sorted((cv - sv * 0.3, cv + sv * 0.68 * rd))
+                    f = self.box(fu[0], fu[1], fv[0], fv[1], z0 + 0.05, z0 + ln - 0.05, mat, rot=(ang, 0, 0),
+                                 pivot=tuple(P))
+                    f.hidden = ("up", "down", "east", "west")
+                    cubes.append(f)
+                    for i in range(k):
+                        th_deg = (i + 0.5) * 90.0 / k
+                        ct, st = math.cos(math.radians(th_deg)), math.sin(math.radians(th_deg))
+                        n = np.array([su * ct, sv * st, 0.0])
+                        cen = np.array([cu, cv, z0 + ln / 2]) + rr * n - n * th / 2
+                        phi = -su * sv * (90.0 - th_deg)
+                        R = Rx_ @ rot_z(phi)
+                        cw = P + Rx_ @ (cen - P)
+                        cube = self.obox(cw, (wt, th, ln - 0.12), R, mat)
+                        outer = "up" if sv > 0 else "down"
+                        cube.hidden = tuple(x for x in FACES if x not in (outer, "north", "south"))
+                        nw = R @ np.array([0.0, float(sv), 0.0])
+                        cube.light = {outer: lit(nw[1])}
+                        cubes.append(cube)
 
         def top(z):
             return top0 + (top1 - top0) * (z - z0) / L
@@ -326,8 +454,8 @@ class Bone:
                 seg = zs[i:j + 1]
                 lo_need = max(top(q) - tt for q in seg)             # filler must reach up to here
                 hi_need = min(bot(q) + tb for q in seg)             # and down to here
-                lo_ok = max(bot(q) for q in seg) + 0.2              # without poking out below
-                hi_ok = min(top(q) for q in seg) - 0.2              # or above
+                lo_ok = max(bot(q) for q in seg) + 0.2 + rd         # without poking out below
+                hi_ok = min(top(q) for q in seg) - 0.2 - rd         # or above (or through the rounded edges)
                 y0, y1 = max(lo_ok, hi_need - 0.5), min(hi_ok, lo_need + 0.5)
                 if y1 - y0 < 0.5 or y0 > hi_need or y1 < lo_need:
                     break

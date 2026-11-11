@@ -69,7 +69,7 @@ def _smooth(a, k=3):
     return out
 
 
-def paint_patch(mat, w, h, face, seed, plain=False):
+def paint_patch(mat, w, h, face, seed, plain=False, light=None):
     """
     Clean, high-resolution finish: flat base colour with a soft light falloff, very low-contrast material detail
     (brushing, grain, stipple), and a crisp bevel on every edge — a dark 1 px outline with a light inner line — so parts
@@ -108,20 +108,18 @@ def paint_patch(mat, w, h, face, seed, plain=False):
         base += (_smooth(rng.normal(0, 1, (h, w)), 3) * noise * 0.25)[..., None]
     elif style == "canvas":
         base += (((xx.astype(int) + yy.astype(int)) % 2) * 5.0)[..., None]
-    # face lighting so the three visible sides of a part separate even under flat light
-    base *= {"up": 1.07, "down": 0.86, "east": 1.0, "west": 0.96, "north": 0.98, "south": 0.94}.get(face, 1.0)
+    # face lighting so the three visible sides of a part separate even under flat light; facets of curved shapes
+    # bring their own value, from their true normal
+    table = {"up": 1.07, "down": 0.86, "east": 1.0, "west": 0.96, "north": 0.98, "south": 0.94}
+    base *= light if light is not None else table.get(face, 1.0)
     if style != "flat" and not plain and w >= 4 and h >= 4:
-        light = np.minimum(255, base * 1.12 + 10)
-        base[1, 1:-1] = light[1, 1:-1]                            # inner highlight along the top and left edges
-        base[1:-1, 1] = light[1:-1, 1]
-        if style in ("metal", "anodized") and w >= 8:
-            base[1, 2:-2] = np.minimum(255, base[1, 2:-2] * 1.06 + 8)
-        base[-2, 1:-1] *= 0.93                                     # soft inner shadow on the opposite edges
-        base[1:-1, -2] *= 0.95
-        base[0, :] *= 0.66                                         # crisp dark outline = panel line
-        base[-1, :] *= 0.62
-        base[:, 0] *= 0.68
-        base[:, -1] *= 0.64
+        # soft machined edge instead of a hard outline: the surface darkens gently over two texels towards every edge
+        # (reads as a rounded-over corner), with a light catch just inside the top and left
+        e = np.minimum(np.minimum(xx, w - 1 - xx), np.minimum(yy, h - 1 - yy))
+        base *= (1.0 - 0.2 * np.clip(1.0 - e / 2.2, 0, 1) ** 1.5)[..., None]
+        if w >= 6 and h >= 6:
+            base[1, 2:-2] = np.minimum(255, base[1, 2:-2] * 1.08 + 5)
+            base[2:-2, 1] = np.minimum(255, base[2:-2, 1] * 1.04 + 3)
     return np.clip(base, 0, 255).astype(np.uint8)
 
 
@@ -130,7 +128,8 @@ def paint_texture(model, path):
     for bi, b in enumerate(model.order):
         for ci, c in enumerate(b.cubes):
             for f, (u, v, w, h) in c.uv.items():
-                patch = paint_patch(c.mat, w, h, f, f"{model.name}:{b.name}:{ci}", plain=f in getattr(c, "plain", ()))
+                patch = paint_patch(c.mat, w, h, f, f"{model.name}:{b.name}:{ci}", plain=f in getattr(c, "plain", ()),
+                                    light=getattr(c, "light", {}).get(f))
                 img[v:v + h, u:u + w, :3] = patch
                 img[v:v + h, u:u + w, 3] = 255
     os.makedirs(os.path.dirname(path), exist_ok=True)
