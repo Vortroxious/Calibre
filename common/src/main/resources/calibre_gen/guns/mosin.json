@@ -11,8 +11,8 @@
  ],
  "sight": [
   0,
-  26,
-  -160
+  19.5,
+  -168
  ],
  "texel_density": 1.0,
  "hip": {
@@ -35,7 +35,6 @@
   "root",
   "gun",
   "body",
-  "rear_sight",
   "trigger",
   "bolt",
   "clip",

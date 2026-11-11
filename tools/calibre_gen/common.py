@@ -70,6 +70,10 @@ def auto_moving_parts(asset):
     itself is left alone.
     """
     m = asset.model
+    if m.follow:
+        from .templates import follow_pos
+        for src, dst in m.follow:
+            follow_pos(asset.anims, src, dst)
     for a in asset.anims:
         def free(bone):
             return m.has(bone) and (bone, "pos") not in a.tracks and (bone, "rot") not in a.tracks

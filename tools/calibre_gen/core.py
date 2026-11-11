@@ -553,6 +553,8 @@ class Model:
         self.meta: dict = {}
         # how small controls move when worked: bone -> {"pos": .., "rot": ..} (see common.moving / auto_moving_parts)
         self.moves: dict = {}
+        # parts that ride along with another bone without turning with it: [(src, dst)] (see riflekit.rides)
+        self.follow: list = []
         self.tex_w = 0
         self.tex_h = 0
 

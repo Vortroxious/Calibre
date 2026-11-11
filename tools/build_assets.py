@@ -24,7 +24,7 @@ ROOT = os.path.dirname(HERE)
 RES = os.path.join(ROOT, "common", "src", "main", "resources")  # shared by the neoforge and fabric builds
 ASSETS = os.path.join(RES, "assets", "calibre")
 
-from calibre_gen import camera, core, cs2, materials, motion  # noqa: E402
+from calibre_gen import camera, core, cs2, materials, motion, templates  # noqa: E402
 from calibre_gen.common import auto_moving_parts, meta_actions  # noqa: E402
 import calibre_gen.guns as guns_pkg  # noqa: E402
 
@@ -52,6 +52,8 @@ def build_gun(name, preview=False):
     for i, a in enumerate(asset.anims):
         if a.name == "inspect":
             a = asset.anims[i] = cs2.cs2_inspect(asset)
+            for src, dst in m.follow:
+                templates.follow_pos([a], src, dst)
             motion.fluid_inspect(asset, a)
             motion.clearance(asset, a, dmin=0.07)   # close-ups: only keep parts out of the near plane
     core.pack_uv(m)

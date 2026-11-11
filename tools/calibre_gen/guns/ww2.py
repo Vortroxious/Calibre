@@ -7,7 +7,12 @@ from ..core import Anim
 from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, firemode,
                       apply_hidden)
 from ..templates import (bolt_cycle, bolt_clip_load, carrier_clip_load, follow_pos, _settle, OFF_LEFT, OFF_LEFT_ROT)
-from ..parts import trigger_group, barrel
+from ..parts import trigger_group, barrel, pins, sling_swivel, side_swivel
+from ..common import moving
+from ..longkit import slot, ring_sight, eared_sight, tangent_sight, peep, aperture_sight
+from ..pistolkit import control
+from ..riflekit import (mil_stock, stock, line_y, butt_plate, band, handguard, receiver, stepped_barrel, bolt,
+                        rides)
 
 RIFLE_FP = {"hip": {"pos": [0.12, -0.14, -0.2], "rot": [0, 3, 0]}, "ads": {"dist": 0.42}}
 
@@ -81,94 +86,50 @@ def _band(b, z, top=16, bot=-38, w=17, mat="steel"):
 # Mosin-Nagant M91/30
 # =================================================================================================
 def mosin():
+    # Mosin-Nagant M91/30: 1232 mm long, 730 mm barrel, hexagonal receiver, straight-wristed stock
     m = new_gun("mosin")
     body = m["body"]
-    st = "steel"
-    wd = "wood"
-    # receiver: hexagonal, with open top between the rings
-    body.cyl((0, 0, -10), 32, 200, st, sides=8)                       # -110 .. 90
-    body.box(-9, 9, 15, 16.6, -82, 6, "rubber")                       # open top of the action
-    body.box(-10, -7, 14, 24, 6, 16, st)                              # charger guide ears
-    body.box(7, 10, 14, 24, 6, 16, st)
-    body.box(-6, 6, -14, 14, 90, 150, st)                             # tang
-    # barrel (stepped profile) + sights
-    body.cyl((0, 0, -200), 24, 180, st)
-    barrel(body, -280, -830, d=19)
-    body.box(-6, 6, 9, 22, -830, -808, st)                            # front sight base
-    body.box(-8, -6, 10, 30, -828, -810, st)                          # hood
-    body.box(6, 8, 10, 30, -828, -810, st)
-    body.box(-8, 8, 28, 30, -828, -810, st)
-    body.box(-1, 1, 14, 26, -820, -818, st)                           # post
-    body.box(-12, 12, 10, 18, -260, -150, st)                         # tangent rear sight base
-    sight = body.bone("rear_sight", pivot=(0, 18, -250))
-    sight.box(-9, 9, 18, 22, -250, -158, st)
-    sight.box(-9, 9, 22, 24, -166, -158, st)                          # notch block with a V gap
-    sight.box(-9, -1.6, 24, 28, -166, -158, st)
-    sight.box(1.6, 9, 24, 28, -166, -158, st)
-    # stock: forend, handguards, bands, straight wrist, butt
-    body.box(-17, 17, -40, 4, -570, -110, wd)
-    body.box(-14, 14, 4, 15, -560, -290, wd)                          # front upper handguard
-    body.box(-14, 14, 4, 15, -280, -265, wd)
-    body.box(-18, 18, -54, -6, -110, 120, wd)                         # receiver bed
-    _band(body, -548, top=16, bot=-42)
-    _band(body, -360, top=16, bot=-42)
-    body.box(-13, 13, -38, 4, -582, -570, st)                         # nose cap
-    body.cyl((0, -16, -700), 6, 260, "steel_light")                   # cleaning rod
-    body.box(-14, 14, -70, -54, -76, 2, "steel_dark")                 # magazine box
-    body.box(-15, 15, -74, -70, -80, 6, "steel_dark")                 # floorplate
-    trigger_group(m, body, 40, y_top=-54, guard_depth=24, guard_len=56, guard_mat=st)
-    body.box(-15, 15, -62, -10, 116, 240, wd, rot=(4, 0, 0), pivot=(0, -10, 116))    # straight wrist
-    _butt(body, 236, 391, wd, st, comb_y=-16, heel_drop=18, toe_y=-128, wrist_y=-70)
-    _military_bolt(m, -70, 104, 98, handle_len=50, knob_d=18, cock=(22, 22))
+    st, wd = "steel", "wood"
+    receiver(body, -104, 96, 32, st, port=(-82, 6), ring=44, tang=(142, -12, -1), sides=8)
+    body.box(-10, -7, 14, 22, 6, 16, st)                                # charger guide slots
+    body.box(7, 10, 14, 22, 6, 16, st)
+    stepped_barrel(body, -100, -831, 25, 17.5, st, reinforce=150, cone=60)
+    tangent_sight(body, -252, -168, 11.5, st, w=13, h=9)                # notch top at 20.5
+    ring_sight(body, -812, 8, st, r=7, depth=14, post_h=10.5, base_w=12)
+    top, bot = mil_stock(body, wd, nose=-736, butt=(397, -36, -128), fore=(2, -28, -38), belly=-50, wrist=(-14, -60))
+    handguard(body, -700, -262, 13, 2, 14, wd, caps=st)
+    for z in (-700, -480):
+        band(body, z, line_y(bot, z) - 0.8, 15.5, 16, st, w=10)
+        body.box(15.6, 16.6, -6, -3, z - 22, z - 5, st)                 # band spring
+    body.rbox(-15.6, 15.6, line_y(bot, -736) - 0.6, 3, -744, -728, st, r=4)       # nose cap
+    body.cyl((0, -14, -772), 5, 92, "steel_light")                      # cleaning rod
+    body.cyl((0, -14, -820), 7, 7, "steel_light", sides=8)
+    for z, hw in ((-560, 15), (300, 17)):                               # sling slots with their escutcheons
+        yc = (line_y(top, z) + line_y(bot, z)) / 2 + (0 if z < 0 else 4)
+        for sx in (-1, 1):
+            body.box(sx * hw - 0.3, sx * hw + 0.3, yc - 9, yc + 9, z - 15, z + 15, st)
+            slot(body, sx * hw, yc - 6, yc + 6, z - 12, z + 12)
+    # single-stack magazine housing in front of the guard, with its hinged floorplate and catch
+    body.profile(-8.5, 8.5, [(-86, -48), (6, -48)], [(-86, -66), (-60, -88), (6, -92)], st)
+    body.box(-9, 9, -93.5, -91, -64, 8, "steel_dark")
+    body.box(-3, 3, -97, -92, -2, 8, st)
+    trigger_group(m, body, 40, y_top=-50, guard_depth=24, guard_len=56, guard_mat=st)
+    butt_plate(body, 397, -128, -36, 17, st)
+    b = bolt(m, -70, 104, 98, d=18, handle_len=38, droop=4, knob_d=17, cock=(21, 20))
+    b.cyl((0, 0, 128), 25, 8, st)                                       # knurled cocking knob
+    for i in range(8):
+        b.box(-12.8, 12.8, -1, 1, 124.6, 131.4, "steel_dark", rot=(0, 0, i * 22.5), pivot=(0, 0, 128))
     _clip(m, (0, 15, 12), case_len=54, bullet_len=23, d=11.5)
     _round_load(m, (0, 12, -26), 77, 11.5)
     add_arms(m, right_hand=(10, -74, 168), left_hand=(-14, -46, -330), right_rot=(30, 12, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -832), eject=(16, 10, -30), sight=(0, 26, -160))
-    travel, hrot = (0, 0, 92), (0, 0, 84)
+    add_sockets(m, muzzle=(0, 0, -832), eject=(16, 10, -30), sight=(0, 19.5, -168))
 
-    def inspect():
-        # hold the trigger, draw the bolt all the way out and look at its face, then slide it home
-        a = Anim(m, "inspect", 5.2)
-        a.mv("gun", 0.0, 0.4, pos=(-30, 20, 30), rot=(4, -20, -26))
-        a.mv("arm_right", 0.0, 0.2, pos=(20, 40, -30), rot=(-25, -20, -20))
-        a.grab("arm_right", "bolt", 0.2, 3.3, fade_in=0.03, fade_out=0.08)
-        a.key("bolt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.22, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.34, pos=(0, 0, 0), rot=hrot, e="outquad")
-        a.sound(0.32, "bolt_open")
-        a.key("bolt", 0.58, pos=travel, rot=hrot, e="inoutquad")
-        a.sound(0.56, "bolt_back")
-        # trigger held: the bolt stop drops and the bolt comes out of the receiver
-        a.key("trigger", 0.0, rot=(0, 0, 0))
-        a.key("trigger", 0.62, rot=(0, 0, 0))
-        a.key("trigger", 0.7, rot=(-14, 0, 0), e="outquad")
-        a.key("trigger", 1.1, rot=(-14, 0, 0))
-        a.key("trigger", 1.2, rot=(0, 0, 0))
-        a.sound(0.7, "click_small")
-        a.key("bolt", 0.78, pos=travel, rot=hrot)
-        a.key("bolt", 1.12, pos=(0, 10, 230), rot=hrot, e="inoutsine")
-        a.mv("gun", 0.7, 1.2, pos=(-60, -10, 60), rot=(0, -30, -30))
-        # turn the bolt to look at the face / extractor
-        a.key("bolt", 1.55, pos=(30, 70, 250), rot=(-30, 150, 40), e="inoutsine")
-        a.key("bolt", 2.2, pos=(34, 74, 252), rot=(-24, 160, 20), e="linear")
-        a.sound(1.6, "cloth")
-        a.key("bolt", 2.65, pos=(0, 10, 230), rot=hrot, e="inoutsine")
-        a.key("bolt", 2.95, pos=travel, rot=hrot, e="inoutsine")
-        a.sound(2.92, "bolt_forward")
-        a.key("bolt", 3.12, pos=(0, 0, 0), rot=hrot, e="inoutquad")
-        a.sound(3.1, "bolt_forward")
-        a.key("bolt", 3.24, pos=(0, 0, 0), rot=(0, 0, 0), e="inquad")
-        a.sound(3.24, "bolt_close")
-        a.spring("gun", "rot", 3.24, (1.4, 0, -1.2), freq=6, damp=8)
-        a.mv("gun", 2.5, 3.0, pos=(-30, 20, 30), rot=(4, -20, -26))
-        a.mv("arm_right", 3.38, 3.7, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.6, 5.15)
-        return a
+    travel, hrot = (0, 0, 92), (0, 0, 84)
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              *_bolt_set(m, travel, hrot, kick=(7.5, 0.7, 1.6), push=24, cycle_len=0.9),
-             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), inspect(), dry_fire(m)]
+             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
     return GunAsset(m, anims, RIFLE_FP)
 
@@ -177,95 +138,52 @@ def mosin():
 # M1917 Enfield
 # =================================================================================================
 def m1917():
+    # M1917 Enfield: 1175 mm long, 660 mm barrel, eared aperture sight on the bridge, dog-leg bolt handle
     m = new_gun("m1917")
     body = m["body"]
-    st = "steel_parked"
-    wd = "wood_light"
-    body.cyl((0, 0, -6), 34, 220, st, sides=8)                          # receiver -116 .. 104
-    body.box(-9, 9, 16, 17.6, -84, 8, "rubber")
-    body.box(-10, -7, 16, 24, 8, 18, st)
-    body.box(7, 10, 16, 24, 8, 18, st)
-    # receiver bridge with the protective sight ears and ladder aperture
-    body.box(-16, 16, 10, 26, 30, 70, st)
-    body.box(-16, -11, 26, 52, 30, 70, st)                              # left ear
-    body.box(11, 16, 26, 52, 30, 70, st)                                # right ear
-    lad = body.bone("rear_sight", pivot=(0, 26, 66))
-    lad.box(-8, 8, 26, 30, 30, 66, st)                                  # ladder lies forward
-    for x0, x1, y0, y1 in ((-6, 6, 26, 28), (-6, 6, 32, 34), (-6, -2, 28, 32), (2, 6, 28, 32)):
-        lad.box(x0, x1, y0, y1, 46, 50, "steel_dark")                   # battle-sight aperture ring
-    body.box(-6, 6, -14, 14, 104, 150, st)
-    # barrel and front sight with ears
-    body.cyl((0, 0, -210), 26, 190, st)
-    barrel(body, -300, -840, d=19)
-    body.box(-9, 9, 9, 18, -834, -810, st)
-    body.box(-9, -6, 18, 34, -832, -812, st)
-    body.box(6, 9, 18, 34, -832, -812, st)
-    body.box(-1, 1, 18, 30, -824, -821, st)
-    # stock (semi pistol grip), finger grooves in the forend
-    body.box(-17, 17, -42, 4, -600, -116, wd)
-    for z in (-300, -250):
-        body.box(-17.4, 17.4, -24, -14, z, z + 30, "wood")
-    body.box(-14, 14, 4, 16, -590, -130, wd)
-    _band(body, -580, top=18, bot=-44, mat=st)
-    _band(body, -420, top=18, bot=-44, mat=st)
-    body.box(-13, 13, -38, 0, -612, -600, st)
-    body.box(-18, 18, -56, -8, -116, 120, wd)
-    body.box(-15, 15, -86, -56, -84, 4, st)                             # the "belly" of the 6-rd magazine
-    body.box(-16, 16, -90, -86, -88, 8, st)
+    st, wd = "steel_parked", "wood_light"
+    receiver(body, -106, 104, 34, st, port=(-84, 8), ring=46, tang=(146, -12, -1))
+    body.box(-10, -7, 16, 23, 8, 18, st)
+    body.box(7, 10, 16, 23, 8, 18, st)
+    body.rbox(-16, 16, 9, 22, 28, 74, st, r=3, edges="top")             # receiver bridge
+    for sx in (-1, 1):                                                  # the protective ears
+        body.rbox(sx * 16 - (4 if sx > 0 else 0), sx * 16 + (4 if sx < 0 else 0), 20, 44, 32, 72, st, r=1.8,
+                  axis="x", edges="top")
+    lad = body.bone("rear_sight", pivot=(0, 22, 68))
+    lad.box(-5, 5, 22, 25, 34, 62, st)                                  # ladder folded forward
+    peep(lad, 64, 22, 38, st, w=10, hole=4, depth=3, hole_y=31)
+    stepped_barrel(body, -100, -760, 27, 17.5, st, reinforce=120, cone=60)
+    eared_sight(body, -742, 8.5, 26.2, st, w=16, depth=14, lean=6)      # post top at 31
+    top, bot = mil_stock(body, wd, nose=-650, butt=(411, -36, -132), fore=(2, -30, -42), belly=-56, wrist=(-14, -62),
+                         grip=True)
+    for sx in (-1, 1):                                                  # finger grooves
+        body.box(sx * 15 - 0.2, sx * 15 + 0.2, -14, -9, -320, -220, "wood")
+    handguard(body, -640, -444, 13, 2, 15, wd)
+    handguard(body, -426, -128, 13, 2, 16, wd)
+    band(body, -435, line_y(bot, -435) - 0.8, 17, 16, st, w=12, swivel=True)
+    band(body, -628, line_y(bot, -628) - 0.8, 16.5, 16, st, w=24)
+    body.box(-5, 5, line_y(bot, -628) - 10, line_y(bot, -628), -642, -616, st)        # bayonet lug
+    sling_swivel(body, 0, line_y(bot, -606) - 1, -606, along="x", w=18, drop=10, mat=st)   # stacking swivel
+    body.rbox(-15.6, 15.6, line_y(bot, -650) - 0.6, 3, -660, -648, st, r=4)
+    body.profile(-12, 12, [(-88, -55), (8, -55)], [(-88, -60), (8, -74)], st)         # belly of the 6-round magazine
     trigger_group(m, body, 40, y_top=-56, guard_depth=24, guard_len=60, guard_mat=st)
-    body.box(-15, 15, -62, -10, 116, 240, wd, rot=(4, 0, 0), pivot=(0, -10, 116))    # wrist
-    body.box(-14, 14, -108, -50, 128, 176, wd, rot=(-24, 0, 0), pivot=(0, -50, 150))  # semi pistol grip
-    _butt(body, 236, 405, wd, st, comb_y=-16, heel_drop=18, toe_y=-130, wrist_y=-80)
-    sel = body.bone("selector", pivot=(10, 6, 150))                      # wing safety
-    sel.box(8, 14, 4, 18, 146, 154, "steel")
-    _military_bolt(m, -76, 112, 100, handle_len=46, knob_d=17, bend=-28, cock=(20, 26))
+    butt_plate(body, 411, -132, -36, 17, st)
+    sling_swivel(body, 0, line_y(bot, 330), 330, along="x", w=22, drop=12, mat=st)
+    control(body, "safety", (15, 0, 118), [(13, 17, -4, 6, 114, 122, "steel"), (15, 19.5, 4, 10, 106, 124, "steel")],
+            turn=(-50, 0, 0))
+    bolt(m, -76, 112, 100, d=18, handle_len=38, droop=22, sweep=30, knob_d=17, cock=(20, 26))
     _clip(m, (0, 17, 14), case_len=63, bullet_len=21, d=12)
     _round_load(m, (0, 12, -30), 84, 12)
     add_arms(m, right_hand=(10, -86, 148), left_hand=(-14, -48, -330), right_rot=(34, 14, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -842), eject=(16, 10, -30), sight=(0, 30, 48))
-    travel, hrot = (0, 0, 100), (0, 0, 88)
+    add_sockets(m, muzzle=(0, 0, -761), eject=(16, 10, -30), sight=(0, 31, 64))
 
-    def inspect():
-        # bolt half-open chamber check, then flip up the ladder sight and run the aperture up and down
-        a = Anim(m, "inspect", 4.8)
-        a.mv("gun", 0.0, 0.4, pos=(-30, 20, 30), rot=(4, -22, -28))
-        a.mv("arm_right", 0.0, 0.2, pos=(20, 40, -30), rot=(-25, -20, -20))
-        a.grab("arm_right", "bolt", 0.2, 1.5, fade_in=0.03, fade_out=0.06)
-        a.key("bolt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.24, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.36, pos=(0, 0, 0), rot=hrot, e="outquad")
-        a.sound(0.34, "bolt_open")
-        a.key("bolt", 0.58, pos=(0, 0, 34), rot=hrot, e="inoutsine")
-        a.mv("gun", 0.55, 0.9, pos=(-40, 30, 40), rot=(10, -36, -50))
-        a.key("bolt", 1.1, pos=(0, 0, 34), rot=hrot)
-        a.key("bolt", 1.26, pos=(0, 0, 0), rot=hrot, e="inoutsine")
-        a.key("bolt", 1.36, pos=(0, 0, 0), rot=(0, 0, 0), e="inquad")
-        a.sound(1.36, "bolt_close")
-        a.mv("arm_right", 1.5, 1.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        # bring the receiver bridge to the eye, flip the ladder up
-        a.mv("gun", 1.4, 1.9, pos=(-20, -50, -40), rot=(-14, -8, -6), e="inoutsine")
-        a.mv("arm_left", 1.7, 2.0, pos=(20, 120, 360), rot=(-60, 10, 20))
-        a.key("rear_sight", 0.0, rot=(0, 0, 0))
-        a.key("rear_sight", 2.05, rot=(0, 0, 0))
-        a.key("rear_sight", 2.25, rot=(-88, 0, 0), e="outback")
-        a.sound(2.22, "click_small")
-        # run the aperture slide up the ladder: three detent clicks
-        for i, t in enumerate((2.6, 2.85, 3.1)):
-            a.sound(t, "click_small")
-            a.spring("rear_sight", "rot", t, (1.5, 0, 0), freq=12, damp=14)
-        a.key("rear_sight", 3.35, rot=(-88, 0, 0))
-        a.key("rear_sight", 3.52, rot=(0, 0, 0), e="inquad")
-        a.sound(3.52, "click_small")
-        a.mv("arm_left", 3.55, 3.9, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.6, 4.75)
-        return a
+    travel, hrot = (0, 0, 100), (0, 0, 88)
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              *_bolt_set(m, travel, hrot, kick=(8, 0.7, 1.6), push=25, cycle_len=0.88),
-             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=54), inspect(), dry_fire(m)]
+             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=54), Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
-    m.warp_z([(-841, -760), (-110, -110)])
     return GunAsset(m, anims, {"hip": RIFLE_FP["hip"], "ads": {"dist": 0.2}})
 
 
@@ -273,101 +191,60 @@ def m1917():
 # Arisaka Type 99
 # =================================================================================================
 def arisaka():
+    # Arisaka Type 99: 1118 mm long, 657 mm barrel, sliding bolt cover, anti-aircraft sight arms, wire monopod
     m = new_gun("arisaka")
     body = m["body"]
-    st = "steel"
-    wd = "wood"
-    body.cyl((0, 0, -8), 32, 200, st, sides=8)
-    body.box(-9, 9, 15, 16.6, -82, 8, "rubber")
-    body.box(-10, -7, 15, 24, 8, 18, st)
-    body.box(7, 10, 15, 24, 8, 18, st)
-    body.box(-6, 6, -14, 14, 92, 150, st)
-    body.cyl((0, 0, -200), 24, 180, st)
-    barrel(body, -290, -780, d=19)
-    body.box(-6, 6, 9, 20, -778, -756, st)
-    body.box(-8, -6, 10, 30, -776, -758, st)
-    body.box(6, 8, 10, 30, -776, -758, st)
-    body.box(-1, 1, 14, 28, -768, -766, st)
-    # leaf rear sight with the folding anti-aircraft lead arms
-    body.box(-12, 12, 10, 18, -250, -170, st)
-    body.box(-9, 9, 18, 24, -244, -176, st)
-    body.box(-5, -1.6, 24, 30, -182, -176, st)                         # notch ears
-    body.box(1.6, 5, 24, 30, -182, -176, st)
-    for side, name in ((-1, "aa_left"), (1, "aa_right")):
-        aa = body.bone(name, pivot=(side * 10, 22, -210))
-        aa.box(side * 10 - 2 if side > 0 else side * 10 - 2, side * 10 + 2, 20, 24, -214, -206, st)
-        aa.box(min(side * 10, side * 62), max(side * 10, side * 62), 21, 23, -212, -208, st)
-    # stock, two-piece with the joint under the receiver; monopod under the forend
-    body.box(-17, 17, -40, 4, -560, -110, wd)
-    body.box(-14, 14, 4, 15, -545, -130, wd)
-    _band(body, -540, top=16, bot=-42)
-    _band(body, -390, top=16, bot=-42)
-    body.box(-13, 13, -36, 2, -572, -560, st)
-    body.cyl((0, -16, -660), 6, 220, "steel_light")
-    body.box(-18, 18, -54, -6, -110, 118, wd)
-    body.box(-14, 14, -68, -54, -78, 0, "steel_dark")
-    body.box(-15, 15, -72, -68, -82, 4, "steel_dark")
-    mono = body.bone("monopod", pivot=(0, -40, -470))
-    mono.box(-2, 2, -44, -40, -470, -330, "steel_light")                  # folded wire leg
-    mono.box(-10, 10, -46, -40, -340, -330, "steel_light")
-    trigger_group(m, body, 40, y_top=-54, guard_depth=24, guard_len=58, guard_mat=st)
-    body.box(-15, 15, -62, -10, 116, 236, wd, rot=(4, 0, 0), pivot=(0, -10, 116))
-    body.box(-14, 14, -104, -50, 128, 172, wd, rot=(-24, 0, 0), pivot=(0, -50, 148))
-    _butt(body, 232, 351, wd, st, comb_y=-16, heel_drop=14, toe_y=-122, wrist_y=-80)
-    _military_bolt(m, -70, 104, 96, handle_len=44, knob_d=16, cock=(28, 18))
-    # the bolt's sliding dust cover (rides with the bolt, does not rotate)
-    dc = body.bone("dust_cover", pivot=(0, 0, 0))
-    dc.box(-13, 13, 16.5, 19, -84, 10, "steel_dark")
-    dc.box(-14, -12, 10, 19, -84, 10, "steel_dark")
-    dc.box(12, 14, 13, 19, -84, -10, "steel_dark")
+    st, wd = "steel", "wood"
+    receiver(body, -104, 96, 32, st, port=(-82, 8), ring=44, tang=(140, -12, -1))
+    body.box(-10, -7, 15, 22, 8, 18, st)
+    body.box(7, 10, 15, 22, 8, 18, st)
+    stepped_barrel(body, -100, -757, 25, 17, st, reinforce=150, cone=60)
+    eared_sight(body, -738, 8, 19.2, st, w=15, depth=13, lean=7)        # post top at 24.5
+    tangent_sight(body, -246, -174, 11.5, st, w=12, h=13)               # notch top at 24.5
+    for side, name in ((-1, "aa_left"), (1, "aa_right")):               # folding lead arms
+        aa = body.bone(name, pivot=(side * 9, 17, -214))
+        aa.cyl((side * 9, 17, -214), 5, 4, st, axis="y", sides=8)
+        aa.box(side * 9 - 1, side * 9 + 1, 16, 18, -214, -166, st)     # folded back along the leaf
+        for k in (0.4, 0.7, 1.0):
+            aa.box(side * 9 - 1.6, side * 9 + 1.6, 15.4, 18.6, -214 + 47 * k - 1, -214 + 47 * k + 1, st)
+    top, bot = mil_stock(body, wd, nose=-690, butt=(357, -34, -122), fore=(2, -28, -38), belly=-50, wrist=(-14, -60),
+                         grip=True)
+    handguard(body, -676, -262, 13, 2, 14, wd)
+    band(body, -676, line_y(bot, -676) - 0.8, 15.5, 16, st, w=22)
+    body.box(-5, 5, line_y(bot, -676) - 10, line_y(bot, -676), -690, -664, st)        # bayonet lug
+    band(body, -470, line_y(bot, -470) - 0.8, 15.5, 16, st, w=11)
+    side_swivel(body, -16, -12, -470, h=18, mat=st)
+    body.rbox(-15.6, 15.6, line_y(bot, -690) - 0.6, 3, -698, -686, st, r=4)
+    body.cyl((0, -14, -726), 5, 56, "steel_light")                      # cleaning rod
+    mono = body.bone("monopod", pivot=(0, line_y(bot, -470) - 2, -470))
+    my = line_y(bot, -470) - 3
+    for sx in (-1, 1):
+        mono.box(sx * 6 - 1.2, sx * 6 + 1.2, my - 2.4, my, -470, -336, "steel_light")
+    mono.box(-7.2, 7.2, my - 2.4, my, -338, -334, "steel_light")
+    body.box(-12, 12, -54, -50, -80, 2, st)                             # hinged floorplate
+    body.box(-3, 3, -57, -53, 2, 10, st)
+    trigger_group(m, body, 40, y_top=-50, guard_depth=24, guard_len=58, guard_mat=st)
+    butt_plate(body, 357, -122, -34, 17, st)
+    side_swivel(body, -17, -70, 290, h=18, mat=st)
+    b = bolt(m, -70, 104, 96, d=18, handle_len=36, droop=2, knob_d=19, cock=(28, 16))
+    for i in range(10):                                                 # knurled safety knob
+        b.box(-14.4, 14.4, -1, 1, 106, 119, "steel_dark", rot=(0, 0, i * 18), pivot=(0, 0, 112))
+    dc = body.bone("bolt_cover", pivot=(0, 0, 0))                       # rides with the bolt, does not turn
+    dc.rbox(-15, 15, 6, 18.6, -84, 58, "steel_dark", r=7, edges="top")
+    dc.box(-15.3, 15.3, 6, 8, -84, 58, "steel")
     _clip(m, (0, 15, 12), case_len=57, bullet_len=23, d=12)
     _round_load(m, (0, 12, -28), 80, 12)
     add_arms(m, right_hand=(10, -84, 150), left_hand=(-14, -46, -320), right_rot=(34, 14, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -782), eject=(16, 10, -30), sight=(0, 28, -180))
-    travel, hrot = (0, 0, 94), (0, 0, 86)
+    add_sockets(m, muzzle=(0, 0, -758), eject=(16, 10, -30), sight=(0, 24, -176))
 
-    def inspect():
-        # swing out the anti-aircraft lead arms and track a plane, unfold the monopod, then twist the safety knob
-        a = Anim(m, "inspect", 5.4)
-        a.mv("gun", 0.0, 0.45, pos=(-30, 30, 50), rot=(10, -16, 20))
-        a.mv("arm_left", 0.2, 0.5, pos=(-20, 60, 110), rot=(-30, 10, 10))
-        for name, t, r in (("aa_left", 0.6, (0, 0, -90)), ("aa_right", 0.9, (0, 0, 90))):
-            a.key(name, 0.0, rot=(0, 0, 0))
-            a.key(name, t, rot=(0, 0, 0))
-            a.key(name, t + 0.14, rot=r, e="outback")
-            a.sound(t + 0.12, "click_small")
-            a.key(name, 3.1, rot=r)
-            a.key(name, 3.25 + (0.15 if name == "aa_right" else 0), rot=(0, 0, 0), e="inquad")
-            a.sound(3.24 + (0.15 if name == "aa_right" else 0), "click_small")
-        a.mv("arm_left", 1.1, 1.4, pos=(0, 0, 0), rot=(0, 0, 0))
-        # aim up at the sky and sweep, like leading an aircraft
-        a.mv("gun", 1.2, 1.7, pos=(0, -40, -30), rot=(-38, 6, 0), e="inoutsine")
-        a.mv("gun", 1.7, 2.4, pos=(10, -40, -30), rot=(-34, -10, -2), e="inoutsine")
-        # flip the monopod down and back up
-        a.mv("gun", 2.4, 2.8, pos=(-40, 30, 30), rot=(6, 30, 30))
-        a.key("monopod", 0.0, rot=(0, 0, 0))
-        a.key("monopod", 2.6, rot=(0, 0, 0))
-        a.key("monopod", 2.78, rot=(-80, 0, 0), e="outback")
-        a.sound(2.76, "stock_lock")
-        a.key("monopod", 3.0, rot=(-80, 0, 0))
-        a.key("monopod", 3.16, rot=(0, 0, 0), e="inquad")
-        a.sound(3.16, "stock_lock")
-        # push and turn the big safety knob on the cocking piece
-        a.mv("gun", 3.4, 3.8, pos=(-30, 20, 30), rot=(-6, 24, 12))
-        a.mv("arm_right", 3.5, 3.75, pos=(-10, 70, -30), rot=(-30, -20, -20))
-        a.sound(3.9, "safety")
-        a.sound(4.25, "safety")
-        a.mv("arm_right", 4.3, 4.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 4.3, 5.35)
-        return a
+    travel, hrot = (0, 0, 94), (0, 0, 86)
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              *_bolt_set(m, travel, hrot, kick=(7.5, 0.7, 1.6), push=24, cycle_len=0.88),
-             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), inspect(), dry_fire(m)]
-    follow_pos(anims, "bolt", "dust_cover")
+             *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), Anim(m, "inspect", 1.0), dry_fire(m)]
+    follow_pos(anims, "bolt", "bolt_cover")
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
-    m.warp_z([(-781, -757), (-110, -110)])
     return GunAsset(m, anims, RIFLE_FP)
 
 
@@ -375,91 +252,67 @@ def arisaka():
 # SKS (Type 45 pattern, folding blade bayonet)
 # =================================================================================================
 def sks():
+    # SKS: 1020 mm long, 520 mm barrel, fixed 10-round magazine, folding blade bayonet
     m = new_gun("sks")
     body = m["body"]
-    st = "steel"
-    wd = "wood_red"
-    body.box(-14, 14, -30, 14, -90, 140, st)                            # milled receiver
-    body.box(-12, 12, 14, 24, -10, 170, st)                             # receiver cover
-    body.box(0, 14.3, -4, 12, -60, 10, "rubber")                       # ejection port
-    body.box(-6, 6, -40, -30, 0, 20, st)
-    # barrel, gas tube, front sight, bayonet lug
-    body.cyl((0, 0, -140), 22, 100, st)
-    barrel(body, -190, -560, d=17)
-    body.cyl((0, 20, -260), 14, 330, st)                                # gas tube -95 .. -425
-    body.box(-8, 8, 0, 30, -440, -420, st)                              # gas block
-    body.box(-6, 6, 8, 30, -548, -528, st)                               # front sight tower
-    body.box(-8, -6, 22, 46, -546, -530, st)
-    body.box(6, 8, 22, 46, -546, -530, st)
-    body.box(-1, 1, 30, 40, -540, -538, st)
-    body.box(-10, 10, 14, 30, -110, -70, st)                            # tangent rear sight
-    body.box(-8, 8, 30, 34, -110, -40, st)
-    body.box(-8, -1.6, 34, 41, -44, -40, st)
-    body.box(1.6, 8, 34, 41, -44, -40, st)
-    # wood: forend, handguard over the gas tube, semi pistol grip butt
-    body.box(-17, 17, -34, 6, -420, -90, wd)
-    body.box(-13, 13, 12, 28, -420, -150, wd)
-    _band(body, -400, top=8, bot=-36, w=18)
-    body.box(-17, 17, -48, -8, -90, 150, wd)
-    body.box(-14, 14, -86, -30, -84, -6, st)                             # 10-rd fixed magazine
-    body.box(-15, 15, -90, -86, -88, -2, st)
-    trigger_group(m, body, 26, y_top=-48, guard_depth=26, guard_len=60, guard_mat=st)
-    body.box(-15, 15, -60, -10, 140, 250, wd, rot=(4, 0, 0), pivot=(0, -10, 140))
-    body.box(-14, 14, -104, -48, 150, 196, wd, rot=(-24, 0, 0), pivot=(0, -48, 172))
-    _butt(body, 246, 449, wd, st, comb_y=-14, heel_drop=20, toe_y=-128, wrist_y=-80, w=18)
-
-    sel = body.bone("selector", pivot=(0, -40, 60))
-    sel.box(-3, 3, -46, -38, 56, 66, "steel")                           # safety behind the trigger
+    st, wd = "steel", "wood_red"
+    body.rbox(-14, 14, -30, 12, -100, 150, st, r=3, edges="bottom")     # milled receiver
+    body.rbox(-12.5, 12.5, 12, 25, -6, 172, st, r=6.5, edges="top")     # receiver cover
+    body.box(-13, 13, 12, 26, 164, 172, st)
+    body.cyl((13.4, 18, 156), 7, 1.2, "steel", axis="x", sides=8)       # cover pin lever
+    body.box(13, 16, 15, 21, 140, 158, st)
+    body.box(8, 14.4, 5, 12, -66, -6, "rubber")                         # ejection port
+    pins(body, 14, [(-18, -80), (-20, 110)], d=4.5, mat="steel")
+    body.cyl((0, 0, -125), 22, 52, st)
+    barrel(body, -148, -620, d=16)
+    body.rbox(-8, 8, -9, 30, -362, -340, st, r=3, edges="top")          # gas block
+    body.cyl((0, 20, -226), 13, 230, st)                                # gas tube
+    body.rbox(-13, 13, 6, 31, -332, -152, wd, r=7, edges="top")         # hand guard over the gas tube
+    for z in (-332, -152):
+        body.rbox(-13.5, 13.5, 6, 31.5, z - 3, z + 3, st, r=7, edges="top")
+    body.rbox(-11, 11, 9, 30, -150, -104, st, r=3, edges="top")         # rear sight base
+    tangent_sight(body, -148, -70, 30, st, w=12, h=10)                  # notch top at 40
+    body.rbox(-6, 6, 6, 27, -602, -578, st, r=2.5, edges="top")         # front sight tower
+    ring_sight(body, -590, 26, st, r=7.5, depth=14, post_h=12, base_w=12)
+    top, bot = mil_stock(body, wd, nose=-340, butt=(396, -36, -128), action=(-100, 140), fore=(6, -30, -36),
+                         belly=-46, wrist=(-14, -58), grip=True, hw=(16, 17, 15, 17), bottom_at=70)
+    band(body, -334, -31, 8, 17, st, w=12, swivel=True)
+    body.cyl((0, -11, -470), 4.5, 250, "steel_light")                   # cleaning rod
+    body.profile(-12, 12, [(-92, -44), (-8, -44)], [(-92, -74), (-62, -90), (-8, -84)], st)   # fixed magazine
+    body.box(-12.5, 12.5, -72, -70, -90, -10, "steel_dark")
+    body.box(-3, 3, -62, -46, -8, -2, st)                               # magazine latch
+    trigger_group(m, body, 26, y_top=-46, guard_depth=26, guard_len=60, guard_mat=st)
+    control(body, "safety", (6, -48, 56), [(4, 8, -64, -48, 53.5, 57.5, "steel")], turn=(40, 0, 0))
+    butt_plate(body, 396, -128, -36, 17, st)
+    body.cyl((0, -60, 400.3), 14, 0.6, "steel_dark", sides=16)          # trap for the cleaning kit
+    side_swivel(body, -17, -78, 300, h=18, mat=st)
     # carrier with the charger guide and right-hand handle
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(-10, 10, -6, 12, -60, 60, "steel_light")
-    bolt.box(-8, 8, 12, 14, -10, 14, "steel_light")                     # charger guide on the carrier
-    bolt.box(10, 28, -2, 6, -40, -30, "steel_light")
-    bolt.box(26, 32, -6, 10, -42, -28, "steel_light")
-    # folding blade bayonet, hinged at the front band
-    bay = body.bone("bayonet", pivot=(0, -20, -470))
-    bay.box(-6, 6, -26, -14, -478, -462, st)
-    bay.box(-2, 2, -26, -14, -462, -236, "steel_light")                   # folded back along the forend
-    bay.box(-2.5, 2.5, -25, -15, -244, -236, "steel_light")
+    bolt.rbox(-10.5, 10.5, 0, 14, -70, -6, "steel_light", r=4, edges="top")
+    bolt.box(-9, -5.5, 14, 18, -22, -8, "steel_light")                  # charger guide
+    bolt.box(5.5, 9, 14, 18, -22, -8, "steel_light")
+    bolt.box(-6, 6, 13.6, 14.4, -64, -30, "steel_dark")
+    bolt.box(10, 24, 2, 9, -46, -36, "steel_light")
+    bolt.cyl((28, 5.5, -41), 13, 10, "steel_light", axis="x", sides=16)
+    # folding blade bayonet, hinged under the muzzle and lying back in the fore-end
+    bay = body.bone("bayonet", pivot=(0, -14, -524))
+    bay.rbox(-7, 7, -22, 9, -532, -516, st, r=3)
+    bay.box(-1.6, 1.6, -27, -15, -516, -300, "steel_light")
+    bay.box(-2.4, 2.4, -24, -18, -516, -470, st)
     _clip(m, (0, 13, -14), n=10, case_len=39, bullet_len=17, d=11, step=5.0)
     _round_load(m, (0, 10, -40), 56, 11)
-    add_arms(m, right_hand=(8, -82, 170), left_hand=(-14, -40, -300), right_rot=(34, 14, 6),
+    add_arms(m, right_hand=(8, -82, 170), left_hand=(-14, -40, -280), right_rot=(34, 14, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -562), eject=(15, 6, -30), sight=(0, 40, -44))
-    travel = (0, 0, 100)
+    add_sockets(m, muzzle=(0, 0, -621), eject=(15, 6, -30), sight=(0, 39.5, -72))
 
-    def inspect():
-        # flick the bayonet out until it locks, show it off, fold it back
-        a = Anim(m, "inspect", 4.6)
-        a.mv("gun", 0.0, 0.45, pos=(-40, 30, 60), rot=(14, -24, 30))
-        a.mv("arm_left", 0.25, 0.55, pos=(10, -10, -160), rot=(10, 10, 0))
-        a.key("bayonet", 0.0, rot=(0, 0, 0))
-        a.key("bayonet", 0.6, rot=(0, 0, 0))
-        a.key("bayonet", 0.82, rot=(-180, 0, 0), e="outback")
-        a.sound(0.66, "stock_unlock")
-        a.sound(0.82, "stock_lock")
-        a.spring("gun", "rot", 0.82, (2.0, 0, 1.0), freq=6, damp=8)
-        a.spring("bayonet", "rot", 0.82, (4.0, 0, 0), freq=12, damp=14)
-        a.mv("arm_left", 0.9, 1.2, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("gun", 0.95, 1.6, pos=(-60, 10, -30), rot=(2, -50, -10))
-        a.mv("gun", 1.8, 2.3, pos=(-30, 30, 40), rot=(10, 20, 30))
-        a.key("bayonet", 2.6, rot=(-180, 0, 0))
-        a.mv("arm_left", 2.3, 2.6, pos=(10, -40, -280), rot=(10, 10, 0))
-        a.key("bayonet", 2.62, rot=(-176, 0, 0))
-        a.sound(2.62, "stock_unlock")
-        a.key("bayonet", 2.95, rot=(0, 0, 0), e="inoutsine")
-        a.sound(2.95, "stock_lock")
-        a.spring("gun", "rot", 2.95, (-1.2, 0, 0.8), freq=6, damp=8)
-        a.mv("arm_left", 3.0, 3.4, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.1, 4.55)
-        return a
+    travel = (0, 0, 100)
 
     cyc = dict(bone="bolt", travel=travel, t_back=0.024, t_fwd=0.07)
     kk = dict(kick=(4.2, 0.6, 1.4), push=16, cycle=cyc)
     anims = [idle(m), draw(m, 0.75, sound="draw_rifle"),
              fire_basic(m, "fire", recover=0.2, length=0.3, **kk),
              fire_basic(m, "fire_aim", recover=0.18, length=0.28, aim=True, **kk),
-             *carrier_clip_load(m, travel=travel, push=40), inspect(), dry_fire(m)]
+             *carrier_clip_load(m, travel=travel, push=40), Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
     return GunAsset(m, anims, {"hip": RIFLE_FP["hip"], "ads": {"dist": 0.38}})
 
