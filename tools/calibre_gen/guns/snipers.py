@@ -30,8 +30,8 @@ def m24():
     body.box(-24, 24, -46, -10, -560, 100, s)
     body.box(-22, 22, -40, -16, -560, -140, s)
     body.box(-22, 22, -110, -10, 100, 160, s, rot=(-20, 0, 0), pivot=(0, -10, 100))   # grip area
-    body.taper(-24, 24, 160, 420, 8, 8, -78, -102, s)
-    body.box(-25, 25, -108, 14, 416, 432, "rubber")
+    body.taper(-24, 24, 160, 359, 8, 8, -78, -100, s)
+    body.box(-25, 25, -106, 14, 355, 371, "rubber")
     body.box(-6, 6, -46, -40, -480, -460, "steel")                                   # sling swivel
     trigger_group(m, body, 40, y_top=-46, guard_depth=26, guard_len=60, guard_mat=st)
     sel = body.bone("selector", pivot=(14, 10, 110))
@@ -157,6 +157,7 @@ def awm():
              rifle_reload(m, "reload", A, empty=False, style="ar", mag_out=50, tilt=(4, -6, -20)),
              inspect(), dry_fire(m)]
     apply_hidden(anims, ["brass"])
+    m.warp_z([(-761, -788), (-110, -110)])
     return GunAsset(m, anims, SNIPER_FP)
 
 

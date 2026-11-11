@@ -49,7 +49,7 @@ def kar98k():
     body.cyl((0, -16, -650), 6, 180, "steel_light")
     body.box(-14, 14, -68, -54, -70, 4, st)                              # flush floorplate
     trigger_group(m, body, 40, y_top=-54, guard_depth=24, guard_len=56, guard_mat=st)
-    _rifle_stock(body, 460)
+    _rifle_stock(body, 460, butt=(236, 400))
     body.box(-16, 16, -96, -80, 300, 360, "rubber")                      # sling cut-out
     _military_bolt(m, -70, 104, 98, handle_len=46, knob_d=20, cock=(24, 26))
     _clip(m, (0, 15, 10), case_len=57, bullet_len=24, d=12)
@@ -61,6 +61,7 @@ def kar98k():
              *_bolt_set(m, travel, hrot, kick=(7.8, 0.7, 1.6), push=24, cycle_len=0.88),
              *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), _inspect(m), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
+    m.warp_z([(-741, -700), (-110, -110)])
     return GunAsset(m, anims, RIFLE_FP)
 
 
@@ -198,7 +199,7 @@ def enfield():
     mag = m["gun"].bone("magazine", pivot=(0, -40, -40))
     mag.box(-13, 13, -96, -40, -80, -6, st)
     mag.box(-14, 14, -100, -96, -82, -4, st)
-    _rifle_stock(body, 470)
+    _rifle_stock(body, 470, butt=(236, 397))
     _military_bolt(m, -70, 110, 104, handle_len=48, knob_d=22, cock=(22, 24))
     _clip(m, (0, 16, 14), case_len=56, bullet_len=22, d=12)
     _round_load(m, (0, 12, -26), 78, 12)

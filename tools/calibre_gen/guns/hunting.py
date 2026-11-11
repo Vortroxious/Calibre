@@ -12,11 +12,11 @@ SG_FP = {"hip": {"pos": [0.12, -0.13, -0.2], "rot": [0, 3.5, 0]}, "ads": {"dist"
 SCOPED_FP = {"hip": {"pos": [0.12, -0.15, -0.18], "rot": [0, 3, 0]}, "ads": {"dist": 0.075}}
 
 
-def _sporter_stock(body, z0, mat, plate="rubber", grip_mat=None, w=18):
+def _sporter_stock(body, z0, mat, plate="rubber", grip_mat=None, w=18, length=360):
     """Sporter wrist with a gentle pistol grip and a lofted butt."""
     body.box(-14, 14, -46, -10, z0, z0 + 110, mat, rot=(4, 0, 0), pivot=(0, -10, z0))
     body.box(-14, 14, -104, -46, z0 + 14, z0 + 62, grip_mat or mat, rot=(-24, 0, 0), pivot=(0, -46, z0 + 40))
-    _butt(body, z0 + 106, z0 + 360, mat, plate, comb_y=-12, heel_drop=16, toe_y=-128, wrist_y=-72, w=w)
+    _butt(body, z0 + 106, z0 + length, mat, plate, comb_y=-12, heel_drop=16, toe_y=-128, wrist_y=-72, w=w)
 
 
 def _choke(m, z, d, length, mat="steel_light", y=4):
@@ -185,7 +185,8 @@ def mossberg190():
 # =================================================================================================
 # Tikka T3 (synthetic, scoped, 3-round flush magazine)
 # =================================================================================================
-def _scoped_bolt_gun(name, stock_mat, barrel_len, barrel_d, mag_rounds_len, mag_len, eye, threaded=False):
+def _scoped_bolt_gun(name, stock_mat, barrel_len, barrel_d, mag_rounds_len, mag_len, eye, threaded=False,
+                     stock_len=294):
     m = new_gun(name)
     body = m["body"]
     st = "steel_dark"
@@ -197,7 +198,7 @@ def _scoped_bolt_gun(name, stock_mat, barrel_len, barrel_d, mag_rounds_len, mag_
     trigger_group(m, body, 30, y_top=-52, guard_depth=24, guard_len=60, guard_mat=stock_mat)
     sel = body.bone("selector", pivot=(10, 8, 96))
     sel.box(8, 13, 4, 14, 90, 100, "steel")
-    _sporter_stock(body, 100, stock_mat, grip_mat=stock_mat)
+    _sporter_stock(body, 100, stock_mat, grip_mat=stock_mat, length=stock_len)
     _military_bolt(m, -70, 110, 92, handle_len=44, knob_d=17, d=19, cock=(20, 16))
     rl = m["gun"].bone("brass", pivot=(0, 6, -30))
     rl.cyl((0, 6, -20), 12, mag_rounds_len * 0.7, "brass")
@@ -255,7 +256,7 @@ def tikka_t3():
 
 
 def savage10():
-    m = _scoped_bolt_gun("savage10", "polymer", 406, 22, 57, 90, eye=150)
+    m = _scoped_bolt_gun("savage10", "polymer", 406, 22, 57, 90, eye=150, stock_len=272)
     body = m["body"]
     body.cyl((0, 0, -527), 18, 10, "steel")                                      # threads
     cap = body.bone("thread_cap", pivot=(0, 0, -532))

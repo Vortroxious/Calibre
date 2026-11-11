@@ -118,7 +118,7 @@ def mosin():
     body.box(-15, 15, -74, -70, -80, 6, "steel_dark")                 # floorplate
     trigger_group(m, body, 40, y_top=-54, guard_depth=24, guard_len=56, guard_mat=st)
     body.box(-15, 15, -62, -10, 116, 240, wd, rot=(4, 0, 0), pivot=(0, -10, 116))    # straight wrist
-    _butt(body, 236, 470, wd, st, comb_y=-16, heel_drop=22, toe_y=-136, wrist_y=-70)
+    _butt(body, 236, 391, wd, st, comb_y=-16, heel_drop=18, toe_y=-128, wrist_y=-70)
     _military_bolt(m, -70, 104, 98, handle_len=50, knob_d=18, cock=(22, 22))
     _clip(m, (0, 15, 12), case_len=54, bullet_len=23, d=11.5)
     _round_load(m, (0, 12, -26), 77, 11.5)
@@ -215,7 +215,7 @@ def m1917():
     trigger_group(m, body, 40, y_top=-56, guard_depth=24, guard_len=60, guard_mat=st)
     body.box(-15, 15, -62, -10, 116, 240, wd, rot=(4, 0, 0), pivot=(0, -10, 116))    # wrist
     body.box(-14, 14, -108, -50, 128, 176, wd, rot=(-24, 0, 0), pivot=(0, -50, 150))  # semi pistol grip
-    _butt(body, 236, 470, wd, st, comb_y=-16, heel_drop=20, toe_y=-136, wrist_y=-80)
+    _butt(body, 236, 405, wd, st, comb_y=-16, heel_drop=18, toe_y=-130, wrist_y=-80)
     sel = body.bone("selector", pivot=(10, 6, 150))                      # wing safety
     sel.box(8, 14, 4, 18, 146, 154, "steel")
     _military_bolt(m, -76, 112, 100, handle_len=46, knob_d=17, bend=-28, cock=(20, 26))
@@ -265,6 +265,7 @@ def m1917():
              *_bolt_set(m, travel, hrot, kick=(8, 0.7, 1.6), push=25, cycle_len=0.88),
              *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=54), inspect(), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
+    m.warp_z([(-841, -760), (-110, -110)])
     return GunAsset(m, anims, {"hip": RIFLE_FP["hip"], "ads": {"dist": 0.2}})
 
 
@@ -312,7 +313,7 @@ def arisaka():
     trigger_group(m, body, 40, y_top=-54, guard_depth=24, guard_len=58, guard_mat=st)
     body.box(-15, 15, -62, -10, 116, 236, wd, rot=(4, 0, 0), pivot=(0, -10, 116))
     body.box(-14, 14, -104, -50, 128, 172, wd, rot=(-24, 0, 0), pivot=(0, -50, 148))
-    _butt(body, 232, 450, wd, st, comb_y=-16, heel_drop=20, toe_y=-130, wrist_y=-80)
+    _butt(body, 232, 351, wd, st, comb_y=-16, heel_drop=14, toe_y=-122, wrist_y=-80)
     _military_bolt(m, -70, 104, 96, handle_len=44, knob_d=16, cock=(28, 18))
     # the bolt's sliding dust cover (rides with the bolt, does not rotate)
     dc = body.bone("dust_cover", pivot=(0, 0, 0))
@@ -366,6 +367,7 @@ def arisaka():
              *bolt_clip_load(m, travel=travel, handle_rot=hrot, push=52), inspect(), dry_fire(m)]
     follow_pos(anims, "bolt", "dust_cover")
     apply_hidden(anims, ["round_load", "brass", "clip", "clip_rounds"])
+    m.warp_z([(-781, -757), (-110, -110)])
     return GunAsset(m, anims, RIFLE_FP)
 
 
@@ -404,7 +406,7 @@ def sks():
     trigger_group(m, body, 26, y_top=-48, guard_depth=26, guard_len=60, guard_mat=st)
     body.box(-15, 15, -60, -10, 140, 250, wd, rot=(4, 0, 0), pivot=(0, -10, 140))
     body.box(-14, 14, -104, -48, 150, 196, wd, rot=(-24, 0, 0), pivot=(0, -48, 172))
-    _butt(body, 246, 470, wd, st, comb_y=-14, heel_drop=20, toe_y=-128, wrist_y=-80, w=18)
+    _butt(body, 246, 449, wd, st, comb_y=-14, heel_drop=20, toe_y=-128, wrist_y=-80, w=18)
 
     sel = body.bone("selector", pivot=(0, -40, 60))
     sel.box(-3, 3, -46, -38, 56, 66, "steel")                           # safety behind the trigger

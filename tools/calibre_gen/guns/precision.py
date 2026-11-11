@@ -114,6 +114,7 @@ def l96():
     add_sockets(m, muzzle=(0, 0, -702), eject=(17, 8, -20), sight=(0, 52, 150))
     m.meta["integral_optic"] = {"zoom": 6.0, "reticle": "mildot", "eye": [0, 52, 150]}
     anims = _bolt_anims(m, (7, 0.6, 1.4), 22, (0, 0, 96), (0, 0, 66), mag_out=46)
+    m.warp_z([(-701, -738), (-110, -110)])
     return GunAsset(m, anims, SNIPER_FP)
 
 
@@ -137,7 +138,7 @@ def rem700():
     trigger_group(m, body, 30, y_top=-52, guard_depth=24, guard_len=60, guard_mat=st)
     sel = body.bone("selector", pivot=(10, 8, 96))
     sel.box(8, 13, 4, 14, 90, 100, "steel")
-    _sporter_stock(body, 100, w, grip_mat=w)
+    _sporter_stock(body, 100, w, grip_mat=w, length=289)
     _bolt(m, "gun", -70, 106, 92, mat="steel_light", d=19, knob=False)
     m["bolt"].cyl((24, -16, 92), 16, 12, "steel_light", axis="x")              # round bolt knob
     rl = m["gun"].bone("round_load", pivot=(0, 10, -20))
