@@ -8,6 +8,12 @@ from .core import Bone
 METAL_MAGS = ("steel_dark", "steel", "steel_parked", "alloy", "alloy_grey", "stainless", "steel_light")
 
 
+def arc(zc, yc, rz, ry, a0, a1, n=6):
+    """Points [(z, y)] on an ellipse centred (zc, yc): angle 0 = +z (rear), 90 = up, 180 = -z (front), 270 = down."""
+    return [(zc + rz * math.cos(math.radians(a0 + (a1 - a0) * i / n)),
+             yc + ry * math.sin(math.radians(a0 + (a1 - a0) * i / n))) for i in range(n + 1)]
+
+
 # ------------------------------------------------------------------------------------------------
 # small fittings
 # ------------------------------------------------------------------------------------------------
@@ -106,25 +112,18 @@ def pistol_grip(b: Bone, top_z, top_y=-22.0, length=90.0, width=28.0, depth=34.0
 
 def trigger_group(m, body: Bone, z, y_top=-22.0, guard_depth=30.0, guard_len=62.0, guard_mat="alloy", width=8.0,
                   trig_mat="steel_dark"):
-    """Trigger guard (bowed, with rounded corners) + `trigger` bone. z = trigger pivot z."""
+    """Trigger guard (one bar bent round the trigger) + `trigger` bone with a curved blade. z = trigger pivot z."""
     yb = y_top - guard_depth
     zf, zr = z - guard_len * 0.55, z + guard_len * 0.45
-    hw = width / 2
-    c = min(7.0, guard_depth * 0.28)
-    body.box(-hw, hw, yb - 4, yb, zf + c, zr - c, guard_mat)                                   # bottom strap
-    body.box(-hw, hw, yb + c - 1, y_top, zf, zf + 4.5, guard_mat)                              # front upright
-    # 45-degree corners joining them
-    L = c * math.sqrt(2) + 2.5
-    body.box(-hw + 0.1, hw - 0.1, yb + c / 2 - 4.2, yb + c / 2 - 0.2, zf + c / 2 - L / 2 + 1.4, zf + c / 2 + L / 2 + 1.4,
-             guard_mat, rot=(45, 0, 0), pivot=(0, yb + c / 2 - 2.2, zf + c / 2 + 1.4))
-    body.box(-hw + 0.1, hw - 0.1, yb + c / 2 - 4.2, yb + c / 2 - 0.2, zr - c / 2 - L / 2 - 1.4, zr - c / 2 + L / 2 - 1.4,
-             guard_mat, rot=(-45, 0, 0), pivot=(0, yb + c / 2 - 2.2, zr - c / 2 - 1.4))
-    body.box(-hw, hw, yb + c - 1, min(y_top, yb + c + 8), zr - 4, zr, guard_mat)               # rear upright stub
+    c = min(9.0, guard_depth * 0.36, guard_len * 0.2)
+    pts = [(zf + 2, y_top + 1)] + arc(zf + 2 + c, yb + c, c, c, 180, 270, 3) + arc(zr - 2 - c, yb + c, c, c, 270, 330, 2)
+    pts.append((zr + 1, min(y_top, yb + c + 8)))
+    body.path(pts, width, 4.0, guard_mat)
     trig = body.bone("trigger", pivot=(0, y_top - 2, z))
     p = (0, y_top - 2, z)
-    trig.box(-2.5, 2.5, y_top - 15, y_top - 2, z - 3, z + 2, trig_mat, rot=(-10, 0, 0), pivot=p)
-    trig.box(-2.5, 2.5, y_top - 24, y_top - 14, z - 5.2, z - 0.4, trig_mat, rot=(-24, 0, 0), pivot=(0, y_top - 14, z - 1))
-    trig.box(-2.9, 2.9, y_top - 20, y_top - 8, z - 3.4, z - 2.8, trig_mat, rot=(-14, 0, 0), pivot=p)   # face ridge
+    trig.box(-2.5, 2.5, y_top - 14, y_top - 2, z - 2.6, z + 2.2, trig_mat, rot=(5, 0, 0), pivot=p)
+    jy, jz = y_top - 2 - 11 * math.cos(math.radians(5)), z - 11 * math.sin(math.radians(5))
+    trig.box(-2.5, 2.5, jy - 11, jy + 1.5, jz - 2.6, jz + 2.0, trig_mat, rot=(22, 0, 0), pivot=(0, jy, jz))   # hooked tip
     return trig
 
 

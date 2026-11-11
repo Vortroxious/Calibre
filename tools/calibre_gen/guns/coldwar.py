@@ -11,7 +11,6 @@ from ..parts import (pistol_grip, trigger_group, curved_mag, straight_mag, barre
                      ar_front_sight)
 from .lmgs import _belt, _belt_feed, LMG_FP
 from .modern import _rifle_anims, _inspect, _fp
-from .pistols import _fixed_sights
 
 
 # =================================================================================================
@@ -63,7 +62,6 @@ def m60():
              belt_reload(m, "reload_empty", True, cover_rot=(75, 0, 0), ch_travel=(0, 0, 100)),
              _inspect(m), dry_fire(m)]
     return GunAsset(m, anims, LMG_FP)
-
 
 
 def _m16a1_detail(m, body, al="alloy"):
@@ -322,86 +320,6 @@ def sten():
 
 
 # =================================================================================================
-# Colt Python (6" vent rib, full underlug)
-# =================================================================================================
-def python():
-    m = new_gun("python")
-    body = m["body"]
-    bl = "steel_dark"
-    cy = -15.0
-    body.box(-12, 12, 14, 22, -14, 34, bl)
-    body.box(-12, 12, -40, -30, -16, 34, bl)
-    body.box(-12, 12, -40, 22, -22, -14, bl)
-    body.box(-12, 12, -36, 20, 32, 42, bl)
-    body.box(-12, 12, -42, 4, 42, 54, bl)
-    body.cyl((0, 0, -105), 17, 166, bl)                                          # 6" barrel
-    body.box(-6, 6, 8, 18, -188, -22, bl)                                        # rib base
-    for z in range(-180, -30, 22):                                               # vent rib
-        body.box(-6, 6, 18, 26, z, z + 12, bl)
-    body.box(-6, 6, 22, 26, -188, -22, bl)
-    body.box(-9, 9, -30, -6, -188, -22, bl)                                      # full-length underlug
-    body.box(-6.5, 6.5, -6.5, 6.5, -189, -188, "rubber")
-    _fixed_sights(body, -184, 44, 26, front_h=8, rear_h=5, dots=False)
-    body.box(-4, 4, -66, -60, -40, 20, bl)
-    body.box(-4, 4, -66, -40, -44, -38, bl)
-    trig = body.bone("trigger", pivot=(0, -40, -6))
-    trig.box(-3.5, 3.5, -62, -40, -10, -2, bl, rot=(-12, 0, 0), pivot=(0, -40, -6))
-    gp = (0, -30, 50)
-    body.box(-13, 13, -140, -30, 34, 72, "wood", rot=(-22, 0, 0), pivot=gp)    # target walnut
-    body.box(-14, 14, -130, -48, 30, 74, "wood", rot=(-22, 0, 0), pivot=gp)
-    body.box(-12, 12, -40, -24, 46, 64, bl)
-    body.box(-15, -12, -8, 0, 34, 46, bl)
-    ham = body.bone("hammer", pivot=(0, -14, 54))
-    ham.box(-4, 4, -14, 16, 50, 58, bl)
-    ham.box(-5, 5, 12, 18, 56, 70, bl)
-    crane = m["gun"].bone("crane", pivot=(-10, -34, 0))
-    crane.box(-14, -6, -38, -28, -20, 32, bl)
-    cyl = crane.bone("cylinder", pivot=(0, cy, 0))
-    cyl.cyl((0, cy, 9), 44, 41, bl, sides=12)
-    for i in range(6):
-        a = math.radians(30 + 60 * i)
-        x, y = math.cos(a) * 20.5, cy + math.sin(a) * 20.5
-        cyl.box(x - 2.5, x + 2.5, y - 2.5, y + 2.5, -8, 22, "steel")
-    rounds = cyl.bone("rounds", pivot=(0, cy, 0))
-    brass = cyl.bone("brass", pivot=(0, cy, 0))
-    sl = crane.bone("speedloader", pivot=(0, cy, 0))
-    sl.cyl((0, cy, 46), 46, 12, "polymer", sides=12)
-    sl.cyl((0, cy, 56), 18, 12, "polymer")
-    for i in range(6):
-        a = math.radians(90 + 60 * i)
-        x, y = math.cos(a) * 14.0, cy + math.sin(a) * 14.0
-        rounds.cyl((x, y, 30.5), 11.5, 1.5, "brass")
-        rounds.cyl((x, y, 30.6), 5, 1.4, "copper")
-        brass.cyl((x, y, 18), 11, 28, "brass")
-        sl.round_((x, y, 28), 40, 11)
-    ej = crane.bone("ejector", pivot=(0, cy, 0))
-    ej.cyl((0, cy, -60), 7, 110, "steel_light")
-    ej.cyl((0, cy, -116), 9, 8, "steel_light")
-    ej.cyl((0, cy, 29), 26, 2, "steel_light", sides=12)
-    add_arms(m, right_hand=(6, -76, 58), left_hand=(-14, -80, 48), right_rot=(34, 18, 6), left_rot=(34, -26, -6))
-    add_sockets(m, muzzle=(0, 0, -190), optic=(0, 26, -60), eject=None, sight=(0, 31, 44))
-
-    def fire(name, aim):
-        a = Anim(m, name, 0.5)
-        k = 0.45 if aim else 1.0
-        a.key("trigger", 0.0, rot=(-14, 0, 0))
-        a.key("trigger", 0.12, rot=(0, 0, 0), e="outquad")
-        a.key("hammer", 0.0, rot=(0, 0, 0))
-        a.key("cylinder", 0.0, rot=(0, 0, 0))
-        a.key("cylinder", 0.08, rot=(0, 0, 0))
-        a.key("cylinder", 0.2, rot=(0, 0, -60), e="outquad")
-        a.kick("gun", "rot", 0.0, (22 * k, 1.5 * k, 4 * k), attack=0.03, recover=0.4)
-        a.kick("gun", "pos", 0.0, (0, 4 * k, 20 * k), attack=0.025, recover=0.36)
-        a.spring("gun", "rot", 0.05, (2.0 * k, 0, 1.5 * k), freq=5, damp=8)
-        return a
-
-    anims = [idle(m), draw(m, 0.6, sound="draw_pistol", style="pistol"), fire("fire", False), fire("fire_aim", True),
-             revolver_reload(m, "reload"), _inspect(m), dry_fire(m)]
-    apply_hidden(anims, ["speedloader", "brass"])
-    return GunAsset(m, anims, {"hip": {"pos": [0.1, -0.08, -0.29], "rot": [0, 6, 0]}, "ads": {"dist": 0.36}})
-
-
-# =================================================================================================
 # Skorpion vz. 61 (machine pistol, wire stock folded over the top)
 # =================================================================================================
 def skorpion():
@@ -490,5 +408,4 @@ def ks23():
     return GunAsset(m, anims, _fp(pos=(0.12, -0.13, -0.2), rot=(0, 3.5, 0), ads=0.13))
 
 
-GUNS = {"m60": m60, "m16a1": m16a1, "galil": galil, "g3a3": g3a3, "sten": sten, "python": python,
-        "skorpion": skorpion, "ks23": ks23}
+GUNS = {"m60": m60, "m16a1": m16a1, "galil": galil, "g3a3": g3a3, "sten": sten, "skorpion": skorpion, "ks23": ks23}

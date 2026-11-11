@@ -5,7 +5,6 @@ from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire
                       apply_hidden)
 from ..templates import rifle_reload, pistol_reload, pump_cycle, tube_reload
 from ..parts import pistol_grip, trigger_group, curved_mag, straight_mag, barrel, flash_hider_a2
-from .pistols import _pistol_mag, _grip, _fixed_sights
 from .shotguns import _shells
 
 
@@ -45,91 +44,6 @@ def _rifle_anims(m, mag_a, kick, push, style, cyc, ch=None, ch_travel=(0, 0, 70)
         a.append(firemode(m, selector_rot=selector))
     a += [_inspect(m), dry_fire(m)]
     return a
-
-
-def _pistol_anims(m, mag_a, travel, kick, push, hammer=None, release="thumb", draw_len=0.5):
-    cyc = dict(bone="slide", travel=travel, t_back=0.022, t_fwd=0.058)
-    k = dict(kick=kick, push=push, cycle=cyc, hammer=hammer)
-    return [idle(m), idle(m, "idle_empty", locked={"slide": travel}),
-            draw(m, draw_len, sound="draw_pistol", style="pistol"),
-            fire_basic(m, "fire", recover=0.24, length=0.32, **k),
-            fire_basic(m, "fire_aim", recover=0.2, length=0.28, aim=True, **k),
-            fire_basic(m, "fire_last", recover=0.24, length=0.32, lock_back=True, **k),
-            pistol_reload(m, "reload", mag_a, empty=False, slide_travel=travel),
-            pistol_reload(m, "reload_empty", mag_a, empty=True, slide_travel=travel, release=release),
-            _inspect(m), dry_fire(m)]
-
-
-PISTOL_FP = {"hip": {"pos": [0.1, -0.082, -0.27], "rot": [0, 6, 0]}, "ads": {"dist": 0.34}}
-
-
-
-def _grip_texture(body, gp, A, x, y0, y1, z0, z1, mat="polymer_grey", step=14):
-    for yy in range(int(y0), int(y1), step):
-        body.box(-x - 0.6, x + 0.6, yy, yy + 6, z0, z1, mat, rot=(A, 0, 0), pivot=gp)
-
-
-def _usp_detail(m, body, gp, A, p="polymer"):
-    slide = m["slide"]
-    slide.box(1, 9, 13, 19.1, -32, 2, "steel_light")                     # barrel hood in the port
-    slide.box(-7, 7, -7, 7, -187, -186, "steel_light")                    # barrel at the muzzle
-    slide.box(-4, 4, -4, 4, -187.5, -187, "rubber")
-    slide.box(-11, 11, 16, 17.5, -184, 40, "steel_dark")                  # top chamfer step
-    slide.box(12, 12.8, 8, 13, -30, -6, "steel")                          # extractor
-    slide.box(-4, 4, -4, 8, 42, 43, "rubber")                             # hammer cut-out
-    for z in (-170, -156, -142, -128):                                    # universal rail grooves
-        body.box(-14.3, 14.3, -26, -24, z, z + 6, "rubber")
-    body.box(-4, 4, -60, -54, -58, -50, p)                                # hooked trigger guard
-    body.box(-10, 10, -24, -10, -180, -176, p)                            # dust-cover lip
-    body.box(-7, 7, -58, -52, -6, 4, "steel_dark")                        # paddle mag release
-    body.box(-13.5, -11, -14, -8, -24, -2, "steel_dark")                  # slide stop
-    _grip_texture(body, gp, A, 13, -122, -40, -4, 36)
-    body.box(-5, 5, -128, -24, 40, 44, p, rot=(A, 0, 0), pivot=gp)        # backstrap
-    body.box(-14.5, 14.5, -138, -132, -12, 42, p, rot=(A, 0, 0), pivot=gp)  # mag-well flare
-    body.box(-3, 3, -136, -130, 34, 40, "steel", rot=(A, 0, 0), pivot=gp)   # lanyard loop
-
-
-def _fiveseven_detail(m, body, gp, A, p="polymer_grey"):
-    slide = m["slide"]
-    slide.box(-6, 6, -6, 6, -201, -200, "steel_light")                    # barrel at the muzzle
-    slide.box(-3.5, 3.5, -3.5, 3.5, -201.5, -201, "rubber")
-    slide.box(1, 9, 10, 17.9, -38, -8, "steel_light")                     # barrel hood in the port
-    slide.box(-11.7, 11.7, -8, -4, -198, 36, "steel_dark")                # steel lower slide under the cladding
-    slide.box(11.5, 12.3, 6, 10, -34, -10, "steel")                       # extractor
-    for i in range(4):                                                    # front cocking grooves
-        z = -150 + i * 3.6
-        for sx in (-1, 1):
-            slide.box(sx * 11.7 - 0.2, sx * 11.7 + 0.2, -4, 13, z, z + 1.6, "steel_dark")
-    for yy in range(-120, -50, 14):                                       # front-strap grooves
-        body.box(-9, 9, yy, yy + 5, -11, -9.5, "rubber", rot=(A, 0, 0), pivot=gp)
-    _grip_texture(body, gp, A, 13, -124, -40, -2, 34, mat="polymer")
-    body.box(-13, 13, -30, -24, -50, -42, "steel_dark")                   # ambidextrous safety
-    body.box(-13.5, -11, -14, -8, -30, -10, "steel_dark")                 # slide stop
-    body.box(-13.5, -11, -40, -32, -8, 0, p)                              # mag release
-    body.box(-12, -11, -20, -14, -70, -56, "steel_dark")                  # takedown lever
-    body.box(-10, 10, -24, -10, -194, -190, p)                            # dust-cover lip
-    body.box(-14, 14, -142, -136, -14, 40, p, rot=(A, 0, 0), pivot=gp)    # mag-well flare
-
-
-def _cz75_detail(m, body, gp, A, st="steel_dark"):
-    slide = m["slide"]
-    slide.box(-5, 5, 1, 11, -197, -196, "steel_light")                    # barrel / bushingless muzzle
-    slide.box(-3, 3, 3, 9, -197.5, -197, "rubber")
-    slide.box(1, 8, 9, 17.9, -32, -2, "steel_light")                      # barrel hood in the port
-    for i in range(6):                                                    # front serrations
-        z = -180 + i * 3.4
-        for sx in (-1, 1):
-            slide.box(sx * 9.7 - 0.2, sx * 9.7 + 0.2, 5, 15, z, z + 1.5, "steel")
-    slide.box(9.5, 10.3, 9, 13, -30, -6, "steel")                         # extractor
-    body.box(-10, 10, -22, -14, 38, 52, st)                               # beavertail
-    body.box(-13.5, -11, -12, -6, -34, -8, "steel")                       # slide stop
-    body.box(11, 12.5, -10, -6, -34, -28, "steel")                        # slide-stop pin
-    body.box(-11.2, 11.2, 1, 2.5, -188, 36, "rubber")                     # frame-rail line
-    body.box(-13.5, -11, -34, -26, -8, 0, "steel")                        # mag release
-    for yy in range(-118, -40, 10):                                       # front-strap checkering
-        body.box(-8, 8, yy, yy + 4, -9.5, -8, "rubber", rot=(A, 0, 0), pivot=gp)
-    body.box(-13.5, 13.5, -140, -134, -10, 42, "steel", rot=(A, 0, 0), pivot=gp)   # extended mag well
-    body.box(-5, 5, -40, -24, 40, 44, st, rot=(A, 0, 0), pivot=gp)
 
 
 def _famas_detail(m, body, p="polymer"):
@@ -360,116 +274,6 @@ def x95():
 
 
 # =================================================================================================
-# FN Five-seveN
-# =================================================================================================
-def fiveseven():
-    A = -14.0
-    TRAVEL = (0, 0, 40)
-    m = new_gun("fiveseven")
-    body = m["body"]
-    p = "polymer_grey"
-    body.box(-11, 11, -24, -8, -190, 30, p)                                     # frame with a rail
-    body.rail(-186, -120, -24, mat="polymer_grey", side="bottom")
-    body.box(-4, 4, -52, -46, -60, -6, p)                                       # trigger guard
-    body.box(-4, 4, -48, -24, -66, -60, p, rot=(14, 0, 0), pivot=(0, -24, -62))
-    gp = (0, -18, 16)
-    _grip(body, gp, A, 13, -136, -16, -10, 40, p)
-    slide = m["gun"].bone("slide", pivot=(0, 0, 0))
-    slide.box(-11.5, 11.5, -8, 15, -200, 38, "polymer")                         # polymer-clad slide
-    slide.box(-9, 9, 15, 18, -196, 30, "polymer")
-    slide.box(0, 12, 6, 18, -40, -6, "rubber")
-    for i in range(8):
-        z = 4 + i * 3.6
-        for sx in (-1, 1):
-            slide.box(sx * 11.7 - 0.2, sx * 11.7 + 0.2, -4, 13, z, z + 1.6, "steel_dark")
-    _fixed_sights(slide, -190, 32, 18, front_h=6, rear_h=7)
-    trig = body.bone("trigger", pivot=(0, -26, -34))
-    trig.box(-3.5, 3.5, -42, -24, -38, -30, p)
-    _pistol_mag(m, gp, A, -16, -146, -4, 30, 15, base_mat="polymer", body_mat="steel_dark", round_d=7, round_len=36)
-    _fiveseven_detail(m, body, gp, A)
-    add_arms(m, right_hand=(6, -70, 34), left_hand=(-14, -74, 24), right_rot=(34, 18, 6), left_rot=(34, -26, -6))
-    add_sockets(m, muzzle=(0, 0, -202), optic=(0, 18, -40), under=(0, -24, -160), eject=(12, 12, -20),
-                sight=(0, 25, 30))
-    return GunAsset(m, _pistol_anims(m, A, TRAVEL, (8, 0.5, 1.2), 12), PISTOL_FP)
-
-
-# =================================================================================================
-# H&K USP .45
-# =================================================================================================
-def usp():
-    A = -18.0
-    TRAVEL = (0, 0, 46)
-    m = new_gun("usp")
-    body = m["body"]
-    p = "polymer"
-    body.box(-11, 11, -26, -8, -176, 36, p)
-    body.box(-14, 14, -28, -22, -176, -120, p)                                  # USP universal rail lugs
-    body.box(-4, 4, -54, -48, -56, -4, p)
-    body.box(-4, 4, -50, -26, -62, -56, p, rot=(14, 0, 0), pivot=(0, -26, -58))
-    gp = (0, -20, 16)
-    _grip(body, gp, A, 13, -132, -18, -8, 40, p)
-    body.box(-14, -11, -20, -12, 24, 38, "steel_dark")                          # control lever
-    slide = m["gun"].bone("slide", pivot=(0, 0, 0))
-    slide.box(-12, 12, -8, 16, -186, 42, "steel_dark")
-    slide.box(-9, 9, 16, 19, -182, 36, "steel_dark")
-    slide.box(0, 12.2, 8, 19, -34, 4, "rubber")
-    for i in range(8):
-        z = 8 + i * 3.6
-        for sx in (-1, 1):
-            slide.box(sx * 12.2 - 0.2, sx * 12.2 + 0.2, -4, 14, z, z + 1.6, "steel")
-    _fixed_sights(slide, -176, 36, 19)
-    ham = body.bone("hammer", pivot=(0, -4, 42))
-    ham.box(-3.5, 3.5, -6, 10, 40, 46, "steel", rot=(24, 0, 0), pivot=(0, -4, 42))
-    trig = body.bone("trigger", pivot=(0, -28, -30))
-    trig.box(-3.5, 3.5, -44, -26, -34, -26, p)
-    _pistol_mag(m, gp, A, -18, -140, -4, 32, 15, base_mat="polymer", round_d=11, round_len=30)
-    _usp_detail(m, body, gp, A)
-    add_arms(m, right_hand=(6, -68, 34), left_hand=(-14, -72, 24), right_rot=(34, 18, 6), left_rot=(34, -26, -6))
-    add_sockets(m, muzzle=(0, 0, -188), optic=(0, 19, -40), under=(0, -28, -150), eject=(12, 12, -14),
-                sight=(0, 25, 36))
-    return GunAsset(m, _pistol_anims(m, A, TRAVEL, (10, 0.6, 1.4), 15, hammer=-28), PISTOL_FP)
-
-
-# =================================================================================================
-# CZ 75 SP-01 (the slide rides inside the frame rails)
-# =================================================================================================
-def cz75():
-    A = -16.0
-    TRAVEL = (0, 0, 40)
-    m = new_gun("cz75")
-    body = m["body"]
-    st = "steel_dark"
-    body.box(-11, 11, -24, 4, -190, 38, st)                                     # full-length frame (slide in it)
-    body.rail(-186, -130, -24, mat=st, side="bottom")
-    body.box(-4, 4, -52, -46, -58, -6, st)
-    body.box(-4, 4, -48, -24, -64, -58, st, rot=(16, 0, 0), pivot=(0, -24, -60))
-    gp = (0, -18, 18)
-    _grip(body, gp, A, 12, -134, -16, -8, 40, st, panel_mat="rubber")
-    sf = body.bone("safety", pivot=(-11, -10, 26))
-    sf.box(-14, -11, -14, -6, 18, 32, "steel")
-    slide = m["gun"].bone("slide", pivot=(0, 0, 0))
-    slide.box(-9.5, 9.5, 4, 16, -196, 40, st)                                   # slide sits low, inside the rails
-    slide.box(-7, 7, 16, 18, -192, 34, st)
-    slide.box(0, 10, 6, 18, -34, 0, "rubber")
-    for i in range(9):
-        z = 6 + i * 3.4
-        for sx in (-1, 1):
-            slide.box(sx * 9.7 - 0.2, sx * 9.7 + 0.2, 5, 15, z, z + 1.5, "steel")
-    _fixed_sights(slide, -186, 34, 18, front_h=6, rear_h=6)
-    slide.box(-1.2, 1.2, 22, 24, -184, -182, "sight_orange")                    # fibre front sight
-    ham = body.bone("hammer", pivot=(0, -4, 42))
-    ham.box(-3.5, 3.5, -6, 12, 40, 47, "steel", rot=(28, 0, 0), pivot=(0, -4, 42))
-    trig = body.bone("trigger", pivot=(0, -26, -30))
-    trig.box(-3.5, 3.5, -42, -24, -34, -26, st)
-    _pistol_mag(m, gp, A, -16, -144, -2, 30, 14, round_d=9, round_len=29)
-    _cz75_detail(m, body, gp, A)
-    add_arms(m, right_hand=(6, -68, 34), left_hand=(-14, -72, 24), right_rot=(34, 18, 6), left_rot=(34, -26, -6))
-    add_sockets(m, muzzle=(0, 6, -198), optic=(0, 18, -40), under=(0, -24, -160), eject=(10, 12, -16),
-                sight=(0, 24, 34))
-    return GunAsset(m, _pistol_anims(m, A, TRAVEL, (7.5, 0.5, 1.2), 12, hammer=-30), PISTOL_FP)
-
-
-# =================================================================================================
 # Franchi SPAS-12 (pump mode)
 # =================================================================================================
 def spas12():
@@ -556,5 +360,4 @@ def aa12():
     return GunAsset(m, anims, _fp(pos=(0.12, -0.14, -0.21), ads=0.15))
 
 
-GUNS = {"vector": vector, "mp7": mp7, "g36c": g36c, "famas": famas, "x95": x95, "fiveseven": fiveseven,
-        "usp": usp, "cz75": cz75, "spas12": spas12, "aa12": aa12}
+GUNS = {"vector": vector, "mp7": mp7, "g36c": g36c, "famas": famas, "x95": x95, "spas12": spas12, "aa12": aa12}

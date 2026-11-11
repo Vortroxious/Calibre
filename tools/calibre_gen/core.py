@@ -246,6 +246,25 @@ class Bone:
             out.append(cube)
         return out
 
+    def path(self, pts, width, thick, mat, x=0.0, overlap=0.6):
+        """
+        A bar bent along a polyline in the side (z, y) plane: pts = [(z, y), ...], `width` across X, `thick` in the
+        plane. One box per span, turned to follow it and overlapped a little at the joints: trigger guards, lever
+        loops, wire stocks, curved backstraps, sling loops.
+        """
+        out = []
+        for (z0, y0), (z1, y1) in zip(pts, pts[1:]):
+            L = math.hypot(z1 - z0, y1 - y0)
+            if L < 0.2:
+                continue
+            mz, my = (z0 + z1) / 2, (y0 + y1) / 2
+            ang = math.degrees(math.atan2(-(y1 - y0), z1 - z0))
+            flat = abs(ang) < 0.01 or abs(abs(ang) - 180) < 0.01
+            out.append(self.box(x - width / 2, x + width / 2, my - thick / 2, my + thick / 2,
+                                mz - L / 2 - overlap, mz + L / 2 + overlap, mat,
+                                rot=None if flat else (ang, 0, 0), pivot=None if flat else (x, my, mz)))
+        return out
+
     def profile(self, x0, x1, top, bot, mat):
         """
         Side silhouette extruded across X: `top` and `bot` are polylines [(z, y), ...] over the same z range (z
@@ -484,7 +503,8 @@ class Model:
         return f
 
     def length(self, skip=()):
-        """Overall length along the bore, ignoring the arms and the bones in `skip` (and their children)."""
+        """Overall length along the bore at rest (true corners, so raked grips and angled stocks count), ignoring the
+        arms and the bones in `skip` (and their children)."""
         lo, hi = 1e9, -1e9
         for b in self.order:
             p, bad = b, False
@@ -492,10 +512,16 @@ class Model:
                 if p.name.startswith("arm_") or p.name in skip:
                     bad = True
                 p = p.parent
-            if bad:
+            if bad or not b.cubes:
                 continue
+            bm = self.rest_matrix(b.name)
             for c in b.cubes:
-                lo, hi = min(lo, c.z0), max(hi, c.z1)
+                cm = bm @ cube_matrix(c)
+                for x in (c.x0, c.x1):
+                    for y in (c.y0, c.y1):
+                        for z in (c.z0, c.z1):
+                            zz = float((cm @ np.array([x, y, z, 1.0]))[2])
+                            lo, hi = min(lo, zz), max(hi, zz)
         return hi - lo
 
     def bounds(self):
