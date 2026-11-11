@@ -103,12 +103,12 @@ def peep(b: Bone, z, y0, y1, mat, w=8.0, hole=4.0, depth=3.0, hole_y=None):
     return hy
 
 
-def aperture_sight(b: Bone, z, y0, mat, w=18.0, h=12.0, hole=4.0):
+def aperture_sight(b: Bone, z, y0, mat, w=18.0, h=12.0, hole=6.0):
     """Peep rear sight with protective wings and a windage knob. The line of sight is at y0 + h - 4.5."""
     b.box(-w / 2, w / 2, y0, y0 + 3, z - 10, z + 10, mat)
     for sx in (-1, 1):
         b.box(sx * w / 2 - (2.4 if sx > 0 else 0), sx * w / 2 + (2.4 if sx < 0 else 0), y0 + 3, y0 + h, z - 8, z + 8, mat)
-    peep(b, z, y0 + 3, y0 + h - 1.5, mat, w=8, hole=hole, hole_y=y0 + h - 4.5)
+    peep(b, z, y0 + 3, y0 + h, mat, w=11, hole=hole, depth=2.6, hole_y=y0 + h - 4.5)
     b.cyl((w / 2 + 3.5, y0 + 6, z), 9, 5, "steel", axis="x", sides=8)
     return y0 + h - 4.5
 

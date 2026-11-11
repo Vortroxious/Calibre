@@ -177,7 +177,7 @@ def sten():
     barrel(body, -286, -355, d=15, mat="steel_dark")
     body.taper(-1.6, 1.6, -200, -182, 19, 27.4, 19, 19, st)                        # triangular front sight
     body.box(-6, 6, 19, 22, 68, 92, st)                                            # rear peep
-    peep(body, 86, 22, 32, st, w=10, hole=4, depth=4, hole_y=27.4)
+    peep(body, 86, 21, 34, st, w=12, hole=6.5, depth=3, hole_y=27.4)
     # magazine housing on the left (a collar that turns to close the port)
     body.cyl((0, 0, -166), 44, 46, st)
     body.box(-56, -18, -15, 15, -188, -144, st)

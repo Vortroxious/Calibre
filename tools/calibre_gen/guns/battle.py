@@ -8,7 +8,7 @@ from ..parts import (pistol_grip, trigger_group, curved_mag, straight_mag, barre
 from ..common import moving
 from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
 from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
-                       peep, rod_stock, selector, paddle, button, stock_solid)
+                       peep, rod_stock, selector, paddle, button, stock_solid, tangent_sight)
 from ..pistolkit import control
 from .ar15 import _buis, _flip_front
 
@@ -58,7 +58,7 @@ def fal():
     body.path([(-112, 6), (-104, -14), (-52, -14), (-44, 6)], 5, 5, st, x=19)
     # sights: sliding aperture on the lower, behind the cover
     body.box(-9, 9, 18, 24, 112, 148, st)
-    peep(body, 132, 24, 56, st, w=10, hole=4.4, depth=3, hole_y=48)
+    peep(body, 132, 24, 55, st, w=13, hole=7.0, depth=2.6, hole_y=48)
     for sx in (-1, 1):
         body.box(sx * 9 - 1.5, sx * 9 + 1.5, 24, 40, 124, 144, st)
     # frame: magazine well, grip, guard, controls
@@ -185,77 +185,82 @@ def scar_h():
 # SVD Dragunov (integral PSO-1)
 # =================================================================================================
 def svd():
+    # SVD Dragunov: 1225 mm long, 620 mm barrel, skeleton stock, PSO-1 on the side rail
     A = 6.0
+    st = "steel_dark"
+    wd = "wood_red"
     m = new_gun("svd")
     body = m["body"]
-    st = "steel_dark"
-    body.box(-14, 14, -34, 12, -100, 200, st)
-    body.box(-12, 12, 12, 20, -60, 200, st)
-    body.box(-14.5, 14.5, -40, -34, -100, -50, st)
-    body.box(0, 14.3, -6, 10, -50, 30, "rubber")
-    body.box(-14, 14, -20, 24, -126, -100, st)
-    body.box(-17, 17, -30, 10, -400, -126, "wood_red")
-    for z in range(-390, -140, 26):
-        body.box(-17.4, 17.4, -20, 0, z, z + 12, "rubber")
-    body.cyl((0, 14, -410), 16, 40, st)
-    barrel(body, -400, -640, d=16)
-    body.box(-6, 6, -8, 40, -620, -606, st)
-    body.box(-10, 10, -10, 10, -700, -640, st)                                   # flash hider
-    for z in (-690, -675, -660):
-        body.box(-10.4, 10.4, -6, 6, z, z + 6, "rubber")
-    pistol_grip(body, 30, top_y=-34, length=40, width=26, depth=30, angle=-10, mat="wood_red", checker=False)
-    trigger_group(m, body, -6, y_top=-34, guard_depth=30, guard_len=70, guard_mat=st)
-    # skeleton thumbhole stock + cheek rest
-    stock = m["gun"].bone("stock", pivot=(0, 0, 200))
-    stock.box(-15, 15, 0, 14, 200, 520, "wood_red")
-    stock.box(-15, 15, -110, -84, 260, 520, "wood_red")
-    stock.box(-15, 15, -110, 0, 200, 230, "wood_red", rot=(30, 0, 0), pivot=(0, 0, 215))
-    stock.box(-15, 15, -110, 14, 480, 520, "wood_red")
-    stock.box(-16, 16, -118, 18, 516, 528, st)
-    cheek = stock.bone("cheek_rest", pivot=(0, 14, 360))
-    cheek.box(-14, 14, 14, 34, 300, 420, "leather")
-    sel = body.bone("selector", pivot=(14, 4, 0))
-    sel.box(14, 16, -4, 8, 0, 100, "steel")
-    bolt = body.bone("bolt", pivot=(18, 2, -60))
-    bolt.box(1, 13, -6, 8, -60, -14, "steel_light")
-    bolt.box(14, 28, -2, 6, -64, -54, "steel_light")
-    bolt.box(26, 32, -4, 8, -66, -52, "steel_light")
-    # PSO-1 4x on its side mount
-    pso = body.bone("pso1", pivot=(0, 60, 40))
-    pso.box(-20, -14, 0, 40, -10, 90, st)                                         # side rail mount
-    scope(pso, 40, 66, length=280, tube_d=28, obj_d=40, eye_d=34, mat="steel_dark", mount_y=24)
-    pso.box(-20, 20, 50, 84, 170, 200, "rubber")                                   # eyecup
-    pso.box(-12, 12, 60, 80, -110, -96, "rubber")                                  # sunshade
-    mag = m["gun"].bone("magazine", pivot=(0, -40, -80))
-    curved_mag(mag, -34, -100, 70, 150, curve=12, segs=3, width=24, mat="steel_dark", rib_mat="steel", round_d=11,
-               round_len=70)
-    add_arms(m, right_hand=(8, -66, 36), left_hand=(-12, -40, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -700), optic=None, under=(0, -30, -320), eject=(15, 6, -30), sight=(0, 66, 196))
-    m.meta["integral_optic"] = {"zoom": 4.0, "reticle": "pso1", "eye": [0, 66, 196]}
+    body.rbox(-15, 15, -32, 10, -110, 160, st, r=2.5, edges="bottom")                  # receiver
+    body.box(-16, 16, -32, 13, -128, -108, st)                                         # front trunnion
+    body.rbox(-14, 14, 10, 22, -104, 158, st, r=6, edges="top")                        # cover
+    body.box(-3, 3, 22, 23, -60, 130, st)
+    body.box(8, 15.4, 2, 10.4, -70, 44, "rubber")                                      # ejection opening
+    body.box(8, 14.5, 10, 19, -70, 44, "rubber")
+    pins(body, 15, [(-4, -100), (-22, -100), (-14, 10), (-16, 34), (0, 140)], d=4.5, mat="steel")
+    # back-up tangent sight, barrel, gas system, slotted hand guards
+    body.rbox(-12, 12, 10, 32, -172, -108, st, r=4, edges="top")
+    tangent_sight(body, -168, -112, 32, st, w=10, h=12)
+    body.cyl((0, 0, -150), 22, 44, st)
+    barrel(body, -128, -636, d=17, mat=st)
+    body.cyl((0, 24, -290), 14, 236, "steel")                                          # gas tube
+    body.rbox(-18, 18, -28, 36, -362, -114, wd, r=10, edges="all")                     # hand guards
+    vents(body, 18, 4, 12, -352, -126, n=6, fill=0.6)
+    body.box(-18.4, 18.4, -3, 0, -358, -118, "rubber")
+    body.box(-19, 19, -29, 37, -370, -362, st)                                         # retainer
+    body.rbox(-9, 9, -10, 32, -424, -398, st, r=3, edges="top")                        # gas block
+    body.cyl((0, 24, -430), 11, 10, "steel")
+    body.rbox(-8, 8, -9, 14, -668, -640, st, r=3, edges="all")                         # front sight base
+    body.box(-4.5, 4.5, 12, 30, -662, -648, st)
+    eared_sight(body, -655, 28, 16.5, st, w=15, depth=12, lean=6)
+    body.box(-4, 4, -18, -9, -664, -644, st)                                           # bayonet lug
+    body.cyl((0, 0, -668), 20, 64, st)                                                 # long slotted flash hider
+    for ang in (0, 36, 72, 108, 144):
+        body.box(-10.4, 10.4, -1.5, 1.5, -696, -650, "rubber", rot=(0, 0, ang), pivot=(0, 0, -672))
+    body.cyl((0, 0, -700.3), 9, 0.6, "rubber", sides=8)
+    # controls: paddle catch, guard, the AK-pattern safety lever
+    control(body, "mag_release", (0, -34, -26), [(-5, 5, -58, -32, -32, -27, st), (-6, 6, -60, -54, -33, -22, st)],
+            turn=(22, 0, 0))
+    trigger_group(m, body, 14, y_top=-32, guard_depth=30, guard_len=78, guard_mat=st)
+    control(body, "safety", (15, 2, 72), [(15, 17, -3, 6, -18, 72, "steel"), (17, 22, -7, 1, -20, -6, "steel")],
+            turn=(-14, 0, 0))
+    bolt = body.bone("bolt", pivot=(18, 6, -44))
+    bolt.box(8.4, 14.6, 2.4, 18.6, -68, 42, "steel_light")
+    bolt.box(14.6, 30, 4, 12, -50, -38, "steel_light")
+    bolt.cyl((30, 8, -44), 12, 8, "steel_light", axis="x", sides=16)
+    # skeleton thumbhole stock with the cheek rest
+    stock = m["gun"].bone("stock", pivot=(0, 0, 160))
+    stock.rbox(-14, 14, -6, 12, 160, 516, wd, r=5, edges="all")                        # comb
+    stock.rbox(-13, 13, -104, -4, 152, 188, wd, r=5, axis="y", edges="all", rot=(-22, 0, 0), pivot=(0, -6, 170))
+    stock.path([(206, -98), (300, -114), (506, -114)], 26, 16, wd)                     # lower bar
+    stock.rbox(-14, 14, -122, 12, 496, 520, wd, r=5, edges="all")
+    stock.box(-15, 15, -126, 14, 520, 526, st)
+    stock.rbox(-13, 13, 12, 30, 300, 420, "leather", r=5, edges="top")                 # cheek rest
+    stock.box(-14.4, 14.4, 10, 16, 310, 320, st)
+    stock.box(-14.4, 14.4, 10, 16, 400, 410, st)
+    side_swivel(stock, -14, -60, 508, h=14)
+    side_swivel(body, -9, 10, -412, h=12)
+    # PSO-1 on its side-rail bracket
+    pso = body.bone("pso1", pivot=(0, 64, 40))
+    pso.rbox(-22, -15, -4, 44, -20, 96, st, r=2.4, edges="top")
+    pso.box(-22, -6, 40, 50, 0, 80, st)
+    pso.cyl((-24, 10, 40), 10, 5, "steel", axis="x", sides=16)
+    scope(pso, 40, 64, length=260, tube_d=28, obj_d=38, eye_d=34, mat="steel_dark", mount_y=None, turrets=False)
+    pso.cyl((0, 64, -100), 40, 26, st)                                                 # sunshade
+    for axis, c in (("y", (0, 64 + 22, 36)), ("x", (22, 64, 36))):
+        pso.cyl(c, 24, 16, st, axis=axis)
+    pso.rbox(-9, 9, 44, 54, 14, 60, st, r=2.4, edges="bottom")
+    pso.cyl((0, 46, 84), 14, 22, st)                                                   # reticle lamp
+    pso.cyl((0, 64, 178), 40, 26, "rubber", d2=46, steps=4)                            # eyecup
+    pso.cyl((0, 64, 194), 46, 8, "rubber")
+    mag = m["gun"].bone("magazine", pivot=(0, -40, -66))
+    curved_mag(mag, -28, -100, 70, 112, curve=10, segs=3, width=24, mat="steel_dark", rib_mat="steel", round_d=12.4,
+               round_len=76)
+    add_arms(m, right_hand=(8, -70, 186), left_hand=(-12, -44, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -702), optic=None, under=(0, -30, -240), eject=(15, 6, -14), sight=(0, 64, 200))
+    m.meta["integral_optic"] = {"zoom": 4.0, "reticle": "pso1", "eye": [0, 64, 200]}
+    m.warp_z([(0, -140)])                                                              # put the grip where the hand is
 
-    def inspect():
-        a = Anim(m, "inspect", 4.8)
-        # bring the PSO-1 up to the eye, check through the scope
-        a.mv("gun", 0.0, 0.6, pos=(-90, 30, 60), rot=(4, 16, 10), e="inoutsine")
-        a.wave("gun", "rot", (0.4, 0.5, 0.2), 1.6)
-        a.mv("arm_left", 0.7, 1.0, pos=(-10, 110, -40), rot=(-30, 0, 30))
-        # adjust the elevation turret
-        for t in (1.1, 1.3, 1.5):
-            a.sound(t, "click_small")
-        a.mv("arm_left", 1.6, 1.9, pos=(0, 0, 0), rot=(0, 0, 0))
-        # rotate to look at the cheek rest, flip it
-        a.mv("gun", 1.8, 2.5, pos=(-40, 30, -40), rot=(-6, -56, -10), e="inoutsine")
-        a.mv("arm_left", 2.3, 2.6, pos=(20, 60, 560), rot=(-30, 40, 0))
-        a.key("cheek_rest", 0.0, rot=(0, 0, 0))
-        a.key("cheek_rest", 2.62, rot=(0, 0, 0))
-        a.key("cheek_rest", 2.74, rot=(0, 0, -70), e="outquad")
-        a.sound(2.74, "click_small")
-        a.key("cheek_rest", 3.1, rot=(0, 0, -70))
-        a.key("cheek_rest", 3.22, rot=(0, 0, 0), e="outback")
-        a.sound(3.22, "click_small")
-        a.mv("arm_left", 3.3, 3.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.5, 4.75)
-        return a
 
     kk = _kk("bolt", (0, 0, 120), kick=5.0, push=16)
     anims = [
@@ -265,7 +270,7 @@ def svd():
         rifle_reload(m, "reload", A, empty=False, style="ak", rock=10, mag_out=60),
         rifle_reload(m, "reload_empty", A, empty=True, style="ak", rock=10, mag_out=60, bolt="bolt", ch="bolt",
                      bolt_travel=(0, 0, 120), ch_travel=(0, 0, 120), bolt_hold_open=False, ch_hand="right"),
-        inspect(), dry_fire(m),
+        Anim(m, "inspect", 1.0), dry_fire(m),
     ]
     return GunAsset(m, anims, {"hip": {"pos": [0.12, -0.15, -0.2], "rot": [0, 3.5, 0]}, "ads": {"dist": 0.07}})
 
@@ -274,68 +279,68 @@ def svd():
 # M14 EBR (Sage chassis)
 # =================================================================================================
 def m14ebr():
+    # M14 EBR (Mk 14 Mod 0): 965 mm with the stock out, 457 mm barrel, Sage chassis
     A = 6.0
+    al = "alloy"
     m = new_gun("m14ebr")
     body = m["body"]
-    al = "alloy"
-    body.box(-14, 14, -14, 16, -100, 120, "steel_parked")                       # M14 receiver
-    body.box(-19, 19, -40, 30, -360, -100, al)                                   # EBR chassis forend
-    body.rail(-356, 116, 30, mat=al)
-    body.rail(-350, -120, -40, mat=al, side="bottom")
-    body.rail(-350, -150, -5, x=-19, mat=al, side="left", width=20)
-    body.rail(-350, -150, -5, x=19, mat=al, side="right", width=20)
-    body.box(-17, 17, -40, -14, -100, 140, al)
-    body.box(-16, 16, -46, -40, -104, -40, al)
-    for z in range(-340, -120, 30):
-        body.box(-19.4, 19.4, -30, 10, z, z + 14, "rubber")
-    pistol_grip(body, 42, top_y=-40, length=92, width=28, depth=36, angle=-18, mat="polymer")
-    trigger_group(m, body, 4, y_top=-40, guard_depth=26, guard_len=62, guard_mat="steel_parked")
-    sel = body.bone("selector", pivot=(0, -38, -20))
-    sel.box(-3, 3, -44, -38, -30, -14, "steel")                                   # safety in the guard
-    barrel(body, -360, -560, d=18)
-    muzzle_brake(body, -560, d=22, length=50, ports=3)
-    # adjustable stock
-    stock = m["gun"].bone("stock", pivot=(0, 0, 140))
-    stock.cyl((0, -6, 240), 32, 200, al)
-    stock.taper(-20, 20, 240, 340, 14, 14, -58, -80, "polymer")
-    stock.box(-14, 14, 14, 34, 250, 320, "polymer")
-    stock.box(-22, 22, -86, 18, 336, 348, "rubber")
-    # op-rod handle (right side)
+    st = "steel_parked"
+    body.rbox(-14, 14, -14, 16, -100, 120, st, r=3, edges="top")                       # M14 receiver
+    body.box(2, 14.4, 8, 16.4, -70, -10, "rubber")                                     # open top of the action
+    for sx in (-1, 1):
+        body.box(sx * 9 - 1.5, sx * 9 + 1.5, 16, 34, 98, 118, st)                      # rear sight ears
+        body.cyl((sx * 13, 22, 108), 12, 5, "steel", axis="x", sides=16)               # windage / elevation knobs
+    peep(body, 108, 16, 45, st, w=13, hole=7.0, depth=2.6, hole_y=38)
+    # chassis: fore-end with four rails, bridge rail over the action, body under the receiver
+    body.rbox(-19, 19, -40, 30, -360, -100, al, r=6, edges="all")
+    body.rail(-356, -104, 30, mat=al, side="top")
+    body.rail(-352, -120, -40, mat=al, side="bottom")
+    for sx in (-1, 1):
+        body.rail(-352, -150, -5, x=sx * 19, mat=al, side="right" if sx > 0 else "left", width=20)
+    vents(body, 16, 14, 22, -346, -110, n=7, fill=0.5, proud=3.4)
+    body.box(-10.5, 10.5, 20, 27, -98, 40, al)
+    body.rail(-96, 38, 27, mat=al, side="top")
+    for z in (-96, 34):
+        body.box(-14.5, 14.5, 10, 24, z, z + 8, al)                                    # bridge legs
+    body.rbox(-17, 17, -44, -14, -100, 150, al, r=3, edges="bottom")
+    body.box(-16, 16, -50, -44, -104, -40, al)                                         # magazine well lip
+    pistol_grip(body, 64, top_y=-42, length=92, width=28, depth=36, angle=-18, mat="polymer")
+    trigger_group(m, body, 22, y_top=-44, guard_depth=26, guard_len=62, guard_mat=st)
+    sel = body.bone("selector", pivot=(0, -44, -4))
+    sel.box(-3, 3, -52, -44, -12, 4, "steel")                                          # safety in the guard
+    control(body, "mag_release", (0, -46, -30), [(-5, 5, -64, -44, -34, -29, st), (-6, 6, -66, -60, -35, -24, st)],
+            turn=(20, 0, 0))
+    pins(body, 17, [(-30, -90), (-30, 130)], d=5, mat="steel_dark")
+    # barrel, gas cylinder, long flash suppressor with the front sight
+    barrel(body, -360, -547, d=18, mat=st)
+    body.cyl((0, -15, -420), 17, 100, st)
+    body.cyl((0, -15, -472), 13, 8, "steel")
+    body.cyl((0, 0, -578), 22, 66, st)
+    for ang in (0, 36, 72, 108, 144):
+        body.box(-11.4, 11.4, -1.5, 1.5, -606, -566, "rubber", rot=(0, 0, ang), pivot=(0, 0, -586))
+    body.cyl((0, 0, -611.3), 9.5, 0.6, "rubber", sides=8)
+    eared_sight(body, -556, 11, 31.4, st, w=18, depth=12, lean=8)
+    body.box(-4, 4, -18, -11, -560, -546, st)                                          # bayonet lug
+    # operating rod and its handle (right)
     bolt = body.bone("bolt", pivot=(16, 0, -40))
-    bolt.box(1, 13.5, -4, 10, -60, -10, "steel_light")
-    bolt.box(14, 22, -2, 8, -120, -40, "steel_parked")
-    bolt.box(20, 30, -4, 10, -128, -112, "steel_parked")
-    mag = m["gun"].bone("magazine", pivot=(0, -46, -80))
-    curved_mag(mag, -40, -100, 76, 150, curve=6, segs=3, width=26, mat="steel_dark", rib_mat="steel", round_d=10,
+    bolt.box(2, 13.6, 8.4, 16, -66, -14, "steel_light")
+    bolt.box(14, 20, -4, 6, -260, -40, st)
+    bolt.rbox(18, 30, -6, 10, -72, -56, st, r=3, axis="y", edges="all")
+    # telescoping stock with a cheek rest
+    stock = m["gun"].bone("stock", pivot=(0, 0, 150))
+    stock.rbox(-17, 17, -44, 12, 146, 176, al, r=4, edges="all")
+    rod_stock(stock, 120, 338, 11, -18, "steel", -84, 22, butt_hw=18, rod=8)
+    stock.rbox(-13, 13, 6, 24, 230, 320, "polymer", r=5, edges="top")
+    stock.box(-4, 4, -18, 8, 250, 262, al)
+    stock.box(-4, 4, -18, 8, 296, 308, al)
+    side_swivel(body, -19, -10, -340, h=14)
+    mag = m["gun"].bone("magazine", pivot=(0, -46, -62))
+    curved_mag(mag, -38, -100, 76, 150, curve=6, segs=3, width=26, mat="steel_dark", rib_mat="steel", round_d=12,
                round_len=70)
-    add_arms(m, right_hand=(8, -96, 62), left_hand=(-12, -48, -260), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -610), optic=(0, 33, -10), under=(0, -43, -280), side=(-22, -5, -280),
-                eject=(15, 6, -30), sight=(0, 50, 100))
-    body.box(-8, 8, 33, 50, 96, 106, al)
-    body.box(-6, 6, 33, 52, -330, -320, al)
+    add_arms(m, right_hand=(8, -96, 76), left_hand=(-12, -56, -250), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -613), optic=(0, 33, -230), under=(0, -45, -250), side=(-23, -5, -260),
+                eject=(15, 12, -40), sight=(0, 38, 108))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.2)
-        # op-rod press check: rotate right side up, ease the op-rod back, look
-        a.mv("gun", 0.0, 0.45, pos=(-40, 26, 40), rot=(6, -40, -44), e="inoutsine")
-        a.mv("arm_right", 0.25, 0.5, pos=(30, 70, -120), rot=(-30, -20, -30))
-        a.grab("arm_right", "bolt", 0.52, 1.5, fade_in=0.03, fade_out=0.06)
-        a.key("bolt", 0.0, pos=(0, 0, 0))
-        a.key("bolt", 0.55, pos=(0, 0, 0))
-        a.key("bolt", 0.78, pos=(0, 0, 34), e="inoutquad")
-        a.sound(0.74, "charging_handle_back")
-        a.mv("gun", 0.8, 1.1, pos=(-46, 32, 50), rot=(10, -56, -60))
-        a.key("bolt", 1.3, pos=(0, 0, 34))
-        a.key("bolt", 1.42, pos=(0, 0, 0), e="inoutsine")
-        a.sound(1.42, "charging_handle_forward")
-        a.mv("arm_left", 1.5, 1.7, pos=(26, 40, 160), rot=(-10, 30, 20))
-        a.mv("arm_left", 1.7, 1.76, pos=(20, 40, 166), rot=(-10, 30, 20), e="outquad")
-        a.sound(1.75, "tap")
-        a.mv("arm_right", 1.5, 1.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("arm_left", 1.85, 2.3, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("gun", 1.9, 2.6, pos=(-60, 30, 30), rot=(10, 30, 20), e="inoutsine")
-        _settle(a, 3.0, 4.15)
-        return a
 
     kk = _kk("bolt", (0, 0, 96), kick=4.6, push=16)
     anims = [
@@ -346,7 +351,7 @@ def m14ebr():
         rifle_reload(m, "reload", A, empty=False, style="ak", rock=8, mag_out=60),
         rifle_reload(m, "reload_empty", A, empty=True, style="ak", rock=8, mag_out=60, bolt="bolt", ch="bolt",
                      bolt_travel=(0, 0, 96), ch_travel=(0, 0, 96), bolt_hold_open=True, ch_hand="right"),
-        inspect(), dry_fire(m),
+        Anim(m, "inspect", 1.0), dry_fire(m),
     ]
     return GunAsset(m, anims, FP)
 

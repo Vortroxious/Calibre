@@ -19,11 +19,11 @@ def _buis(body, z, y_rail, mat="alloy", sy=None):
     SIGHT_Y = sy if sy is not None else globals()["SIGHT_Y"]
     body.rbox(-10.5, 10.5, y_rail, y_rail + 6, z - 13, z + 13, mat, r=2, edges="top")
     body.box(-11.4, -10.5, y_rail + 1, y_rail + 5, z - 5, z + 5, "steel")
-    for sx in (-1, 1):
-        xs = sorted((sx * 5, sx * 9))
-        body.box(xs[0], xs[1], y_rail + 6, SIGHT_Y + 5, z - 3, z + 3, mat)
-    peep(body, z, y_rail + 6, SIGHT_Y + 5, mat, w=10, hole=4.4, depth=3, hole_y=SIGHT_Y)
-    body.cyl((11.5, SIGHT_Y - 6, z), 9, 5, "steel", axis="x", sides=16)
+    for sx in (-1, 1):                                    # two slim uprights: the view between them stays open
+        xs = sorted((sx * 6.5, sx * 8.5))
+        body.box(xs[0], xs[1], y_rail + 6, SIGHT_Y - 5, z - 2.4, z + 2.4, mat)
+    peep(body, z, SIGHT_Y - 7, SIGHT_Y + 7, mat, w=17, hole=8.0, depth=2.6, hole_y=SIGHT_Y)       # ghost ring
+    body.cyl((11, SIGHT_Y - 10, z), 8, 4, "steel", axis="x", sides=16)
 
 
 def _flip_front(body, z, y_rail, mat="alloy", sy=None):
@@ -103,10 +103,12 @@ def _ar(name, *, ul=197.0, hw_low=11.5, hw_up=14.0, barrel_out, barrel_d=17.0, g
         body.taper(-6, 6, zf + 78, zf + 100, 30, 56, 21, 21, al, round=0)                             # front leg
         body.rbox(-7.5, 7.5, 50, 58, zf + 96, 78, al, r=2.4, edges="top")                             # handle bar
         body.rbox(-8.5, 8.5, 21, 60, 64, 101, al, r=3, edges="top")                                   # rear sight housing
-        body.box(-9, 9, 60, SIGHT_Y + 6, 80, 92, al)
+        for sx in (-1, 1):
+            xs = sorted((sx * 6, sx * 9))
+            body.box(xs[0], xs[1], 60, SIGHT_Y + 7, 80, 92, al)                                         # sight ears
         for sx in (-1, 1):
             slot(body, sx * 6, 31, 48, zf + 104, 62)
-        peep(body, 96, 60, SIGHT_Y + 6, al, w=8, hole=4.2, depth=3, hole_y=SIGHT_Y)
+        peep(body, 96, 60, SIGHT_Y + 6, al, w=12, hole=7.0, depth=2.6, hole_y=SIGHT_Y)
         body.cyl((11, 58, 86), 12, 5, "steel_dark", axis="x", sides=16)                               # windage drum
         y_rail = None
         optic = None
