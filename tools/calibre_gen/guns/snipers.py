@@ -4,6 +4,7 @@ from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire
 from ..templates import rifle_reload, bolt_cycle, bolt_load, _settle, OFF_LEFT, OFF_LEFT_ROT
 from ..parts import (pistol_grip, trigger_group, curved_mag, straight_mag, barrel, muzzle_brake, scope, bipod)
 from ..common import moving
+from ..parts import pins, vents, sling_swivel
 from ..pistolkit import control
 from ..riflekit import stock, line_y, butt_plate, bolt, rides
 from .hunting import _bolt_rifle
@@ -146,74 +147,59 @@ def awm():
 
 
 def m82a1():
+    # Barrett M82A1: 1448 mm long, 737 mm fluted barrel, arrowhead brake, stamped two-part receiver
     A = 4.0
     m = new_gun("m82a1")
     body = m["body"]
     st = "steel_parked"
-    # lower receiver
-    body.box(-24, 24, -60, 0, -320, 300, st)
+    body.rbox(-24, 24, -60, 0, -320, 455, st, r=4, edges="bottom")                  # lower receiver
+    body.box(-24.4, 24.4, -24, -21, -310, 445, "steel_dark")                        # stamped rib
+    pins(body, 24, [(-10, -300), (-34, -110), (-10, 300), (-10, 440)], d=7, mat="steel")
     pistol_grip(body, 60, top_y=-60, length=96, width=30, depth=40, angle=-16, mat="polymer")
     trigger_group(m, body, 20, y_top=-60, guard_depth=28, guard_len=66, guard_mat=st)
-    body.box(-22, 22, -130, -60, 300, 360, st)                                      # monopod/stock
-    body.box(-20, 20, -40, 0, 300, 480, "polymer")
-    body.box(-24, 24, -60, 4, 470, 490, "rubber")
-    body.box(-14, 14, 0, 30, 220, 330, "polymer")                                   # cheek rest
-    sel = body.bone("selector", pivot=(-24, -40, 40))
-    sel.box(-28, -24, -44, -36, 30, 50, "steel")
+    control(body, "safety", (-24, -40, 44), [(-27, -24, -43, -37, 26, 46, "steel")], turn=(-50, 0, 0))
+    control(body, "mag_release", (0, -62, 66), [(-5, 5, -78, -61, 62, 66, "steel_dark")], turn=(-16, 0, 0))
+    body.rbox(-25, 25, -64, 38, 455, 462, "steel_dark", r=5)                        # back plate and recoil pad
+    body.rbox(-25, 25, -64, 38, 462, 480, "rubber", r=7)
+    body.rbox(-11, 11, -122, -58, 384, 420, "polymer", r=7, axis="y", rot=(-10, 0, 0), pivot=(0, -60, 400))   # rear grip
+    body.cyl((0, -124, 414), 9, 6, "steel", axis="y", sides=8)                      # monopod socket
     bipod(body, -280, y=-60, legs_len=260, folded=True)
     # upper receiver + barrel recoil together
     up = m["gun"].bone("upper", pivot=(0, 0, 0))
-    up.box(-24, 24, 0, 36, -360, 300, st)
-    up.rail(-200, 280, 36, mat="alloy")
-    up.box(0, 24.4, 2, 26, -80, -20, "rubber")
-    for z in range(-350, -200, 22):
-        up.box(-24.4, 24.4, 6, 28, z, z + 10, "rubber")                             # cooling holes
-    barrel(up, -360, -900, d=30)
-    up.box(-40, 40, -18, 18, -1000, -900, st)                                        # dual chamber brake
-    up.box(-41, 41, -14, 14, -980, -960, "rubber")
-    up.box(-41, 41, -14, 14, -940, -920, "rubber")
+    up.rbox(-24, 24, 0, 36, -360, 455, st, r=5, edges="top")
+    up.rail(-200, 300, 36, mat="alloy")
+    up.box(10, 24.4, 4, 26, -80, -20, "rubber")                                     # ejection port
+    for z in range(-350, -210, 24):
+        for sx in (-1, 1):
+            up.box(sx * 24 - 0.4, sx * 24 + 0.4, 8, 28, z, z + 12, "rubber")        # cooling slots
+    up.box(-24.4, 24.4, 15, 18, 20, 445, "steel_dark")
+    up.rbox(-18, 18, 36, 46, 330, 446, "polymer", r=4, edges="top")                 # cheek pad
+    up.cyl((0, 0, -368), 44, 16, st)                                                # barrel bushing
+    barrel(up, -360, -868, d=30)
+    for k in range(6):
+        up.box(-1.4, 1.4, 14.4, 15.3, -850, -420, "rubber", rot=(0, 0, k * 60 + 30), pivot=(0, 0, 0))
+    for sx in (-1, 1):
+        up.cyl((sx * 19, -8, -405), 7, 74, "steel")                                 # barrel spring rods
+    up.cyl((0, 0, -876), 36, 16, st)                                                # two-chamber arrowhead brake
+    up.rbox(-42, 42, -17, 17, -928, -884, st, r=4)
+    up.rbox(-34, 34, -17, 17, -968, -928, st, r=4)
+    up.box(-42.4, 42.4, -11, 11, -918, -896, "rubber")
+    up.box(-34.4, 34.4, -11, 11, -958, -940, "rubber")
+    up.cyl((0, 0, -968.3), 18, 0.6, "rubber", sides=8)
     ch = up.bone("charging_handle", pivot=(24, 16, -80))
-    ch.box(24, 44, 10, 22, -86, -74, "steel")
-    ch.box(40, 50, 6, 26, -88, -72, "polymer")
-    # carry handle
-    up.box(-6, 6, 36, 70, -160, -150, "steel")
-    up.box(-6, 6, 64, 72, -160, -60, "polymer")
-    up.box(-6, 6, 36, 70, -70, -60, "steel")
+    ch.box(24, 40, 11, 21, -86, -74, "steel")
+    ch.cyl((44, 16, -80), 16, 10, "polymer", axis="x", sides=16)
+    for z in (-160, -70):                                                           # carry handle
+        up.box(-5, 5, 38, 66, z, z + 10, "steel")
+    up.rbox(-7, 7, 62, 72, -164, -56, "polymer", r=3)
     mag = m["gun"].bone("magazine", pivot=(0, -60, -40))
     straight_mag(mag, -60, -90, 60, 130, width=34, mat="steel_dark", round_d=20, round_len=130)
     sc = up.bone("scope", pivot=(0, 80, 120))
     scope(sc, 120, 82, length=360, tube_d=34, obj_d=56, eye_d=44, mount_y=39)
-    add_arms(m, right_hand=(10, -104, 80), left_hand=(-16, -70, 380), right_rot=(34, 14, 6), left_rot=(30, -22, -4))
-    add_sockets(m, muzzle=(0, 0, -1000), eject=(24, 14, -50), sight=(0, 82, 300), parent="body")
-    m.meta["integral_optic"] = {"zoom": 10.0, "reticle": "mildot", "eye": [0, 82, 300]}
+    add_arms(m, right_hand=(10, -104, 80), left_hand=(-16, -92, 400), right_rot=(34, 14, 6), left_rot=(30, -22, -4))
+    add_sockets(m, muzzle=(0, 0, -969), eject=(24, 14, -50), sight=(0, 82, 300), parent="body")
 
-    def inspect():
-        a = Anim(m, "inspect", 4.8)
-        # rest it on the shoulder
-        a.mv("gun", 0.0, 0.7, pos=(-60, 120, 160), rot=(30, -20, -40), e="inoutsine")
-        a.mv("arm_left", 0.1, 0.6, pos=(-60, 10, -40), rot=(10, -20, 0))
-        a.wave("gun", "rot", (0.6, 0.4, 0.5), 1.6)
-        a.wave("gun", "pos", (0, 2, 0), 0.8)
-        # pat the upper receiver twice
-        for t in (1.5, 1.85):
-            a.mv("arm_left", t - 0.15, t, pos=(-10, 60, -60), rot=(-20, -10, 10), e="outquad")
-            a.sound(t, "tap")
-            a.spring("gun", "rot", t, (0.6, 0, 0.4), freq=7, damp=10)
-            a.mv("arm_left", t, t + 0.12, pos=(-10, 80, -40), rot=(-20, -10, 10))
-        # tug the charging handle a touch
-        a.mv("arm_left", 2.1, 2.4, pos=(-20, -20, 40), rot=(0, 0, 0))
-        a.mv("gun", 2.2, 2.9, pos=(-40, 30, 40), rot=(4, -40, -26), e="inoutsine")
-        a.mv("arm_right", 2.6, 2.9, pos=(40, 120, -160), rot=(-30, -20, -30))
-        a.grab("arm_right", "charging_handle", 2.92, 3.5, fade_in=0.03, fade_out=0.06)
-        a.key("charging_handle", 2.92, pos=(0, 0, 0))
-        a.key("charging_handle", 3.12, pos=(0, 0, 40), e="inoutquad")
-        a.sound(3.1, "charging_handle_back")
-        a.key("charging_handle", 3.38, pos=(0, 0, 0), e="inquad")
-        a.sound(3.38, "charging_handle_forward")
-        a.mv("arm_right", 3.5, 3.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("arm_left", 3.3, 3.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.6, 4.75)
-        return a
+    m.meta["integral_optic"] = {"zoom": 10.0, "reticle": "mildot", "eye": [0, 82, 300]}
 
     def fire(name, aim):
         a = fire_basic(m, name, kick=(10, 0.8, 1.8), push=30, recover=0.5, length=0.6, aim=aim)
@@ -227,7 +213,7 @@ def m82a1():
              rifle_reload(m, "reload", A, empty=False, style="ar", mag_out=60, length=3.0),
              rifle_reload(m, "reload_empty", A, empty=True, style="smg", mag_out=60, ch="charging_handle",
                           ch_travel=(0, 0, 120), bolt_hold_open=False, ch_hand="right", length=3.6),
-             inspect(), dry_fire(m)]
+             Anim(m, "inspect", 1.0), dry_fire(m)]
     return GunAsset(m, anims, {"hip": {"pos": [0.13, -0.16, -0.24], "rot": [0, 3, 0]}, "ads": {"dist": 0.075}})
 
 
