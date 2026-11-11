@@ -14,6 +14,7 @@ from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
 from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
                        peep, rod_stock, selector, paddle, button, stock_solid)
 from ..pistolkit import control
+from .ar15 import _buis, _flip_front
 from .lmgs import _belt, _belt_feed, LMG_FP
 from .modern import _rifle_anims, _inspect, _fp
 
@@ -73,50 +74,61 @@ def m60():
 # H&K G3A3 (roller delayed, slap reload)
 # =================================================================================================
 def g3a3():
+    # H&K G3A3: 1025 mm long, 450 mm barrel
+    st = "steel_dark"
     m = new_gun("g3a3")
     body = m["body"]
-    st = "steel_dark"
-    body.box(-16, 16, -22, 18, -260, 80, st)                                    # stamped receiver
-    body.box(-13, 13, 18, 22, -260, 70, st)
-    for z in (-180, -80, 0):
-        body.box(-16.4, 16.4, -18, 14, z, z + 20, "steel")
-    body.box(0, 16.3, -4, 12, -80, -30, "rubber")
-    body.cyl((0, 10, -340), 24, 170, st)                                        # cocking tube
-    body.cyl((0, -4, -380), 18, 260, "steel")
-    body.box(-19, 19, -36, 4, -460, -260, "polymer")                            # slim handguard
-    for z in range(-450, -270, 20):
-        body.box(-19.4, 19.4, -28, -6, z, z + 10, "rubber")
-    barrel(body, -460, -580, d=17)
-    flash_hider_a2(body, -580, d=22, length=40)
-    # hooded front sight + drum rear
-    body.box(-11, 11, 20, 24, -440, -420, st)
-    body.box(-11, -8, 24, 44, -438, -422, st)
-    body.box(8, 11, 24, 44, -438, -422, st)
-    body.box(-1.2, 1.2, 24, 36, -431, -429, st)
-    body.box(-12, 12, 22, 28, 30, 60, st)
-    body.cyl((0, 36, 46), 24, 16, st, axis="x", sides=12)
-    body.box(-16, 16, 22, 26, -160, -130, st)                                   # claw mount bumps
-    body.box(-14, 14, -42, -22, -70, 70, "polymer")                             # trigger housing
-    pistol_grip(body, 36, top_y=-40, length=88, width=30, depth=38, angle=-14, mat="polymer")
-    trigger_group(m, body, 0, y_top=-42, guard_depth=28, guard_len=60, guard_mat="polymer")
-    sel = body.bone("selector", pivot=(-15, -32, 46))
-    sel.box(-18, -15, -36, -28, 40, 54, "steel")
-    body.box(-15, 15, -42, -22, -126, -70, st)                                  # mag well
-    stock = m["gun"].bone("stock", pivot=(0, 0, 80))
-    stock.box(-14, 14, -24, 16, 80, 120, "polymer")
-    stock.taper(-18, 18, 120, 360, 14, 14, -30, -90, "polymer")
-    stock.box(-20, 20, -96, 18, 356, 370, "rubber")
-    ch = body.bone("charging_handle", pivot=(-14, 10, -400))
-    ch.box(-34, -12, 6, 14, -408, -394, "steel")
-    ch.box(-38, -30, 4, 16, -410, -392, "polymer")
+    P = "polymer"
+    body.rbox(-17, 17, -24, 26, -220, 100, st, r=6.5, edges="top")                     # stamped receiver
+    body.box(-2.5, 2.5, 26, 26.8, -216, 84, st)
+    ribs(body, 17, -16, 12, (-196, -150, -40, 20), 12, "steel")
+    ejection_port(body, 17, 0, 14, -106, -60, lip_mat=st)
+    body.box(17, 18.6, 1, 13, -60, -54, "steel")
+    body.rbox(-17.4, 17.4, -24, 26.4, 98, 106, st, r=6.5, edges="top")                 # end cap
+    for sx in (-1, 1):
+        body.box(sx * 17.4 - 0.4, sx * 17.4 + 0.4, 2, 14, -30, 16, "steel")            # claw-mount cuts
+    # cocking tube, barrel, slim hand guard, ring front sight, drum rear, slotted hider
+    body.cyl((0, 16, -372), 24, 306, st)
+    body.cyl((0, 16, -526.5), 26, 5, st)
+    slot(body, -12, 14, 18, -516, -330)
+    slot(body, -12, 18, 24, -342, -330)
+    barrel(body, -220, -640, d=18, mat="steel")
+    body.box(-9, 9, -10, 28, -540, -524, st)
+    ring_sight(body, -532, 28, st, r=11, depth=16)
+    drum_sight(body, 66, 26, st, d=22)                                                 # line of sight y = 41
+    body.rbox(-20, 20, -36, 4, -512, -236, P, r=8, edges="bottom")
+    vents(body, 20, -26, -8, -500, -246, n=12, fill=0.5)
+    body.box(-20.4, 20.4, -6, -3, -508, -240, "rubber")
+    flash_hider_a2(body, -628, d=22, length=44)
+    bipod_lug = body.box(-6, 6, -40, -36, -508, -492, st)
+    # trigger housing, grip, guard, selector, magazine well with paddle and button
+    body.rbox(-14.5, 14.5, -50, -24, -72, 96, P, r=3, edges="bottom")
+    pistol_grip(body, 34, top_y=-46, length=88, width=29, depth=38, angle=-14, mat=P)
+    trigger_group(m, body, -20, y_top=-48, guard_depth=27, guard_len=58, guard_mat=P)
+    selector(body, (-14.5, -32, 38), mat="steel", length=18, side=-1, turn=(-50, 0, 0))
+    body.box(14.5, 15.1, -35, -29, 28, 44, "steel")
+    pins(body, 17, [(-16, -88), (-16, 86)], d=5, mat="steel")
+    body.box(-16, 16, -56, -24, -152, -96, st)
+    body.box(-16.6, 16.6, -56, -53, -153, -95, st)
+    paddle(body, (0, -54, -94), mat=st, w=16, h=8, d=10)
+    body.cyl((17, -40, -100), 7, 2.4, "steel", axis="x", sides=8)
+    ch = body.bone("charging_handle", pivot=(-12, 16, -500))
+    ch.box(-26, -11.5, 13, 19, -506, -494, "steel")
+    ch.cyl((-30, 16, -500), 14, 14, P, axis="x")
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 15.5, -2, 10, -78, -32, "steel_light")
-    mag = m["gun"].bone("magazine", pivot=(0, -42, -110))
-    curved_mag(mag, -38, -122, 52, 160, curve=8, segs=3, width=24, mat="steel_dark", rib_mat="steel", round_d=10,
-               round_len=60)
-    add_arms(m, right_hand=(8, -86, 48), left_hand=(-10, -44, -360), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, -4, -620), optic=(0, 26, -60), under=(0, -36, -360), eject=(16, 4, -55),
-                sight=(0, 44, 46))
+    bolt.box(2, 16.5, 1, 13, -104, -62, "steel_light")
+    stock = m["gun"].bone("stock", pivot=(0, 0, 100))
+    stock.rbox(-16, 16, -26, 24, 104, 140, P, r=6, edges="all")
+    stock_solid(stock, 17, [(136, 20), (352, 16)], [(136, -24), (190, -36), (352, -92)], P, pad="rubber", pad_th=8)
+    sling_swivel(stock, 0, -80, 300, along="z", drop=9)
+    side_swivel(body, -12, 16, -520, h=12)
+    mag = m["gun"].bone("magazine", pivot=(0, -50, -124))
+    curved_mag(mag, -40, -150, 52, 160, curve=6, segs=3, width=25, mat="steel_dark", rib_mat="steel", round_d=12,
+               round_len=70)
+    add_arms(m, right_hand=(8, -90, 50), left_hand=(-10, -52, -380), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -674), optic=(0, 27, -40), under=(0, -38, -380), eject=(17, 7, -84),
+                sight=(0, 41, 66))
+
     cyc = dict(bone="bolt", travel=(0, 0, 56), t_back=0.016, t_fwd=0.05)
     kk = dict(kick=(3.6, 0.6, 1.4), push=14, cycle=cyc)
     anims = [idle(m), draw(m, 0.75, sound="draw_rifle"),

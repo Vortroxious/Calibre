@@ -14,8 +14,9 @@ def _inspect(m):
     return Anim(m, "inspect", 1.0)
 
 
-def _buis(body, z, y_rail, mat="alloy"):
-    """Flip-up rear sight on the top rail: clamp, upright arm, aperture, windage knob."""
+def _buis(body, z, y_rail, mat="alloy", sy=None):
+    """Flip-up rear sight on the top rail: clamp, upright arm, aperture, windage knob. sy = line of sight height."""
+    SIGHT_Y = sy if sy is not None else globals()["SIGHT_Y"]
     body.rbox(-10.5, 10.5, y_rail, y_rail + 6, z - 13, z + 13, mat, r=2, edges="top")
     body.box(-11.4, -10.5, y_rail + 1, y_rail + 5, z - 5, z + 5, "steel")
     for sx in (-1, 1):
@@ -25,8 +26,9 @@ def _buis(body, z, y_rail, mat="alloy"):
     body.cyl((11.5, SIGHT_Y - 6, z), 9, 5, "steel", axis="x", sides=16)
 
 
-def _flip_front(body, z, y_rail, mat="alloy"):
+def _flip_front(body, z, y_rail, mat="alloy", sy=None):
     """Flip-up front sight on the top rail: clamp, wings, post up to the line of sight."""
+    SIGHT_Y = sy if sy is not None else globals()["SIGHT_Y"]
     body.rbox(-10.5, 10.5, y_rail, y_rail + 6, z - 11, z + 11, mat, r=2, edges="top")
     for sx in (-1, 1):
         xs = sorted((sx * 5, sx * 8.5))

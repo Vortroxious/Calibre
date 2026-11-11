@@ -10,6 +10,7 @@ from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
 from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
                        peep, rod_stock, selector, paddle, button, stock_solid)
 from ..pistolkit import control
+from .ar15 import _buis, _flip_front
 from .ww2 import _military_bolt, _clip, _round_load, _bolt_set, _butt, _band, RIFLE_FP
 from .lmgs import _belt, _belt_feed, LMG_FP
 from .modern import _rifle_anims, _inspect, _fp

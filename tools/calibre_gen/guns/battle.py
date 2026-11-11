@@ -5,6 +5,12 @@ from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire
 from ..templates import rifle_reload, _settle, OFF_LEFT, OFF_LEFT_ROT
 from ..parts import (pistol_grip, trigger_group, curved_mag, straight_mag, barrel, flash_hider_a2, muzzle_brake,
                      picatinny_handguard, scope)
+from ..common import moving
+from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
+from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
+                       peep, rod_stock, selector, paddle, button, stock_solid)
+from ..pistolkit import control
+from .ar15 import _buis, _flip_front
 
 FP = {"hip": {"pos": [0.12, -0.13, -0.19], "rot": [0, 3.5, 0]}, "ads": {"dist": 0.09}}
 
@@ -17,83 +23,68 @@ def _kk(bolt, travel, kick=4.2, push=15):
 # FN FAL
 # =================================================================================================
 def fal():
+    # FN FAL 50.00: 1090 mm long, 533 mm barrel
     A = 4.0
+    st = "steel_parked"
     m = new_gun("fal")
     body = m["body"]
-    st = "steel_parked"
-    body.box(-15, 15, -10, 18, -120, 170, st)                                   # upper receiver
-    body.box(-14, 14, -40, -10, -100, 150, st)                                  # lower
-    body.box(-15.5, 15.5, -46, -40, -104, -40, st)
-    body.box(0, 15.3, -4, 14, -60, 0, "rubber")
-    pistol_grip(body, 40, top_y=-40, length=92, width=28, depth=36, angle=-18, mat="polymer")
-    trigger_group(m, body, 4, y_top=-40, guard_depth=28, guard_len=64, guard_mat=st)
-    sel = body.bone("selector", pivot=(-14, -26, 46))
-    sel.box(-18, -14, -30, -22, 38, 54, "steel")
-    # carry handle (folding)
-    ch_ = body.bone("carry_handle", pivot=(0, 18, -40))
-    ch_.box(-3, 3, 18, 44, -60, -52, "steel")
-    ch_.box(-3, 3, 38, 46, -60, 20, "polymer")
-    ch_.box(-3, 3, 18, 44, 12, 20, "steel")
-    # rear aperture sight
-    body.box(-8, 8, 18, 36, 150, 166, st)
-    body.box(-2, 2, 30, 34, 150, 166, "rubber")
-    # handguard (polymer, vented), gas regulator, front sight, flash hider
-    body.box(-18, 18, -34, 14, -340, -120, "polymer")
-    for z in range(-330, -130, 22):
-        body.box(-18.4, 18.4, -22, 6, z, z + 10, "rubber")
-    body.cyl((0, 14, -350), 18, 40, st)
-    barrel(body, -340, -540, d=17)
-    body.box(-6, 6, -10, 44, -380, -366, st)
-    body.box(-8, -5, 30, 50, -380, -366, st)
-    body.box(5, 8, 30, 50, -380, -366, st)
-    body.box(-1, 1, 30, 46, -374, -372, st)
-    flash_hider_a2(body, -540, d=22, length=60)
-    # fixed stock
-    stock = m["gun"].bone("stock", pivot=(0, 0, 170))
-    stock.taper(-18, 18, 170, 518, 14, -22, -52, -128, "polymer")
-    stock.box(-19.5, 19.5, -130, -20, 518, 530, "rubber")
-    # charging handle: left side, non-reciprocating
-    ch = body.bone("charging_handle", pivot=(-15, 4, -110))
-    ch.box(-32, -15, 0, 10, -118, -102, "steel")
-    ch.box(-36, -30, -2, 12, -120, -100, "steel")
+    P = "polymer"
+    body.rbox(-15, 15, -14, 18, -150, 130, st, r=3, edges="top")                       # upper receiver
+    body.rbox(-13, 13, 18, 23, -100, 126, st, r=2.4, edges="top")                      # top cover
+    ejection_port(body, 15, -2, 12, -96, -36, lip_mat=st)
+    slot(body, -15, 4, 8, -138, -30)                                                   # cocking slot (left)
+    body.box(-14, 14, -42, -14, -122, 150, st)                                         # lower / trigger frame
+    body.box(-15.4, 15.4, -16, -13, -146, 128, "rubber")
+    body.cyl((0, -22, -124), 12, 34, "steel", axis="x", sides=16)                      # hinge pin
+    body.rbox(-13, 13, -40, 14, 128, 160, st, r=4, edges="top")                        # stock socket
+    # barrel, gas system, hand guards, front sight on the gas block, combination flash hider
+    body.cyl((0, 0, -160), 30, 22, st)
+    barrel(body, -150, -663, d=17, mat=st)
+    body.cyl((0, 20, -300), 14, 280, st)                                               # gas cylinder
+    body.rbox(-19, 19, -24, 32, -412, -168, P, r=9, edges="all")                       # hand guards
+    vents(body, 19, 16, 22, -400, -180, n=7, fill=0.55)
+    vents(body, 19, -14, -8, -400, -180, n=7, fill=0.55)
+    body.box(-19.4, 19.4, 2, 5, -408, -172, "rubber")
+    body.rbox(-9, 9, -11, 36, -446, -416, st, r=3, edges="top")                        # gas block
+    eared_sight(body, -430, 36, 14, st, w=18, depth=14, lean=6)
+    body.cyl((0, 20, -452), 12, 14, "steel")                                           # gas plug
+    body.cyl((0, 0, -640), 22, 62, st)                                                 # long flash hider
+    for ang in (0, 60, 120):
+        body.box(-11.4, 11.4, -1.6, 1.6, -666, -622, "rubber", rot=(0, 0, ang), pivot=(0, 0, -644))
+    body.cyl((0, 0, -671.3), 9.5, 0.6, "rubber", sides=8)
+    sling_swivel(body, 0, -11, -438, along="x", drop=9, w=16)
+    # carry handle folded down on the right
+    body.cyl((16, 6, -112), 8, 5, st, axis="x", sides=8)
+    body.path([(-112, 6), (-104, -14), (-52, -14), (-44, 6)], 5, 5, st, x=19)
+    # sights: sliding aperture on the lower, behind the cover
+    body.box(-9, 9, 18, 24, 112, 148, st)
+    peep(body, 132, 24, 56, st, w=10, hole=4.4, depth=3, hole_y=48)
+    for sx in (-1, 1):
+        body.box(sx * 9 - 1.5, sx * 9 + 1.5, 24, 40, 124, 144, st)
+    # frame: magazine well, grip, guard, controls
+    body.box(-15, 15, -52, -42, -110, -40, st)
+    control(body, "mag_release", (0, -44, -36), [(-5, 5, -62, -42, -40, -35, st), (-6, 6, -64, -58, -41, -30, st)],
+            turn=(20, 0, 0))
+    control(body, "bolt_catch", (-14, -30, -30), [(-17, -14, -40, -24, -36, -24, st)], press=(0, 3, 0))
+    pistol_grip(body, 62, top_y=-40, length=96, width=28, depth=36, angle=-18, mat=P)
+    trigger_group(m, body, 22, y_top=-42, guard_depth=27, guard_len=66, guard_mat=st)
+    selector(body, (-14, -28, 66), mat="steel", length=16, side=-1, turn=(-60, 0, 0))
+    pins(body, 14, [(-30, 24), (-26, 100)], d=5, mat="steel_dark")
+    ch = body.bone("charging_handle", pivot=(-15, 6, -130))
+    ch.box(-24, -15, 3, 9, -136, -124, st)
+    ch.cyl((-28, 6, -130), 14, 8, P, axis="x", sides=16)
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 14.8, -2, 12, -58, -2, "steel_light")
-    mag = m["gun"].bone("magazine", pivot=(0, -46, -70))
-    curved_mag(mag, -40, -100, 76, 160, curve=8, segs=3, width=26, mat="steel_dark", rib_mat="steel", round_d=10,
+    bolt.box(2, 14.6, -1, 11, -94, -38, "steel_light")
+    stock = m["gun"].bone("stock", pivot=(0, 0, 150))
+    stock_solid(stock, 16, [(156, 10), (412, 4)], [(156, -36), (200, -44), (412, -108)], P, pad="rubber", pad_th=8)
+    sling_swivel(stock, 0, -96, 360, along="z", drop=9)
+    mag = m["gun"].bone("magazine", pivot=(0, -46, -75))
+    curved_mag(mag, -40, -106, 62, 150, curve=6, segs=3, width=25, mat="steel_dark", rib_mat="steel", round_d=12,
                round_len=70)
-    add_arms(m, right_hand=(8, -96, 60), left_hand=(-12, -46, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -600), optic=(0, 18, 60), under=(0, -34, -260), eject=(15, 6, -30),
-                sight=(0, 34, 160))
+    add_arms(m, right_hand=(8, -96, 74), left_hand=(-12, -50, -290), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -673), optic=(0, 23, 20), under=(0, -26, -290), eject=(15, 6, -66),
+                sight=(0, 48, 132))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.4)
-        a.mv("gun", 0.0, 0.45, pos=(-30, 20, 30), rot=(6, 24, 20))
-        # pull the charging handle partway, look into the action
-        a.mv("arm_left", 0.1, 0.45, pos=(-22, 50, 130), rot=(-20, -20, 10))
-        a.grab("arm_left", "charging_handle", 0.48, 1.25, fade_in=0.03, fade_out=0.06)
-        for b in ("charging_handle", "bolt"):
-            a.key(b, 0.0, pos=(0, 0, 0))
-            a.key(b, 0.5, pos=(0, 0, 0))
-            a.key(b, 0.7, pos=(0, 0, 50), e="inoutquad")
-            a.key(b, 1.1, pos=(0, 0, 50))
-            a.key(b, 1.18, pos=(0, 0, 0), e="inquad")
-        a.sound(0.68, "charging_handle_back")
-        a.sound(1.18, "charging_handle_forward")
-        a.mv("gun", 0.7, 1.0, pos=(-40, 30, 40), rot=(10, -30, -40))
-        # flip the carry handle up, grab it, rotate the rifle
-        a.mv("arm_left", 1.3, 1.6, pos=(10, 90, 170), rot=(-50, 0, 20))
-        a.key("carry_handle", 0.0, rot=(0, 0, 0))
-        a.key("carry_handle", 1.6, rot=(0, 0, 0))
-        a.key("carry_handle", 1.72, rot=(0, 0, -90), e="outback")
-        a.sound(1.7, "click_small")
-        a.grab("arm_left", "carry_handle", 1.75, 2.9, fade_in=0.03, fade_out=0.06)
-        a.mv("gun", 1.8, 2.5, pos=(-60, 50, 40), rot=(16, -40, -10), e="inoutsine")
-        a.key("carry_handle", 2.8, rot=(0, 0, -90))
-        a.key("carry_handle", 2.95, rot=(0, 0, 0), e="inquad")
-        a.sound(2.95, "click_small")
-        a.mv("arm_left", 3.0, 3.4, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.1, 4.35)
-        return a
 
     kk = _kk("bolt", (0, 0, 100))
     anims = [
@@ -104,7 +95,7 @@ def fal():
         rifle_reload(m, "reload", A, empty=False, style="ak", rock=8, mag_out=70),
         rifle_reload(m, "reload_empty", A, empty=True, style="ak", rock=8, mag_out=70, bolt="bolt",
                      bolt_travel=(0, 0, 100), ch="charging_handle", ch_travel=(0, 0, 100), ch_hand="left"),
-        firemode(m, selector_rot=(-60, 0, 0)), inspect(), dry_fire(m),
+        firemode(m, selector_rot=(-60, 0, 0)), Anim(m, "inspect", 1.0), dry_fire(m),
     ]
     return GunAsset(m, anims, FP)
 
@@ -113,79 +104,63 @@ def fal():
 # FN SCAR-H
 # =================================================================================================
 def scar_h():
+    # FN SCAR-H (Mk 17, 16 in): 965 mm with the stock out, 406 mm barrel
     A = 2.0
+    up, lo = "alloy_tan", "polymer_tan"
     m = new_gun("scar_h")
     body = m["body"]
-    up, lo = "alloy_tan", "polymer_tan"
-    body.box(-17, 17, -8, 28, -330, 112, up)
-    body.rail(-326, 110, 28, mat=up)
-    body.rail(-320, -170, -6, x=-17, mat=up, side="left", width=18)
-    body.rail(-320, -170, -6, x=17, mat=up, side="right", width=18)
-    body.box(-14, 14, -40, -8, -110, 112, lo)
-    body.rail(-320, -130, -8, mat=lo, side="bottom")
-    body.box(-15, 15, -46, -40, -104, -44, lo)
-    body.box(0, 17.2, -4, 14, -60, -10, "rubber")
-    body.box(-17.3, -17, -2, 6, -150, 0, "rubber")                             # charging handle slot
-    pistol_grip(body, 40, top_y=-40, length=92, width=28, depth=36, angle=-18, mat=lo)
-    trigger_group(m, body, 4, y_top=-40, guard_depth=26, guard_len=62, guard_mat=lo)
-    sel = body.bone("selector", pivot=(-14, -24, 46))
-    sel.box(-17, -14, -28, -20, 38, 54, "steel_dark")
-    barrel(body, -330, -470, d=18)
-    body.box(-12, 12, -10, 12, -350, -330, "steel_dark")
-    muzzle_brake(body, -470, d=24, length=52, ports=3)
-    # flip-up sights
-    body.box(-6, 6, 31, 52, -316, -306, up)
-    body.box(-8, 8, 31, 50, 96, 106, up)
-    # side-folding, adjustable stock
-    stock = m["gun"].bone("stock", pivot=(14, 0, 112))
-    stock.box(-14, 14, -20, 20, 112, 150, lo)
-    stock.box(-12, 12, -24, 14, 150, 240, lo)
-    ext = stock.bone("stock_ext", pivot=(0, 0, 240))
-    ext.box(-15, 15, -90, 14, 240, 330, lo)
-    ext.box(-14, 14, 14, 26, 230, 310, lo)                                       # cheek riser
-    ext.box(-16, 16, -96, 18, 326, 340, "rubber")
-    # reciprocating charging handle (left)
-    ch = body.bone("charging_handle", pivot=(-17, 2, -60))
-    ch.box(-36, -17, -2, 8, -66, -54, "polymer")
-    ch.box(-40, -32, -4, 10, -68, -52, "polymer")
+    st = "steel_dark"
+    body.rbox(-21, 21, -12, 38, -330, 100, up, r=6, edges="top")                       # monolithic upper
+    body.box(-10.5, 10.5, 38, 42, -326, 96, up)
+    body.rail(-324, 94, 42, mat=up, side="top")
+    body.rail(-322, -200, -12, mat=up, side="bottom")
+    for sx in (-1, 1):
+        body.rail(-322, -214, 8, x=sx * 21, mat=up, side="right" if sx > 0 else "left", width=18)
+        slot(body, sx * 21, 15, 19, -262, -136)                                        # charging-handle slots
+        body.box(sx * 21 - 0.4, sx * 21 + 0.4, 24, 30, -180, 60, up)                   # extrusion rib
+    ejection_port(body, 21, 0, 14, -116, -58, lip_mat=up)
+    body.taper(21, 26, -54, -34, 16, 14, 2, 6, up, round=0)                            # brass deflector
+    # barrel, gas regulator, brake
+    barrel(body, -330, -521, d=19, mat=st)
+    body.rbox(-9, 9, 6, 30, -356, -330, st, r=3, edges="top")                          # gas block
+    body.cyl((0, 20, -362), 12, 12, "steel")
+    muzzle_brake(body, -512, d=26, length=62, ports=3, mat=st)
+    _buis(body, 80, 45, up, sy=70)
+    _flip_front(body, -344, 30, st, sy=70)
+    # lower: magazine well, grip, guard, ambidextrous controls
+    body.rbox(-16, 16, -48, -12, -114, 70, lo, r=3, edges="bottom")
+    body.rbox(-17, 17, -62, -12, -110, -44, lo, r=2.4, axis="y", edges="all")
+    body.box(-17.6, 17.6, -64, -58, -111, -43, lo)
+    body.box(-21.4, 21.4, -14, -11, -326, 96, "rubber")
+    pistol_grip(body, 14, top_y=-46, length=92, width=28, depth=36, angle=-18, mat=lo)
+    trigger_group(m, body, -18, y_top=-48, guard_depth=26, guard_len=62, guard_mat=lo)
+    selector(body, (-16, -30, 20), mat=lo, length=15, side=-1, turn=(-90, 0, 0))
+    body.box(16, 18.6, -33, -27, 6, 22, lo)
+    control(body, "bolt_catch", (-16, -22, -36), [(-18.6, -16, -30, -14, -44, -30, st)], press=(0, 3, 0))
+    button(body, "mag_release", (16, -34, -40), d=9, mat=st)
+    pins(body, 16, [(-22, -100), (-22, 56)], d=5, mat=st)
+    ch = body.bone("charging_handle", pivot=(-21, 17, -250))
+    ch.box(-30, -21, 14, 20, -256, -244, st)
+    ch.rbox(-37, -30, 11, 23, -260, -240, st, r=2.4, axis="y", edges="all")
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 16.8, -2, 12, -58, -12, "steel_light")
-    mag = m["gun"].bone("magazine", pivot=(0, -46, -72))
-    curved_mag(mag, -40, -102, 76, 160, curve=8, segs=3, width=26, mat="steel_dark", rib_mat="steel", round_d=10,
-               round_len=70)
-    add_arms(m, right_hand=(8, -96, 60), left_hand=(-12, -42, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -522), optic=(0, 31, -60), under=(0, -11, -250), side=(-20, -6, -250),
-                eject=(17, 6, -36), sight=(0, 50, 101))
+    bolt.box(2, 20.6, 1, 13, -114, -60, "steel_light")
+    # side-folding, adjustable stock with the cheek riser
+    stock = m["gun"].bone("stock", pivot=(21, 10, 100))
+    stock.rbox(-20, 20, -40, 36, 100, 124, lo, r=5, edges="all")                       # hinge block
+    stock.cyl((21, 0, 112), 9, 60, "steel", axis="y", sides=16)
+    stock.rbox(-13, 13, -20, 26, 124, 330, lo, r=6, edges="all")                       # spine
+    stock.rbox(-15, 15, 26, 40, 150, 300, lo, r=5, edges="top")                        # cheek riser
+    stock.path([(124, -30), (220, -62), (330, -78)], 22, 12, lo)                       # lower strut
+    stock.rbox(-19, 19, -92, 34, 328, 344, lo, r=5, edges="all")
+    stock.rbox(-20, 20, -96, 36, 344, 356, "rubber", r=5, edges="all")
+    side_swivel(body, -21, 4, 88, h=14)
+    side_swivel(body, -21, 4, -310, h=14)
+    mag = m["gun"].bone("magazine", pivot=(0, -50, -77))
+    straight_mag(mag, -36, -106, -48, 158, width=26, mat="steel_dark", round_d=12, round_len=70)
+    add_arms(m, right_hand=(8, -100, 30), left_hand=(-12, -44, -250), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -576), optic=(0, 45, -60), under=(0, -17, -260), side=(-24, 8, -268),
+                eject=(22, 7, -86), sight=(0, 70, 80))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.6)
-        a.mv("gun", 0.0, 0.45, pos=(-30, 20, 30), rot=(6, 30, 20))
-        # half-pull the charging handle, let it slam (the SCAR "bite")
-        a.mv("arm_left", 0.1, 0.45, pos=(-26, 48, 180), rot=(-20, -20, 10))
-        a.grab("arm_left", "charging_handle", 0.48, 1.0, fade_in=0.03, fade_out=0.05)
-        for b in ("charging_handle", "bolt"):
-            a.key(b, 0.0, pos=(0, 0, 0))
-            a.key(b, 0.5, pos=(0, 0, 0))
-            a.key(b, 0.68, pos=(0, 0, 46), e="inoutquad")
-            a.key(b, 0.9, pos=(0, 0, 46))
-            a.key(b, 0.95, pos=(0, 0, 0), e="inquad")
-        a.sound(0.66, "charging_handle_back")
-        a.sound(0.95, "charging_handle_forward")
-        a.mv("arm_left", 1.0, 1.3, pos=(-40, -20, 120), rot=(0, 0, 0))
-        # stock adjust: rotate to see the stock, pump it out and back
-        a.mv("gun", 1.2, 1.8, pos=(-80, 30, -60), rot=(4, -60, -10), e="inoutsine")
-        a.mv("arm_left", 1.4, 1.8, pos=(30, -50, 470), rot=(0, 40, 10))
-        a.grab("arm_left", "stock_ext", 1.82, 3.0, fade_in=0.03, fade_out=0.06)
-        a.key("stock_ext", 0.0, pos=(0, 0, 0))
-        a.key("stock_ext", 1.85, pos=(0, 0, 0))
-        a.key("stock_ext", 2.05, pos=(0, 0, 40), e="inoutquad")
-        a.sound(2.05, "stock_adjust")
-        a.key("stock_ext", 2.45, pos=(0, 0, 40))
-        a.key("stock_ext", 2.62, pos=(0, 0, 0), e="inoutquad")
-        a.sound(2.62, "stock_adjust")
-        a.mv("arm_left", 3.0, 3.5, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.1, 4.55)
-        return a
 
     kk = _kk("bolt", (0, 0, 96))
     anims = [
@@ -196,7 +171,7 @@ def scar_h():
         fire_basic(m, "fire_last", recover=0.17, length=0.27, lock_back=True, **kk),
         rifle_reload(m, "reload", A, empty=False, style="ar", bolt="bolt", bolt_travel=(0, 0, 96)),
         rifle_reload(m, "reload_empty", A, empty=True, style="ar", bolt="bolt", bolt_travel=(0, 0, 96)),
-        firemode(m, selector_rot=(-90, 0, 0)), inspect(), dry_fire(m),
+        firemode(m, selector_rot=(-90, 0, 0)), Anim(m, "inspect", 1.0), dry_fire(m),
     ]
     # reciprocating handle follows the bolt in fire/reload
     for a in anims:
