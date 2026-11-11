@@ -3,6 +3,11 @@ from ..core import Anim
 from ..common import GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, apply_hidden
 from ..templates import tube_reload, pump_cycle, _settle, OFF_LEFT, OFF_LEFT_ROT
 from ..parts import pistol_grip, trigger_group, barrel
+from ..shotkit import sg_receiver, port_bolt, sg_barrel, sg_tube, forend, sg_butt, crossbolt
+from ..common import moving
+from ..pistolkit import control
+from ..longkit import aperture_sight, eared_sight
+from ..riflekit import butt_plate
 
 SG_FP = {"hip": {"pos": [0.12, -0.13, -0.2], "rot": [0, 3.5, 0]}, "ads": {"dist": 0.13}}
 
@@ -15,111 +20,78 @@ def _shells(m, port=(0, -32, -30)):
 
 
 def rem870():
+    # Remington 870: 978 mm long, 470 mm barrel, steel receiver, walnut furniture
     m = new_gun("rem870")
     body = m["body"]
     st = "steel"
-    body.box(-17, 17, -30, 22, -110, 90, st)                                     # receiver
-    body.box(0, 17.3, -8, 14, -80, -10, "rubber")                                # ejection port
-    body.box(-12, 12, -32, -30, -100, -20, "rubber")                             # loading port
-    barrel(body, -110, -610, d=22, y=4)
-    body.cyl((0, -22, -330), 22, 440, st)                                         # magazine tube
-    body.cyl((0, -22, -552), 26, 8, st)                                           # tube cap
-    body.box(-10, 10, -14, -4, -560, -540, st)                                    # barrel ring
-    body.box(-2, 2, 15, 19, -606, -602, "brass")                                 # bead
-    body.box(-6, 6, 22, 26, -110, 80, st)                                        # receiver rib
+    roof = sg_receiver(body, -110, 90, st)
+    body.box(-6, 6, 21.8, 22.5, -106, 86, "steel_dark")                          # matted top
+    sg_barrel(body, -110, -612, d=22, y=4, mat=st)
+    sg_tube(body, -110, -556, y=-22, d=22, mat=st, ring=-530)
     trigger_group(m, body, 10, y_top=-30, guard_depth=28, guard_len=64, guard_mat="alloy")
-    sel = body.bone("selector", pivot=(0, -36, 40))
-    sel.cyl((0, -36, 40), 8, 40, "steel_dark", axis="x")                         # crossbolt safety
+    crossbolt(body, 36, -42)
+    body.box(-3, 3, -37, -30, -28, -20, st)                                      # action bar lock
     stock = m["gun"].bone("stock", pivot=(0, 0, 90))
-    stock.taper(-18, 18, 90, 438, 18, -6, -46, -122, "wood")
-    stock.box(-19, 19, -124, -4, 438, 450, "rubber")
-    stock.box(-15, 15, -90, -46, 110, 170, "wood", rot=(-28, 0, 0), pivot=(0, -46, 110))
+    sg_butt(stock, "wood", 90, 366, checker="wood_red")
     pump = m["gun"].bone("pump", pivot=(0, -22, -280))
-    pump.box(-22, 22, -42, -4, -390, -200, "wood")
-    for z in range(-380, -210, 18):
-        pump.box(-22.4, 22.4, -36, -12, z, z + 8, "wood_light")
-    pump.box(-6, -3, -14, -6, -200, -60, st)                                     # action bars
-    pump.box(3, 6, -14, -6, -200, -60, st)
+    forend(pump, -390, -200, "wood", grooves=9, groove_mat="wood_red")
     bolt = pump.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 16.8, -6, 12, -78, -20, "steel_light")
+    port_bolt(bolt, (-80, -10), roof=roof)
     _shells(m)
     add_arms(m, right_hand=(8, -84, 120), left_hand=(-10, -40, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 4, -612), optic=(0, 26, -20), under=None, eject=(17, 4, -50), sight=(0, 24, 80))
+    add_sockets(m, muzzle=(0, 4, -613), optic=(0, 26, -20), under=None, eject=(17, 4, -50), sight=(0, 24, 80))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.2)
-        # half-rack: ease the pump back, peek at the shell in the chamber
-        a.mv("gun", 0.0, 0.4, pos=(-30, 20, 30), rot=(4, -30, -36))
-        a.grab("arm_left", "pump", 0.0, 1.6, fade_in=0.0, fade_out=0.06)
-        a.key("pump", 0.0, pos=(0, 0, 0))
-        a.key("pump", 0.4, pos=(0, 0, 0))
-        a.key("pump", 0.7, pos=(0, 0, 32), e="inoutsine")
-        a.sound(0.66, "pump_back_light")
-        a.show("shell_eject", 0.6, 1.4)
-        a.key("shell_eject", 0.6, pos=(0, 0, 0))
-        a.key("shell_eject", 0.72, pos=(0, 0, 6))
-        a.mv("gun", 0.7, 1.0, pos=(-40, 30, -10), rot=(10, -30, -50))
-        a.key("pump", 1.3, pos=(0, 0, 32))
-        a.key("pump", 1.45, pos=(0, 0, 0), e="inquad")
-        a.key("shell_eject", 1.3, pos=(0, 0, 6))
-        a.key("shell_eject", 1.4, pos=(0, 0, 0))
-        a.sound(1.45, "pump_forward")
-        a.spring("gun", "rot", 1.45, (1.4, 0, -1.4), freq=6, damp=8)
-        # pump rattle - the loose forend jingles while you turn it over
-        a.mv("gun", 1.6, 2.3, pos=(-60, 30, 30), rot=(10, 30, 20), e="inoutsine")
-        a.shake("pump", "pos", 1.7, 2.6, (0, 0, 3.0), freq=9, seed=3)
-        a.sound(1.8, "pump_rattle")
-        a.sound(2.3, "pump_rattle")
-        _settle(a, 2.9, 4.15)
-        return a
 
     reload = tube_reload(m)
     anims = [idle(m), draw(m, 0.75, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(8, 0.8, 2.0), push=24, recover=0.32, length=0.4),
              fire_basic(m, "fire_aim", kick=(8, 0.8, 2.0), push=24, recover=0.28, length=0.36, aim=True),
-             pump_cycle(m, "cycle"), pump_cycle(m, "cycle_aim", aim=True), *reload, inspect(), dry_fire(m)]
+             pump_cycle(m, "cycle"), pump_cycle(m, "cycle_aim", aim=True), *reload, Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["shell_load", "shell_eject"])
     return GunAsset(m, anims, SG_FP)
 
 
 def benelli_m4():
+    # Benelli M4 Super 90: 1010 mm long with the stock out, 470 mm barrel, ghost-ring sights, gas operated
     m = new_gun("benelli_m4")
     body = m["body"]
     al = "alloy"
-    body.box(-17, 17, -30, 24, -110, 90, al)
+    roof = sg_receiver(body, -110, 90, al, y1=24, port=(-92, 10))
     body.rail(-100, 80, 24, mat=al)
-    body.box(0, 17.3, -8, 14, -80, -10, "rubber")
-    body.box(-12, 12, -32, -30, -100, -20, "rubber")
-    barrel(body, -110, -560, d=22, y=4)
-    body.cyl((0, -22, -300), 22, 380, al)
-    body.box(-22, 22, -44, -4, -380, -130, "polymer")                            # forend (fixed)
-    for z in range(-370, -140, 22):
-        body.box(-22.4, 22.4, -38, -10, z, z + 10, "rubber")
-    body.box(-10, 10, -14, 6, -470, -450, al)                                     # gas cylinder ring
-    # ghost ring sights
-    body.box(-8, 8, 24, 40, 60, 74, al)
-    body.cyl((0, 36, 67), 14, 4, "steel_dark")
-    body.box(-3, 3, 14, 30, -550, -540, al)
-    body.box(-1, 1, 26, 30, -546, -544, "tritium")
+    sg_barrel(body, -110, -652, d=22, y=4, mat="steel_dark", bead=False)
+    sg_tube(body, -110, -560, y=-22, d=22, mat=al, ring=-520)
+    body.rbox(-22, 22, -44, 12, -420, -112, "polymer", r=10)                     # two-piece hand guard
+    for z in range(-402, -140, 26):
+        for sx in (-1, 1):
+            body.box(sx * 22 - 0.35, sx * 22 + 0.35, -32, -4, z, z + 11, "rubber")
+    body.box(-22.4, 22.4, -16, -14, -418, -114, "rubber")
+    for sx in (-1, 1):
+        body.cyl((sx * 9, -9, -450), 10, 44, al)                                 # twin gas pistons
+    ys = aperture_sight(body, 66, 27, al, w=18, h=13, hole=6)                    # line of sight at 35.5
+    body.rbox(-5, 5, 14, 24, -644, -626, al, r=2, edges="top")
+    eared_sight(body, -635, 22, 15.7, al, w=14, depth=12, lean=4)
     pistol_grip(body, 40, top_y=-30, length=96, width=30, depth=38, angle=-18, mat="polymer")
     trigger_group(m, body, 2, y_top=-30, guard_depth=28, guard_len=66, guard_mat="polymer")
     latch = body.bone("latch", pivot=(0, -32, -40))
     latch.box(-4, 4, -36, -30, -46, -36, "steel")                                # shell-latch / carrier release
-    sel = body.bone("selector", pivot=(0, -36, 50))
-    sel.cyl((0, -36, 50), 8, 40, "steel_dark", axis="x")
+    crossbolt(body, 30, -42)
+    body.cyl((17.3, -14, 30), 9, 1.2, "steel", axis="x", sides=8)                # bolt release button
     stock = m["gun"].bone("stock", pivot=(0, 0, 90))
-    stock.cyl((0, -4, 200), 30, 220, al)
-    stock.taper(-20, 20, 220, 340, 14, 14, -62, -84, "polymer")
-    stock.box(-14, 14, 14, 30, 230, 320, "polymer")
-    stock.box(-22, 22, -90, 18, 336, 350, "rubber")
+    stock.cyl((0, -4, 162), 30, 146, al)                                         # recoil tube
+    for z in (120, 150, 180):
+        stock.box(-2, 2, -21, -18, z - 5, z + 5, "rubber")                       # position notches
+    stock.profile(-19, 19, [(226, 16), (343, 16)], [(226, -30), (343, -90)], "polymer")
+    stock.rbox(-14, 14, 16, 28, 236, 330, "polymer", r=5, edges="top")           # cheek piece
+    butt_plate(stock, 343, -90, 16, 19, "polymer", th=3, pad="rubber", pad_th=12)
     bolt = body.bone("bolt", pivot=(16, 0, -60))
-    bolt.box(2, 16.8, -6, 12, -78, -20, "steel_light")
-    bolt.box(16, 30, 0, 8, -60, -50, "steel_light")
-    bolt.cyl((34, 4, -55), 12, 10, "steel_light", axis="x")
+    port_bolt(bolt, (-92, -22), roof=roof)
+    bolt.box(16, 30, 0, 8, -72, -62, "steel_light")
+    bolt.cyl((34, 4, -67), 12, 10, "steel_light", axis="x", sides=16)
     _shells(m)
     add_arms(m, right_hand=(8, -94, 68), left_hand=(-10, -44, -260), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 4, -562), optic=(0, 27, -20), under=None, side=(-20, -20, -260), eject=(17, 4, -50),
-                sight=(0, 40, 74))
+    add_sockets(m, muzzle=(0, 4, -653), optic=(0, 27, -20), under=None, side=(-20, -20, -260), eject=(17, 4, -50),
+                sight=(0, 35.5, 66))
+
 
     def cycle(name):
         """Shell into the ejection port + bolt release (used after an empty reload)."""
@@ -138,25 +110,6 @@ def benelli_m4():
         a.mv("gun", 0.5, 0.88, pos=(0, 0, 0), rot=(0, 0, 0))
         return a
 
-    def inspect():
-        a = Anim(m, "inspect", 4.0)
-        # press the shell-latch button, roll to show the loading port
-        a.mv("gun", 0.0, 0.5, pos=(-30, 30, 40), rot=(14, -10, -70), e="inoutsine")
-        a.mv("arm_left", 0.2, 0.55, pos=(-6, -10, 250), rot=(10, -10, 30))
-        a.key("latch", 0.0, pos=(0, 0, 0))
-        a.key("latch", 0.6, pos=(0, 0, 0))
-        a.key("latch", 0.66, pos=(0, 2.5, 0), e="outquad")
-        a.sound(0.66, "click_small")
-        a.key("latch", 1.0, pos=(0, 2.5, 0))
-        a.key("latch", 1.05, pos=(0, 0, 0), e="outquad")
-        a.sound(1.05, "click_small")
-        a.mv("gun", 1.1, 1.8, pos=(-50, 40, 40), rot=(20, -40, -120), e="inoutsine")   # look into the port
-        a.mv("arm_left", 1.1, 1.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.wave("gun", "rot", (0.6, 0.6, 0.4), 1.6)
-        a.mv("gun", 2.2, 2.9, pos=(-40, 30, 30), rot=(6, 30, 20), e="inoutsine")
-        _settle(a, 3.0, 3.95)
-        return a
-
     reload = tube_reload(m)
     anims = [idle(m), draw(m, 0.75, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(7, 0.8, 1.8), push=22,
@@ -164,7 +117,7 @@ def benelli_m4():
              fire_basic(m, "fire_aim", kick=(7, 0.8, 1.8), push=22,
                         cycle=dict(bone="bolt", travel=(0, 0, 70), t_back=0.025, t_fwd=0.07), recover=0.26,
                         length=0.34, aim=True),
-             cycle("cycle"), *reload, inspect(), dry_fire(m)]
+             cycle("cycle"), *reload, Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["shell_load", "shell_eject"])
     return GunAsset(m, anims, SG_FP)
 

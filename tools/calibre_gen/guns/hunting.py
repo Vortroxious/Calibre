@@ -6,6 +6,7 @@ from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire
 from ..templates import (rifle_reload, tube_reload, pump_cycle, bolt_cycle, _settle, OFF_LEFT, OFF_LEFT_ROT)
 from ..parts import pistol_grip, trigger_group, barrel, straight_mag, scope, sling_swivel
 from ..pistolkit import control
+from ..shotkit import sg_receiver, port_bolt, sg_barrel, sg_tube, forend, sg_butt, crossbolt
 from ..riflekit import mil_stock, line_y, butt_plate, receiver, stepped_barrel, bolt, rides
 from .ww2 import _butt, _military_bolt
 from .classic import _sg_shells, _tube_mag
@@ -34,64 +35,34 @@ def _choke(m, z, d, length, mat="steel_light", y=4):
 # Charles Daly 300 Field pump
 # =================================================================================================
 def cdaly():
+    # Charles Daly 300 Field: 1250 mm long, 711 mm vent-rib barrel with a screw-in choke, alloy receiver
     m = new_gun("cdaly")
     body = m["body"]
-    al = "alloy"
-    wd = "wood"
-    body.box(-17, 17, -30, 22, -114, 80, al)
-    body.box(0, 17.3, -8, 14, -84, -14, "rubber")
-    body.box(-12, 12, -32, -30, -100, -20, "rubber")
-    barrel(body, -114, -740, d=21, y=4, mat="steel_dark")
-    body.box(-4, 4, 15, 19, -730, -114, "steel_dark")                       # vent rib
-    for z in range(-720, -130, 40):
-        body.box(-3, 3, 14, 15, z, z + 20, "steel_dark")
-    body.box(-1.5, 1.5, 19, 23, -728, -724, "brass")                        # front bead
-    body.box(-1, 1, 19, 21, -420, -418, "white")                           # mid bead
-    _choke(m, -740, 22, 26)
-    _tube_mag(body, -114, -520, -22, d=22, mat=al)
+    al, wd = "alloy", "wood"
+    roof = sg_receiver(body, -114, 80, al, port=(-84, -14))
+    top = sg_barrel(body, -114, -858, d=21, y=4, mat="steel_dark", rib="steel_dark")
+    body.box(-1, 1, top - 3.2, top - 1.2, -482, -480, "white")                 # mid bead
+    _choke(m, -858, 22, 26)
+    sg_tube(body, -114, -520, y=-22, d=22, mat=al)
     trigger_group(m, body, 10, y_top=-30, guard_depth=28, guard_len=62, guard_mat=al)
-    sel = body.bone("selector", pivot=(0, -36, 40))
-    sel.cyl((0, -36, 40), 8, 40, "steel_dark", axis="x")
-    _sporter_stock(body, 80, wd)
+    crossbolt(body, 36, -42)
+    sg_butt(body, wd, 80, 366, checker="wood_red", spacer="white")
     pump = m["gun"].bone("pump", pivot=(0, -22, -280))
-    pump.box(-21, 21, -42, -4, -380, -210, wd)
-    for z in range(-360, -230, 30):
-        pump.box(-21.4, 21.4, -34, -14, z, z + 18, "wood_red")            # checkering panels
-    pump.box(-5, -2, -14, -6, -210, -70, "steel")
-    pump.box(2, 5, -14, -6, -210, -70, "steel")
+    forend(pump, -380, -210, wd, grooves=0)
+    for sx in (-1, 1):
+        pump.box(sx * 21 - 0.3, sx * 21 + 0.3, -34, -12, -366, -224, "wood_red")   # chequered panel
     bolt = pump.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 16.8, -6, 12, -78, -20, "steel_light")
+    port_bolt(bolt, (-84, -14), roof=roof)
     _sg_shells(m)
     add_arms(m, right_hand=(8, -86, 132), left_hand=(-10, -40, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 4, -766), optic=(0, 22, -20), eject=(17, 4, -50), sight=(0, 23.5, 70))
+    add_sockets(m, muzzle=(0, 4, -885), optic=(0, 22, -20), eject=(17, 4, -50), sight=(0, 23.5, 70))
 
-    def inspect():
-        # turn the muzzle up, back the choke tube out a few turns to check it, run it back in snug
-        a = Anim(m, "inspect", 4.6)
-        a.mv("gun", 0.0, 0.5, pos=(-90, 10, -60), rot=(6, 64, 14), e="inoutsine")
-        a.mv("arm_left", 0.2, 0.55, pos=(10, 30, -420), rot=(-40, 10, 20))
-        a.key("choke", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("choke", 0.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        for i in range(3):
-            t = 0.65 + i * 0.32
-            a.key("choke", t + 0.26, pos=(0, 0, -3 * (i + 1)), rot=(0, 0, -150 * (i + 1)), e="inoutsine")
-            a.sound(t + 0.1, "click_small")
-            a.mv("arm_left", t, t + 0.14, pos=(14, 36, -420), rot=(-40, 10, 50), e="inoutsine")
-            a.mv("arm_left", t + 0.14, t + 0.3, pos=(10, 30, -420), rot=(-40, 10, 20), e="inoutsine")
-        a.mv("gun", 1.6, 2.0, pos=(-96, 16, -60), rot=(2, 70, 24))
-        a.key("choke", 2.1, pos=(0, 0, -9), rot=(0, 0, -450))
-        a.key("choke", 2.6, pos=(0, 0, 0), rot=(0, 0, 0), e="inoutsine")
-        a.sound(2.6, "click_small")
-        a.mv("arm_left", 2.1, 2.6, pos=(14, 36, -420), rot=(-40, 10, 80), e="linear")
-        a.mv("arm_left", 2.7, 3.2, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 2.8, 4.55)
-        return a
 
     anims = [idle(m), draw(m, 0.8, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(8, 0.8, 2.0), push=24, recover=0.32, length=0.4),
              fire_basic(m, "fire_aim", kick=(8, 0.8, 2.0), push=24, recover=0.28, length=0.36, aim=True),
              pump_cycle(m, "cycle", travel=(0, 0, 86)), pump_cycle(m, "cycle_aim", travel=(0, 0, 86), aim=True),
-             *tube_reload(m), inspect(), dry_fire(m)]
+             *tube_reload(m), Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["shell_load", "shell_eject"])
     return GunAsset(m, anims, SG_FP)
 
@@ -100,71 +71,39 @@ def cdaly():
 # Mossberg 190 (16 gauge, bolt action, C-Lect-Choke, 2-round box magazine)
 # =================================================================================================
 def mossberg190():
+    # Mossberg 190: bolt-action 16 gauge, 1150 mm long, 660 mm barrel with the C-Lect-Choke, two-round box
     m = new_gun("mossberg190")
     body = m["body"]
-    st = "steel"
-    wd = "wood_light"
-    body.cyl((0, 0, -10), 36, 220, st, sides=12)                            # receiver -120 .. 100
-    body.box(0, 18.6, -4, 12, -96, -20, "rubber")                          # ejection port
-    barrel(body, -120, -640, d=20, mat=st)
-    body.box(-3, 3, 14, 20, -716, -706, "steel")                            # bead stud on the choke body
-    body.box(-1.5, 1.5, 20, 23.5, -714, -708, "brass")
-    # C-Lect-Choke: a big ribbed sleeve with a turning collar
-    body.cyl((0, 0, -680), 30, 70, st, sides=12)
-    col = body.bone("choke", pivot=(0, 0, -690))
-    col.cyl((0, 0, -690), 34, 24, "steel_light", sides=12)
-    for i in range(6):
-        col.box(-17.6, 17.6, -2, 2, -700 + i * 4, -698 + i * 4, "rubber")
-    col.box(-2, 2, 16, 19, -700, -680, "white")                              # index mark
-    body.box(-16, 16, -40, -6, -440, -120, wd)                               # forend
-    body.box(-17, 17, -52, -8, -120, 110, wd)
-    body.box(-12, 12, -64, -52, -96, -40, "steel_dark")                      # mag well
+    st, wd = "steel", "wood_light"
+    receiver(body, -120, 36, 36, st, port=(-96, -20), top_port=False)
+    body.box(11, 18.4, -3, 3, 36, 46, st)                                   # bolt handle recess
+    barrel(body, -120, -706, d=20, mat=st)
+    body.cyl((0, 0, -744), 30, 70, st)                                      # C-Lect-Choke sleeve
+    col = body.bone("choke", pivot=(0, 0, -754))
+    col.cyl((0, 0, -754), 34, 24, "steel_light")
+    for i in range(12):
+        col.box(-17.5, 17.5, -1.2, 1.2, -764, -744, "steel", rot=(0, 0, i * 15), pivot=(0, 0, -754))
+    col.box(-2, 2, 16.5, 18.2, -764, -744, "white")                         # index mark
+    body.box(-3, 3, 14, 20, -778, -768, "steel")                            # bead stud on the choke body
+    body.box(-1.5, 1.5, 20, 23.5, -776, -770, "brass")
+    top, bot = mil_stock(body, wd, nose=-440, butt=(353, -22, -124), action=(-120, 110), fore=(-6, -34, -44),
+                         belly=-52, wrist=(-16, -60), grip=True, comb=-10, hw=(16, 17, 14.5, 17))
+    butt_plate(body, 353, -124, -22, 17, "polymer", th=3, pad="rubber", pad_th=14)
+    body.box(-12, 12, -64, -52, -96, -40, "steel_dark")                     # magazine well
     trigger_group(m, body, 20, y_top=-52, guard_depth=24, guard_len=58, guard_mat=st)
-    sel = body.bone("selector", pivot=(10, 8, 100))
-    sel.box(8, 14, 4, 16, 96, 106, "steel")
-    _sporter_stock(body, 110, wd)
-    _military_bolt(m, -84, 112, 40, handle_len=40, knob_d=16, d=22, cock=(18, 16))
+    control(body, "safety", (0, -4, 122), [(-5, 5, -6, -2, 114, 130, "steel"), (-3, 3, -2, 1, 122, 130, "steel")],
+            press=(0, 0, -8))
+    bolt(m, -84, 112, 40, d=22, handle_len=38, droop=20, knob_d=17, cock=(18, 16))
     br = m["gun"].bone("shell_eject", pivot=(14, 6, -50))
     br.shell12((14, 6, -50), length=64, d=18)
     mag = m["gun"].bone("magazine", pivot=(0, -52, -68))
-    mag.box(-11, 11, -100, -52, -94, -42, "steel_dark")
+    mag.rbox(-11, 11, -100, -52, -94, -42, "steel_dark", r=2, axis="y")
     mag.box(-12, 12, -106, -100, -96, -40, "steel_dark")
     mag.shell12((0, -46, -54), length=64, d=18)
     add_arms(m, right_hand=(10, -86, 160), left_hand=(-14, -46, -320), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -716), eject=(18, 6, -50), sight=(0, 24, 70))
-    travel, hrot = (0, 0, 96), (0, 0, 80)
+    add_sockets(m, muzzle=(0, 0, -781), eject=(18, 6, -50), sight=(0, 24, 70))
 
-    def inspect():
-        # click the C-Lect-Choke collar through its settings, then lift the bolt to peek at the shell
-        a = Anim(m, "inspect", 4.6)
-        a.mv("gun", 0.0, 0.5, pos=(-90, 10, -60), rot=(6, 62, 14), e="inoutsine")
-        a.mv("arm_left", 0.2, 0.55, pos=(6, 40, -370), rot=(-40, 10, 20))
-        a.key("choke", 0.0, rot=(0, 0, 0))
-        a.key("choke", 0.6, rot=(0, 0, 0))
-        for i in range(4):
-            t = 0.7 + i * 0.28
-            a.key("choke", t + 0.12, rot=(0, 0, -36 * (i + 1)), e="outquad")
-            a.sound(t + 0.12, "click_small")
-        a.key("choke", 2.0, rot=(0, 0, -144))
-        a.key("choke", 2.3, rot=(0, 0, -72), e="inoutsine")                # back to modified
-        a.sound(2.3, "click_small")
-        a.mv("arm_left", 2.35, 2.7, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("gun", 2.2, 2.7, pos=(-30, 20, 30), rot=(4, -20, -26))
-        a.mv("arm_right", 2.4, 2.6, pos=(20, 40, -30), rot=(-25, -20, -20))
-        a.grab("arm_right", "bolt", 2.6, 3.7, fade_in=0.03, fade_out=0.06)
-        a.key("bolt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 2.62, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 2.74, pos=(0, 0, 0), rot=hrot, e="outquad")
-        a.sound(2.72, "bolt_open")
-        a.key("bolt", 2.94, pos=(0, 0, 30), rot=hrot, e="inoutsine")
-        a.mv("gun", 2.9, 3.2, pos=(-40, 30, 40), rot=(10, -36, -50))
-        a.key("bolt", 3.4, pos=(0, 0, 30), rot=hrot)
-        a.key("bolt", 3.54, pos=(0, 0, 0), rot=hrot, e="inoutsine")
-        a.key("bolt", 3.64, pos=(0, 0, 0), rot=(0, 0, 0), e="inquad")
-        a.sound(3.64, "bolt_close")
-        a.mv("arm_right", 3.75, 4.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.7, 4.55)
-        return a
+    travel, hrot = (0, 0, 96), (0, 0, 80)
 
     def cycle(name, aim):
         a = bolt_cycle(m, name, travel=travel, handle_rot=hrot, length=0.9, aim=aim)
@@ -179,7 +118,7 @@ def mossberg190():
              fire_basic(m, "fire_aim", kick=(8, 0.8, 1.8), push=24, recover=0.36, length=0.45, aim=True),
              cycle("cycle", False), cycle("cycle_aim", True),
              rifle_reload(m, "reload", 0.0, empty=False, style="ar", mag_out=60, tilt=(4, -6, -20)),
-             inspect(), dry_fire(m)]
+             Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["shell_eject"])
     return GunAsset(m, anims, {"hip": SG_FP["hip"], "ads": {"dist": 0.2}})
 

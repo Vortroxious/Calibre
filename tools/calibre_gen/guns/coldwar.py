@@ -14,6 +14,7 @@ from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
 from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
                        peep, rod_stock, selector, paddle, button, stock_solid)
 from ..pistolkit import control
+from ..shotkit import sg_receiver, port_bolt, sg_barrel, sg_tube, forend, sg_butt, crossbolt
 from .ar15 import _buis, _flip_front
 from .lmgs import _belt, _belt_feed, LMG_FP
 from .modern import _rifle_anims, _inspect, _fp
@@ -287,33 +288,30 @@ def _big_shells(m, port=(0, -36, -30)):
 
 
 def ks23():
+    # KS-23: 23 mm pump carbine, 1040 mm long, 510 mm rifled barrel, three-round tube, wooden butt
     m = new_gun("ks23")
     body = m["body"]
     st = "steel_dark"
-    body.box(-20, 20, -36, 22, -120, 100, st)                                  # receiver
-    body.box(0, 20.3, -8, 16, -90, -10, "rubber")
-    body.box(-14, 14, -38, -36, -110, -20, "rubber")                           # loading port
-    barrel(body, -120, -620, d=30, y=4)                                         # 23 mm bore, rifled
-    body.cyl((0, 4, -626), 34, 12, st)
-    body.cyl((0, -26, -300), 26, 360, st)                                       # 3-round tube
-    body.box(-4, 4, 20, 32, -610, -600, st)
-    body.box(-8, 8, 22, 34, 60, 80, st)
-    body.box(-16, 16, -32, 22, 100, 130, "wood")                               # wrist
-    body.box(-16, 16, -84, -32, 100, 150, "wood", rot=(-26, 0, 0), pivot=(0, -32, 120))
-    body.taper(-17, 17, 130, 420, 18, 10, -40, -110, "wood")                   # straight stock
-    body.box(-18, 18, -114, 14, 416, 430, "rubber")
+    roof = sg_receiver(body, -120, 100, st, hw=20, y0=-36, y1=22, port=(-90, -10), load=(-110, -20), port_y=-8)
+    sg_barrel(body, -120, -638, d=30, y=4, mat=st, bead=False)
+    body.cyl((0, 4, -644), 34, 12, st)
+    sg_tube(body, -120, -480, y=-26, d=26, mat=st, ring=-450, barrel_y=4, barrel_d=30)
+    body.rbox(-4, 4, 18, 26, -634, -614, st, r=2, edges="top")                 # front blade
+    body.box(-1.3, 1.3, 26, 34, -626, -622, st)
+    body.box(-9, 9, 22, 26, 58, 82, st)                                         # rear notch
+    for sx in (-1, 1):
+        body.box(sx * 5.4 - 3.6, sx * 5.4 + 3.6, 26, 34.5, 68, 74, st)
     trigger_group(m, body, 40, y_top=-36, guard_depth=28, guard_len=66, guard_mat=st)
+    crossbolt(body, 70, -48)
+    sg_butt(body, "wood", 100, 390, top0=18, bot0=-36, comb=-6, heel=-26, toe=-118, hw=(16, 18))
     pump = m["gun"].bone("pump", pivot=(0, -26, -280))
-    pump.box(-26, 26, -54, -6, -400, -220, "wood")
-    for z in range(-390, -230, 16):
-        pump.box(-26.4, 26.4, -46, -14, z, z + 6, "wood_light")
-    pump.box(-7, -4, -16, -8, -220, -60, st)
-    pump.box(4, 7, -16, -8, -220, -60, st)
+    forend(pump, -400, -220, "wood", hw=26, y0=-54, y1=-6, grooves=10, groove_mat="wood_red", bar_y=-12)
     bolt = pump.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 19.8, -6, 14, -86, -16, "steel_light")
+    port_bolt(bolt, (-90, -10), hw=20, roof=roof)
     _big_shells(m)
     add_arms(m, right_hand=(8, -88, 128), left_hand=(-10, -46, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 4, -632), eject=(20, 4, -50), sight=(0, 34, 70))
+    add_sockets(m, muzzle=(0, 4, -651), eject=(20, 4, -50), sight=(0, 34, 70))
+
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(11, 1.0, 2.4), push=30, recover=0.4, length=0.5),
              fire_basic(m, "fire_aim", kick=(11, 1.0, 2.4), push=30, recover=0.36, length=0.46, aim=True),

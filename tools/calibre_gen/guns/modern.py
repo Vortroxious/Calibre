@@ -12,6 +12,8 @@ from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight
 from ..pistolkit import control
 from .ar15 import _buis, _flip_front
 from .shotguns import _shells
+from ..shotkit import sg_receiver, port_bolt, sg_barrel, sg_tube, forend, sg_butt, crossbolt
+from ..riflekit import butt_plate
 
 
 def _fp(pos=(0.115, -0.12, -0.2), rot=(0, 4, 0), ads=0.2):
@@ -396,40 +398,41 @@ def x95():
 # Franchi SPAS-12 (pump mode)
 # =================================================================================================
 def spas12():
+    # Franchi SPAS-12: 1041 mm long with the stock unfolded, 546 mm barrel, heat shield, folding stock with hook
     m = new_gun("spas12")
     body = m["body"]
     st = "steel_dark"
-    body.box(-18, 18, -32, 22, -110, 100, st)                                   # receiver
-    body.box(0, 18.3, -6, 14, -80, -10, "rubber")
-    body.box(-12, 12, -34, -32, -100, -20, "rubber")
-    barrel(body, -110, -560, d=22, y=4)
-    body.box(-14, 14, -4, 18, -420, -110, st)                                    # perforated heat shield
-    for z in range(-410, -120, 26):
-        body.box(-14.5, 14.5, 2, 12, z, z + 12, "rubber")
-    body.cyl((0, -22, -320), 24, 420, st)                                        # magazine tube
-    body.cyl((0, -22, -532), 28, 10, st)
-    body.box(-6, 6, 18, 30, -546, -530, st)
-    body.box(-6, 6, 22, 30, 60, 90, st)                                          # rear aperture
+    roof = sg_receiver(body, -110, 100, st, hw=18, y0=-32, y1=22)
+    sg_barrel(body, -110, -661, d=22, y=4, mat=st, bead=False)
+    body.rbox(-15, 15, -3, 21, -470, -110, st, r=9, edges="top")                # perforated heat shield
+    for z in range(-456, -130, 26):
+        for sx in (-1, 1):
+            body.box(sx * 15 - 0.4, sx * 15 + 0.4, 1, 9, z, z + 12, "rubber")
+        body.box(-4, 4, 20.6, 21.4, z + 13, z + 23, "rubber")
+    sg_tube(body, -110, -600, y=-22, d=24, mat=st, ring=-560)
+    body.rbox(-4, 4, 14, 22, -652, -632, st, r=2, edges="top")                   # front blade
+    body.box(-1.2, 1.2, 22, 30, -644, -640, st)
+    ys = aperture_sight(body, 76, 22, st, w=16, h=12.5, hole=5)                  # line of sight at 30
     pistol_grip(body, 110, top_y=-32, length=90, width=28, depth=36, angle=-16, mat="polymer")
     trigger_group(m, body, 30, y_top=-32, guard_depth=28, guard_len=64, guard_mat=st)
-    sel = body.bone("selector", pivot=(0, -36, 70))
-    sel.cyl((0, -36, 70), 8, 40, "steel", axis="x")
-    stock = m["gun"].bone("stock", pivot=(0, 0, 100))                            # folding stock (folded down)
+    crossbolt(body, 60, -44)
+    control(body, "selector", (-18, -20, 20), [(-20.5, -18, -23, -17, 6, 22, "steel")], turn=(-30, 0, 0))
+    stock = m["gun"].bone("stock", pivot=(0, 0, 100))                            # folding stock, unfolded
     for sx in (-12, 12):
-        stock.box(sx - 3, sx + 3, -8, 2, 100, 340, "steel")
-    stock.box(-14, 14, -10, 6, 330, 346, "steel")
-    stock.box(-20, 20, -60, 6, 340, 352, "rubber")
+        stock.box(sx - 2.6, sx + 2.6, -6, 2, 100, 362, "steel")
+    stock.rbox(-15, 15, -8, 6, 100, 116, "steel", r=3)                           # hinge block
+    stock.rbox(-19, 19, -78, 8, 360, 368, "steel", r=4)
+    stock.rbox(-20, 20, -80, 10, 368, 380, "rubber", r=6)
+    stock.box(-2.6, 2.6, -74, -66, 330, 362, "steel")                            # the arm hook
+    stock.box(-2.6, 2.6, -74, -40, 330, 336, "steel")
     pump = m["gun"].bone("pump", pivot=(0, -22, -260))
-    pump.box(-24, 24, -46, -4, -340, -180, "polymer")
-    for z in range(-334, -186, 14):
-        pump.box(-24.4, 24.4, -40, -10, z, z + 6, "rubber")
-    pump.box(-6, -3, -14, -6, -180, -60, st)
-    pump.box(3, 6, -14, -6, -180, -60, st)
+    forend(pump, -340, -180, "polymer", hw=24, y0=-46, y1=-4, grooves=10, groove_mat="rubber")
     bolt = pump.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 17.8, -6, 12, -78, -20, "steel_light")
+    port_bolt(bolt, (-80, -10), hw=18, roof=roof)
     _shells(m)
     add_arms(m, right_hand=(8, -86, 124), left_hand=(-10, -42, -260), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 4, -562), optic=(0, 26, -20), eject=(18, 4, -50), sight=(0, 30, 76))
+    add_sockets(m, muzzle=(0, 4, -662), optic=(0, 26, -20), eject=(18, 4, -50), sight=(0, 30, 76))
+
     anims = [idle(m), draw(m, 0.8, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(8.5, 0.8, 2.0), push=25, recover=0.34, length=0.42),
              fire_basic(m, "fire_aim", kick=(8.5, 0.8, 2.0), push=25, recover=0.3, length=0.38, aim=True),
@@ -443,36 +446,50 @@ def spas12():
 # Atchisson AA-12 (box magazine, open bolt full auto)
 # =================================================================================================
 def aa12():
+    # AA-12: 991 mm long, 457 mm barrel inside a long clamshell receiver, straight-line stock, 8-round box
     m = new_gun("aa12")
     body = m["body"]
     st = "steel_dark"
-    body.box(-22, 22, -40, 30, -260, 140, st)                                    # big square receiver tube
-    body.box(-24, 24, -10, 8, -250, 130, st)                                     # ribs
+    body.rbox(-22, 22, -40, 30, -410, 150, st, r=7)                              # clamshell receiver
+    for sx in (-1, 1):
+        body.box(sx * 22 - 0.3, sx * 22 + 0.3, -10, 10, -392, 132, "polymer")    # long recessed panel
+        for z in (-380, -200, -20, 120):
+            body.cyl((sx * 22.4, -26, z), 6, 0.8, "steel", axis="x", sides=8)    # shell bolts
     body.rail(-250, 120, 30, mat="alloy", side="top")
-    body.box(0, 22.3, -6, 14, -60, 0, "rubber")
-    barrel(body, -260, -470, d=24)
-    body.cyl((0, 0, -476), 28, 14, st)
-    body.box(-6, 6, 30, 60, -150, -140, st)                                      # carry-handle posts
-    body.box(-6, 6, 30, 60, 60, 70, st)
-    body.box(-8, 8, 56, 64, -150, 70, st)
+    body.box(10, 22.4, -6, 14, -60, 0, "rubber")                                 # ejection port
+    barrel(body, -410, -606, d=24)
+    body.cyl((0, 0, -612), 29, 14, st)
+    body.cyl((0, 0, -619.3), 16, 0.6, "rubber", sides=8)
+    for z in (-150, 60):                                                         # carry handle with the sights
+        body.box(-5, 5, 33, 56, z, z + 10, st)
+    body.rbox(-7, 7, 54, 60, -154, 74, st, r=2.5)
+    for sx in (-1, 1):
+        body.box(sx * 4.6 - 2.4, sx * 4.6 + 2.4, 60, 67, 64, 70, st)             # rear notch
+    body.rbox(-6, 6, 30, 40, -402, -384, st, r=2, edges="top")
+    body.box(-1.3, 1.3, 40, 66.5, -395, -391, st)                                # front post
     pistol_grip(body, 110, top_y=-40, length=92, width=30, depth=38, angle=-16, mat="polymer")
     trigger_group(m, body, 30, y_top=-40, guard_depth=30, guard_len=66, guard_mat=st)
     sel = body.bone("selector", pivot=(-22, -26, 80))
     sel.box(-25, -22, -30, -22, 74, 88, "steel")
     ch = body.bone("charging_handle", pivot=(-22, 14, -120))
-    ch.box(-36, -22, 8, 20, -130, -110, "steel")
+    ch.box(-34, -22, 9, 19, -128, -112, "steel")
+    ch.cyl((-36, 14, -120), 14, 5, "steel", axis="x", sides=16)
+    body.box(-22.4, -22, 12, 16, -120, -30, "rubber")                            # its slot
     bolt = body.bone("bolt", pivot=(0, 0, 0))
     bolt.box(2, 22, -6, 12, -58, -2, "steel_light")
-    stock = m["gun"].bone("stock", pivot=(0, 0, 140))
-    stock.box(-18, 18, -20, 24, 140, 200, "polymer")
-    stock.taper(-19, 19, 200, 360, 24, 18, -30, -92, "polymer")
-    stock.box(-20, 20, -96, 22, 356, 368, "rubber")
+    stock = m["gun"].bone("stock", pivot=(0, 0, 150))
+    stock.profile(-19, 19, [(150, 28), (357, 24)], [(150, -38), (196, -36), (357, -96)], "polymer")
+    butt_plate(stock, 357, -96, 24, 19, "polymer", th=3, pad="rubber", pad_th=12)
     mag = m["gun"].bone("magazine", pivot=(0, -40, -100))
-    mag.box(-26, 26, -150, -40, -140, -60, "polymer")                            # 8-round box
+    mag.rbox(-26, 26, -150, -40, -140, -60, "polymer", r=4, axis="y")            # 8-round box
+    for sx in (-1, 1):
+        mag.box(sx * 26 - 0.4, sx * 26 + 0.4, -140, -56, -104, -96, "polymer_grey")
     mag.box(-27.5, 27.5, -156, -150, -142, -57, "polymer_grey")
     mag.shell12((0, -44, -86), length=64, d=19)
+    control(body, "mag_release", (0, -42, -54), [(-5, 5, -56, -41, -58, -54, "steel")], turn=(-16, 0, 0))
     add_arms(m, right_hand=(8, -100, 124), left_hand=(-10, -44, -220), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -484), optic=(0, 32, -60), eject=(22, 4, -30), sight=(0, 64, 66))
+    add_sockets(m, muzzle=(0, 0, -620), optic=(0, 32, -60), eject=(22, 4, -30), sight=(0, 66.5, 67))
+
     cyc = dict(bone="bolt", travel=(0, 0, 70), t_back=0.02, t_fwd=0.07)
     anims = _rifle_anims(m, 0.0, (4.5, 0.6, 1.6), 16, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 80),
                          selector=(-40, 0, 0), rec=0.18, length=0.26, mag_sound="rifle")
