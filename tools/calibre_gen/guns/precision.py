@@ -153,59 +153,6 @@ def rem700():
 
 
 # =================================================================================================
-# Knight's Armament SR-25 (AR-10 pattern DMR)
-# =================================================================================================
-def sr25():
-    m = new_gun("sr25")
-    body = m["body"]
-    al = "alloy"
-    body.box(-14, 14, -44, -6, -120, 104, al)                                  # lower
-    body.box(-16, 16, -50, -6, -110, -30, al)                                  # big 7.62 mag well
-    body.box(-11, 11, -36, -6, 104, 118, al)
-    pistol_grip(body, 38, top_y=-42, length=92, width=27, depth=34, angle=-20, mat="polymer")
-    trigger_group(m, body, 8, y_top=-44, guard_depth=26, guard_len=64, guard_mat=al)
-    sel = body.bone("selector", pivot=(-14, -26, 44))
-    sel.box(-17.5, -14, -29, -23, 36, 52, "steel_dark")
-    bc = body.bone("bolt_catch", pivot=(-14, -16, -22))
-    bc.box(-17, -14, -24, -12, -30, -14, "steel_dark")
-    body.box(-15, 15, -6, 24, -140, 108, al)                                    # upper
-    body.box(-10, 10, 24, 28, -140, 108, al)
-    body.rail(-138, 106, 28, mat=al)
-    body.box(15, 17, -2, 16, -70, -10, "rubber")
-    fa = body.bone("forward_assist", pivot=(16, 12, 44))
-    fa.cyl((21, 12, 44), 12, 16, al, axis="x")
-    picatinny_handguard(body, -520, -140, y_top=24, y_bot=-30, half_w=22)
-    for z in range(-500, -170, 40):
-        body.box(-22.4, 22.4, -18, 8, z, z + 20, "rubber")
-    barrel(body, -520, -680, d=18)
-    body.box(-12, 12, -14, 14, -720, -680, "steel_dark")                      # suppressor mount / flash hider
-    for z in (-712, -698):
-        body.box(-12.4, 12.4, -8, 8, z, z + 6, "rubber")
-    _flip_sights(body, -500, 90, 30)
-    stock = m["gun"].bone("stock", pivot=(0, 0, 108))
-    stock.cyl((0, -4, 200), 32, 200, al)
-    stock.taper(-22, 22, 220, 340, 18, 18, -60, -84, "polymer")               # fixed A2-ish precision stock
-    stock.box(-14, 14, 18, 36, 250, 330, "polymer")
-    stock.box(-23, 23, -90, 22, 336, 350, "rubber")
-    ch = body.bone("charging_handle", pivot=(0, 20, 110))
-    ch.box(-6, 6, 16, 24, -10, 110, "steel_dark")
-    ch.box(-22, 22, 16, 24, 106, 118, "steel_dark")
-    bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(1, 14.8, -1, 14, -68, -12, "steel_light")
-    mag = m["gun"].bone("magazine", pivot=(0, -50, -70))
-    straight_mag(mag, -46, -108, -32, 150, width=26, mat="steel_dark", round_d=11, round_len=68)
-    bipod(body, -460, y=-30, legs_len=200, folded=True)
-    add_arms(m, right_hand=(8, -96, 58), left_hand=(-12, -54, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -720), optic=(0, 28, -40), under=(0, -30, -300), side=(-22, -4, -300),
-                eject=(16, 6, -40), sight=(0, 54, 90))
-    cyc = dict(bone="bolt", travel=(0, 0, 86), t_back=0.02, t_fwd=0.06)
-    anims = _rifle_anims(m, 0.0, (4.0, 0.5, 1.2), 15, "ar", cyc, bolt="bolt", bolt_travel=(0, 0, 86), lock=True,
-                         rec=0.2, length=0.3, draw_len=0.8)
-    anims.insert(1, idle(m, "idle_empty", locked={"bolt": (0, 0, 86)}))
-    return GunAsset(m, anims, _fp(pos=(0.12, -0.13, -0.19), ads=0.09))
-
-
-# =================================================================================================
 # SVU (bullpup SVD with PSO-1)
 # =================================================================================================
 def svu():
@@ -293,4 +240,4 @@ def dsr1():
     return GunAsset(m, anims, {"hip": {"pos": [0.12, -0.15, -0.14], "rot": [0, 3, 0]}, "ads": {"dist": 0.07}})
 
 
-GUNS = {"intervention": intervention, "l96": l96, "rem700": rem700, "sr25": sr25, "svu": svu, "dsr1": dsr1}
+GUNS = {"intervention": intervention, "l96": l96, "rem700": rem700, "svu": svu, "dsr1": dsr1}
