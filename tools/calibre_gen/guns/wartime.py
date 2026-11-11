@@ -35,8 +35,9 @@ def kar98k():
     body.box(-10, -7, 15, 21, 8, 16, st)                                # charger guide
     body.box(7, 10, 15, 21, 8, 16, st)
     stepped_barrel(body, -100, -700, 25, 16.5, st, reinforce=110, cone=50)
-    tangent_sight(body, -246, -160, 11.5, st, w=13, h=9)                # notch top at 20.5
-    ring_sight(body, -682, 7.5, st, r=7, depth=16, post_h=11, base_w=12)
+    tangent_sight(body, -246, -160, 11.5, st, w=13, h=14.5)             # notch top at 26
+    body.box(-5, 5, 7.5, 12, -689, -675, st)
+    ring_sight(body, -682, 13, st, r=7, depth=16, post_h=11, base_w=12)
     top, bot = mil_stock(body, wd, nose=-585, butt=(406, -36, -132), fore=(2, -28, -38), belly=-52, wrist=(-14, -60),
                          grip=True)
     handguard(body, -440, -250, 13, 2, 14, wd)
@@ -65,7 +66,7 @@ def kar98k():
     _clip(m, (0, 15, 10), case_len=57, bullet_len=24, d=12)
     _round_load(m, (0, 12, -26), 80, 12)
     add_arms(m, right_hand=(10, -74, 168), left_hand=(-14, -46, -320), right_rot=(30, 12, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -701), eject=(16, 10, -30), sight=(0, 19.5, -160))
+    add_sockets(m, muzzle=(0, 0, -701), eject=(16, 10, -30), sight=(0, 25.5, -160))
 
     travel, hrot = (0, 0, 92), (0, 0, 84)
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),

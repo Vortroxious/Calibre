@@ -94,8 +94,9 @@ def mosin():
     body.box(-10, -7, 14, 22, 6, 16, st)                                # charger guide slots
     body.box(7, 10, 14, 22, 6, 16, st)
     stepped_barrel(body, -100, -831, 25, 17.5, st, reinforce=150, cone=60)
-    tangent_sight(body, -252, -168, 11.5, st, w=13, h=9)                # notch top at 20.5
-    ring_sight(body, -812, 8, st, r=7, depth=14, post_h=10.5, base_w=12)
+    tangent_sight(body, -252, -168, 11.5, st, w=13, h=14.5)             # notch top at 26
+    body.box(-5, 5, 8, 12, -818, -806, st)
+    ring_sight(body, -812, 13, st, r=7, depth=14, post_h=11, base_w=12)
     top, bot = mil_stock(body, wd, nose=-736, butt=(397, -36, -128), fore=(2, -28, -38), belly=-50, wrist=(-14, -60))
     handguard(body, -700, -262, 13, 2, 14, wd, caps=st)
     for z in (-700, -480):
@@ -123,7 +124,7 @@ def mosin():
     _round_load(m, (0, 12, -26), 77, 11.5)
     add_arms(m, right_hand=(10, -74, 168), left_hand=(-14, -46, -330), right_rot=(30, 12, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -832), eject=(16, 10, -30), sight=(0, 19.5, -168))
+    add_sockets(m, muzzle=(0, 0, -832), eject=(16, 10, -30), sight=(0, 25.5, -168))
 
     travel, hrot = (0, 0, 92), (0, 0, 84)
 
@@ -199,8 +200,8 @@ def arisaka():
     body.box(-10, -7, 15, 22, 8, 18, st)
     body.box(7, 10, 15, 22, 8, 18, st)
     stepped_barrel(body, -100, -757, 25, 17, st, reinforce=150, cone=60)
-    eared_sight(body, -738, 8, 19.2, st, w=15, depth=13, lean=7)        # post top at 24.5
-    tangent_sight(body, -246, -174, 11.5, st, w=12, h=13)               # notch top at 24.5
+    eared_sight(body, -738, 8, 22.7, st, w=15, depth=13, lean=7)        # post top at 27.5
+    tangent_sight(body, -246, -174, 11.5, st, w=12, h=16)               # notch top at 27.5
     for side, name in ((-1, "aa_left"), (1, "aa_right")):               # folding lead arms
         aa = body.bone(name, pivot=(side * 9, 17, -214))
         aa.cyl((side * 9, 17, -214), 5, 4, st, axis="y", sides=8)
@@ -236,7 +237,7 @@ def arisaka():
     _round_load(m, (0, 12, -28), 80, 12)
     add_arms(m, right_hand=(10, -84, 150), left_hand=(-14, -46, -320), right_rot=(34, 14, 6),
              left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -758), eject=(16, 10, -30), sight=(0, 24, -176))
+    add_sockets(m, muzzle=(0, 0, -758), eject=(16, 10, -30), sight=(0, 27, -176))
 
     travel, hrot = (0, 0, 94), (0, 0, 86)
 
