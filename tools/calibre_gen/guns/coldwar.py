@@ -40,9 +40,9 @@ def m60():
     body.cyl((0, -18, -440), 18, 160, st)                                     # gas cylinder
     body.cyl((0, -18, -526), 22, 12, st)
     barrel(body, -150, -610, d=19, mat="steel_dark")
-    for z in (-322, -212):                                                    # carrying handle
-        body.box(-5, 5, 8, 46, z, z + 10, "steel_dark")
-    body.rbox(-7, 7, 42, 52, -326, -198, "steel_dark", r=3)
+    for z in (-322, -212):                                                    # carrying handle, laid over to the left
+        body.box(-5, 5, 8, 46, z, z + 10, "steel_dark", rot=(0, 0, 62), pivot=(0, 0, 0))
+    body.rbox(-7, 7, 42, 52, -326, -198, "steel_dark", r=3, rot=(0, 0, 62), pivot=(0, 0, 0))
     flash_hider_a2(body, -610, d=24, length=50)
     body.profile(-1.6, 1.6, [(-600, 14), (-590, 46), (-584, 46)], [(-600, 9), (-584, 9)], st)    # tall front blade
     body.rbox(-5, 5, 8, 14, -604, -580, st, r=2, edges="top")

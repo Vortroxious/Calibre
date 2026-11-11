@@ -59,9 +59,9 @@ def m249():
     body.rbox(-15, 15, 4, 24, -350, -165, "polymer", r=9, edges="top")             # heat shield
     for z in range(-340, -180, 26):
         body.box(-5, 5, 23.6, 24.4, z, z + 14, "rubber")
-    for z in (-262, -182):                                                         # carry handle
-        body.box(-5, 5, 22, 56, z, z + 10, "steel")
-    body.rbox(-7, 7, 52, 62, -266, -168, "polymer", r=3)
+    for z in (-262, -182):                                                         # carry handle, laid over to the left
+        body.box(-5, 5, 10, 56, z, z + 10, "steel", rot=(0, 0, 62), pivot=(0, 0, 0))
+    body.rbox(-7, 7, 52, 62, -266, -168, "polymer", r=3, rot=(0, 0, 62), pivot=(0, 0, 0))
     body.cyl((0, -20, -300), 18, 260, st)                                          # gas cylinder
     body.rbox(-10, 10, -30, 8, -440, -412, st, r=3)                                # gas block and regulator
     body.cyl((0, -20, -446), 14, 12, "steel")
@@ -132,9 +132,9 @@ def pkm():
     body.cyl((0, 0, -178), 30, 36, st)
     for k in range(8):                                                             # fluted rear half
         body.box(-1.2, 1.2, 9.5, 10.4, -420, -200, "rubber", rot=(0, 0, k * 45 + 22.5), pivot=(0, 0, 0))
-    for z in (-242, -182):                                                         # carry handle
-        body.box(-5, 5, 10, 46, z, z + 10, "steel")
-    body.rbox(-7, 7, 42, 52, -246, -168, wd, r=3)
+    for z in (-242, -182):                                                         # carry handle, laid over to the left
+        body.box(-5, 5, 10, 46, z, z + 10, "steel", rot=(0, 0, 62), pivot=(0, 0, 0))
+    body.rbox(-7, 7, 42, 52, -246, -168, wd, r=3, rot=(0, 0, 62), pivot=(0, 0, 0))
     body.cyl((0, -22, -380), 16, 400, st)                                          # gas tube
     body.rbox(-9, 9, -32, 10, -596, -572, st, r=3)                                 # gas block
     body.cyl((0, -22, -602), 12, 12, "steel")
