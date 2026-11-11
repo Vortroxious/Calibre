@@ -78,7 +78,7 @@ def m45():
     body.box(-8, -1.4, 24, 32, 140, 146, st)
     body.box(1.4, 8, 24, 32, 140, 146, st)
     # magazine housing that doubles as the foregrip
-    body.box(-16, 16, -64, -18, -110, -40, st)
+    body.rbox(-16, 16, -64, -18, -110, -40, st, r=4, axis="y")
     pistol_grip(body, 10, top_y=-18, length=100, width=28, depth=36, angle=-14, mat="polymer")
     trigger_group(m, body, -16, y_top=-18, guard_depth=30, guard_len=60, guard_mat=st)
     # side-folding tube stock (extended)
@@ -87,7 +87,7 @@ def m45():
     stock.cyl((0, 6, 300), 14, 270, st)
     stock.cyl((0, -56, 290), 14, 250, st)
     stock.box(-6, 6, -56, 6, 160, 176, st)
-    stock.box(-18, 18, -100, 16, 428, 444, st)                             # butt plate
+    stock.rbox(-18, 18, -100, 16, 428, 444, st, r=5)                       # butt plate
     stock.box(-6, 6, -100, -56, 412, 430, st, rot=(-10, 0, 0), pivot=(0, -56, 412))
     bolt = body.bone("bolt", pivot=(0, 0, 0))
     bolt.box(-12, 12, -10, 12, -70, 40, "steel_light")

@@ -14,6 +14,7 @@ from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
 from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
                        peep, rod_stock, selector, paddle, button, stock_solid)
 from ..pistolkit import control
+from ..riflekit import butt_plate
 from ..shotkit import sg_receiver, port_bolt, sg_barrel, sg_tube, forend, sg_butt, crossbolt
 from .ar15 import _buis, _flip_front
 from .lmgs import _belt, _belt_feed, LMG_FP
@@ -24,43 +25,57 @@ from .modern import _rifle_anims, _inspect, _fp
 # M60 (belt fed from a 100-round box on the left)
 # =================================================================================================
 def m60():
+    # M60: 1105 mm long, 560 mm barrel, stamped receiver, bipod on the barrel, 100-round bandolier on the left
     m = new_gun("m60")
     body = m["body"]
     st = "steel_parked"
-    body.box(-20, 20, -42, 16, -150, 150, st)                                 # stamped receiver
+    body.rbox(-20, 20, -42, 16, -150, 150, st, r=4, edges="bottom")           # stamped receiver
     body.box(-20.4, 20.4, -30, 6, -120, -60, "steel_dark")                    # feed tray side plates
-    body.box(-15, 15, -36, 8, -380, -150, "polymer")                           # A3-ish forend
-    for z in range(-370, -160, 26):
-        body.box(-15.4, 15.4, -28, 0, z, z + 12, "rubber")
-    body.cyl((0, -18, -420), 18, 200, st)                                       # gas cylinder
-    barrel(body, -150, -700, d=19, mat="steel_dark")
-    body.box(-6, 6, -24, 10, -560, -540, st)                                    # barrel carry handle mount
-    body.box(-5, 5, 10, 46, -560, -548, "steel_dark")
-    body.box(-5, 5, 42, 50, -560, -420, "steel_dark")
-    body.box(-5, 5, 10, 46, -432, -420, "steel_dark")
-    flash_hider_a2(body, -700, d=24, length=50)
-    body.box(-3, 3, 12, 34, -690, -684, st)                                     # front sight blade
-    bipod(body, -640, y=-10, legs_len=250, folded=True)
+    body.box(-20.4, 20.4, -12, -9, -50, 140, "steel_dark")
+    pins(body, 20, [(-32, -136), (-32, 134), (4, 130)], d=5, mat="steel")
+    body.rbox(-16, 16, -40, 8, -380, -150, "polymer", r=8, edges="bottom")    # fore-end
+    for z in range(-366, -170, 26):
+        for sx in (-1, 1):
+            body.box(sx * 16 - 0.35, sx * 16 + 0.35, -28, -4, z, z + 12, "rubber")
+    body.cyl((0, -18, -440), 18, 160, st)                                     # gas cylinder
+    body.cyl((0, -18, -526), 22, 12, st)
+    barrel(body, -150, -610, d=19, mat="steel_dark")
+    for z in (-322, -212):                                                    # carrying handle
+        body.box(-5, 5, 8, 46, z, z + 10, "steel_dark")
+    body.rbox(-7, 7, 42, 52, -326, -198, "steel_dark", r=3)
+    flash_hider_a2(body, -610, d=24, length=50)
+    body.profile(-1.6, 1.6, [(-600, 14), (-590, 46), (-584, 46)], [(-600, 9), (-584, 9)], st)    # tall front blade
+    body.rbox(-5, 5, 8, 14, -604, -580, st, r=2, edges="top")
+    bipod(body, -560, y=-10, legs_len=220, folded=True, fold="back")
     pistol_grip(body, 60, top_y=-42, length=92, width=30, depth=38, angle=-16, mat="polymer")
     trigger_group(m, body, 20, y_top=-42, guard_depth=28, guard_len=66, guard_mat=st)
+    control(body, "safety", (-20, -30, 44), [(-23, -20, -33, -27, 28, 46, "steel")], turn=(-50, 0, 0))
     stock = m["gun"].bone("stock", pivot=(0, 0, 150))
-    stock.box(-17, 17, -46, 6, 150, 200, "polymer")
-    stock.taper(-18, 18, 200, 450, 4, -6, -46, -110, "polymer")
-    stock.box(-19, 19, -114, 2, 446, 460, st)
-    stock.box(-8, 8, -70, -54, 300, 320, st)                                    # shoulder rest hinge
+    stock.rbox(-17, 17, -46, 6, 150, 202, "polymer", r=5)
+    stock.profile(-18, 18, [(200, 6), (430, -2)], [(200, -46), (430, -106)], "polymer")
+    butt_plate(stock, 430, -106, -2, 18, st, th=3, pad="rubber", pad_th=9)
+    stock.box(-10, 10, -2, 1, 396, 445, st)                                   # hinged shoulder rest
+    stock.cyl((0, -1, 398), 5, 24, "steel", axis="x", sides=8)
     cover = body.bone("cover", pivot=(0, 16, 120))
-    cover.box(-20, 20, 16, 30, -140, 120, st)
-    cover.box(-9, 9, 30, 46, 70, 110, st)                                       # leaf rear sight
+    cover.rbox(-20, 20, 16, 30, -140, 120, st, r=5, edges="top")
+    cover.box(-10, 10, 29.6, 30.6, -120, 40, "steel_dark")
+    peep(cover, 96, 30, 51, st, w=10, hole=4.5, depth=3, hole_y=46)           # leaf rear sight
+    cover.box(-9, 9, 30, 34, 84, 108, st)
+    cover.cyl((10, 36, 96), 9, 5, "steel", axis="x", sides=8)
     ch = body.bone("charging_handle", pivot=(20, -14, -100))
     ch.box(20, 38, -20, -8, -106, -94, "steel")
-    ch.box(34, 42, -24, -4, -108, -92, "steel")
-    box = m["gun"].bone("box", pivot=(-20, -42, -80))
-    box.box(-70, 6, -190, -42, -150, -20, "olive")                              # 100-round can / bag
+    ch.rbox(34, 42, -24, -4, -108, -92, "steel", r=2, axis="x")
+    body.box(20, 20.4, -16, -12, -92, 30, "rubber")
+    box = m["gun"].bone("box", pivot=(-20, -42, -80))                         # 100-round bandolier
+    box.rbox(-70, 6, -190, -42, -150, -20, "canvas", r=9)
     box.box(-68, 4, -192, -190, -148, -22, "steel_dark")
+    box.box(-71, -68, -150, -60, -120, -50, "olive")
+    box.rbox(-30, -20, -44, -16, -130, -40, st, r=2)                          # hanger
     belt = m["gun"].bone("belt", pivot=(-26, -6, -100))
     _belt(belt, -24, -4, -120, n=7, dx=-5, dy=-7, case="brass", tip="copper", d=10, length=70)
     add_arms(m, right_hand=(8, -98, 74), left_hand=(-10, -50, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -750), under=(0, -36, -300), eject=(14, -40, -40), sight=(0, 46, 90))
+    add_sockets(m, muzzle=(0, 0, -661), under=(0, -40, -300), eject=(14, -40, -40), sight=(0, 46, 96))
+
     anims = [idle(m), draw(m, 1.0, sound="draw_rifle"),
              _belt_feed(fire_basic(m, "fire", kick=(3.2, 0.7, 1.4), push=12, recover=0.12, length=0.2), (5, 7, 0)),
              _belt_feed(fire_basic(m, "fire_aim", kick=(3.2, 0.7, 1.4), push=12, recover=0.1, length=0.18,

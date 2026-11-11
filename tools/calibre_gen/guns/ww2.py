@@ -11,6 +11,7 @@ from ..parts import trigger_group, barrel, pins, sling_swivel, side_swivel
 from ..common import moving
 from ..longkit import slot, ring_sight, eared_sight, tangent_sight, peep, aperture_sight
 from ..pistolkit import control
+from ..shotkit import sg_butt
 from ..riflekit import (mil_stock, stock, line_y, butt_plate, band, handguard, receiver, stepped_barrel, bolt,
                         rides)
 
@@ -322,61 +323,61 @@ def sks():
 # PPSh-41 with the 71-round drum
 # =================================================================================================
 def ppsh41():
+    # PPSh-41: 843 mm long, 269 mm barrel in a slotted jacket with a slanted compensator, 71-round drum
     m = new_gun("ppsh41")
     body = m["body"]
-    st = "steel_dark"
-    wd = "wood"
-    body.box(-15, 15, -24, 18, -110, 120, st)                              # receiver
-    body.box(-12, 12, 18, 22, -60, 110, st)
-    body.box(14.6, 15.4, 0, 10, -40, 60, "rubber")                       # charging slot
-    body.box(-6, 6, 22, 30, 50, 70, st)                                    # L-flip rear sight
-    body.box(-5, 5, 30, 32, 60, 66, st)
-    body.box(-5, -1.4, 32, 37, 60, 66, st)
-    body.box(1.4, 5, 32, 37, 60, 66, st)
-    # ventilated barrel jacket with the slanted muzzle brake
-    body.cyl((0, 0, -250), 30, 280, st, sides=8)                           # -110 .. -390
-    for z in range(-380, -130, 32):
-        for y in (8, -8):
-            body.box(-15.4, 15.4, y - 4, y + 4, z, z + 16, "rubber")
-        body.box(-6, 6, 14.6, 15.4, z, z + 16, "rubber")
-    barrel(body, -110, -385, d=14, mat="steel_light")
-    body.box(-15, 15, -15, 15, -420, -390, st, rot=(-30, 0, 0), pivot=(0, 15, -390))   # slanted brake
-    body.box(-5, -3, 15, 38, -404, -392, st)                                # front sight hood
-    body.box(3, 5, 15, 38, -404, -392, st)
-    body.box(-5, 5, 36, 38, -404, -392, st)
-    body.box(-1, 1, 15, 33, -398, -396, st)
-    # wood stock: receiver bed, drum cut, wrist, butt
-    body.box(-17, 17, -46, -8, -110, -40, wd)
-    body.box(-17, 17, -46, -8, 30, 150, wd)
-    body.box(-15, 15, -64, -12, 140, 236, wd, rot=(5, 0, 0), pivot=(0, -12, 140))
-    _butt(body, 232, 450, wd, st, comb_y=-18, heel_drop=18, toe_y=-124, wrist_y=-68, w=18)
-
-    body.box(-8, 8, -40, -24, -40, 30, st)                                 # mag housing / catch
+    st, wd = "steel_dark", "wood"
+    body.rbox(-15, 15, -24, 4, -110, 120, st, r=3, edges="bottom")         # lower receiver
+    body.rbox(-15, 15, 0, 24, -110, 122, st, r=9, edges="top")             # hinged receiver cover
+    body.box(-8, 8, 23.6, 24.6, -70, -12, "rubber")                       # ejection opening on top
+    body.box(14.6, 15.4, 2, 9, -40, 62, "rubber")                         # charging slot
+    body.box(-7, 7, 24, 27, 48, 72, st)                                    # L-flip rear sight in its guard
+    for sx in (-1, 1):
+        body.box(sx * 7 - 1.2, sx * 7 + 1.2, 27, 38, 50, 70, st)
+        body.box(sx * 3.4 - 1.9, sx * 3.4 + 1.9, 27, 34.5, 60, 64, st)
+    body.rbox(-15, 15, -15, 15, -392, -110, st, r=8)                       # barrel jacket
+    for z in range(-380, -140, 60):
+        for sx in (-1, 1):
+            body.box(sx * 15 - 0.4, sx * 15 + 0.4, -5, 5, z, z + 42, "rubber")
+        body.box(-5, 5, 14.6, 15.4, z, z + 42, "rubber")
+    body.profile(-15, 15, [(-420, 15), (-392, 15)], [(-420, 6), (-392, -15)], st)      # slanted compensator
+    body.box(-8, 8, 14.6, 15.4, -416, -398, "rubber")
+    body.cyl((0, -1, -404), 15, 0.8, "rubber", axis="z", sides=8)
+    ring_sight(body, -402, 15, st, r=9.5, depth=12, post_h=17, base_w=14)  # post top at 34
+    body.rbox(-17, 17, -46, -6, -112, -40, wd, r=6, edges="bottom")        # wood: fore part, bed, grip and butt
+    body.rbox(-17, 17, -46, -8, 30, 100, wd, r=5, edges="bottom")
+    top, bot = sg_butt(body, wd, 96, 427, top0=-8, bot0=-46, comb=-24, heel=-38, toe=-120, pad=None, plate=st,
+                       hw=(16, 17.5))
+    side_swivel(body, -17, -70, 330, h=18, mat=st)
+    side_swivel(body, -15.4, -4, -330, h=16, mat=st)
+    body.rbox(-9, 9, -42, -24, -40, 30, st, r=2)                           # magazine housing / catch
+    body.box(-3, 3, -50, -42, 24, 30, st)
     trigger_group(m, body, 70, y_top=-46, guard_depth=26, guard_len=58, guard_mat=st)
     sel = body.bone("selector", pivot=(0, -52, 40))
     sel.box(-3, 3, -58, -48, 38, 46, "steel")                              # fire selector inside the guard
     bolt = body.bone("bolt", pivot=(0, 0, 0))
     bolt.box(-10, 10, -10, 12, -40, 70, "steel_light")
     ch = bolt.bone("charging_handle", pivot=(15, 5, 40))
-    ch.box(15, 28, 0, 10, 34, 46, "steel_light")
-    ch.box(26, 30, -2, 12, 32, 48, "steel_light")
+    ch.box(15, 28, 1, 9, 35, 45, "steel_light")
+    ch.cyl((30, 5, 40), 13, 6, "steel_light", axis="x", sides=16)
     # 71-round drum
-    dc = (0, -118, -6)
+    dc = (0, -104, -6)
     mag = m["gun"].bone("magazine", pivot=(0, -30, -6))
-    mag.box(-8, 8, -42, -24, -30, 18, st)                                 # feed tower
-    _disk(mag, dc, 192, 42, st, n=13)
-    _disk(mag, (dc[0] + 22.5, dc[1], dc[2]), 176, 3, "steel", n=11)                    # lid
-    _disk(mag, (dc[0] - 22.5, dc[1], dc[2]), 176, 3, "steel", n=11)
+    mag.box(-8, 8, -42, -24, -30, 18, st)                                  # feed tower
+    _disk(mag, dc, 152, 42, st, n=13)
+    _disk(mag, (dc[0] + 22.5, dc[1], dc[2]), 140, 3, "steel", n=11)        # lids
+    _disk(mag, (dc[0] - 22.5, dc[1], dc[2]), 140, 3, "steel", n=11)
     for i in range(12):                                                    # lid ribs
         a = math.radians(i * 30)
-        mag.box(22, 25, dc[1] + math.sin(a) * 72 - 4, dc[1] + math.sin(a) * 70 + 4,
-                dc[2] + math.cos(a) * 72 - 4, dc[2] + math.cos(a) * 72 + 4, st)
+        mag.box(22, 25, dc[1] + math.sin(a) * 56 - 3.5, dc[1] + math.sin(a) * 56 + 3.5,
+                dc[2] + math.cos(a) * 56 - 3.5, dc[2] + math.cos(a) * 56 + 3.5, st)
     key = mag.bone("drum_key", pivot=(dc[0] + 26, dc[1], dc[2]))
     key.box(24, 30, dc[1] - 6, dc[1] + 6, dc[2] - 6, dc[2] + 6, "steel_light")
-    key.box(28, 32, dc[1] - 22, dc[1] + 22, dc[2] - 4, dc[2] + 4, "steel_light")
-    add_arms(m, right_hand=(8, -66, 170), left_hand=(-14, -60, -210), right_rot=(30, 12, 6),
+    key.box(28, 32, dc[1] - 20, dc[1] + 20, dc[2] - 4, dc[2] + 4, "steel_light")
+    add_arms(m, right_hand=(8, -80, 160), left_hand=(-14, -60, -210), right_rot=(30, 12, 6),
              left_rot=(24, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -420), eject=(15, 10, -30), sight=(0, 33, 62))
+    add_sockets(m, muzzle=(0, 0, -421), eject=(0, 26, -40), sight=(0, 34, 62))
+
     travel = (0, 0, 92)
 
     def reload(name, empty):
@@ -424,35 +425,6 @@ def ppsh41():
             _settle(a, t + 0.05, L - 0.02)
         return a
 
-    def inspect():
-        # roll it over to show the drum, crank the winding key (ratchet clicks), then look down the jacket
-        a = Anim(m, "inspect", 4.8)
-        a.mv("gun", 0.0, 0.45, pos=(-40, 30, 30), rot=(10, 30, 50), e="inoutsine")
-        a.mv("arm_left", 0.2, 0.55, pos=(30, -90, 140), rot=(0, 40, 40))
-        a.key("drum_key", 0.0, rot=(0, 0, 0))
-        a.key("drum_key", 0.6, rot=(0, 0, 0))
-        for i in range(4):
-            t = 0.7 + i * 0.32
-            a.key("drum_key", t + 0.2, rot=(-(i + 1) * 80, 0, 0), e="inoutsine")
-            a.sound(t + 0.08, "click_small")
-            a.sound(t + 0.16, "click_small")
-            a.spring("gun", "rot", t + 0.1, (0, 0.4, 0.6), freq=8, damp=12)
-        a.mv("arm_left", 2.0, 2.35, pos=(0, 0, 0), rot=(0, 0, 0))
-        # sight down the perforated jacket, then flip the L rear sight
-        a.mv("gun", 2.0, 2.6, pos=(-20, -40, -40), rot=(-10, -6, -4), e="inoutsine")
-        a.sound(2.7, "click_small")
-        a.mv("arm_right", 2.7, 2.9, pos=(-6, 20, -20), rot=(-10, -10, 0))
-        a.sound(3.0, "selector")
-        a.key("selector", 0.0, pos=(0, 0, 0))
-        a.key("selector", 2.95, pos=(0, 0, 0))
-        a.key("selector", 3.02, pos=(0, 0, -6), e="outquad")
-        a.key("selector", 3.3, pos=(0, 0, -6))
-        a.key("selector", 3.37, pos=(0, 0, 0), e="outquad")
-        a.sound(3.37, "selector")
-        a.mv("arm_right", 3.45, 3.7, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.5, 4.75)
-        return a
-
     cyc = dict(bone="bolt", travel=travel, t_back=0.018, t_fwd=0.045)
     kk = dict(kick=(2.0, 0.6, 1.2), push=9, cycle=cyc)
     fm = Anim(m, "firemode", 0.55)
@@ -468,7 +440,7 @@ def ppsh41():
     anims = [idle(m), draw(m, 0.7, sound="draw_rifle"),
              fire_basic(m, "fire", recover=0.09, length=0.14, **kk),
              fire_basic(m, "fire_aim", recover=0.08, length=0.13, aim=True, **kk),
-             reload("reload", False), reload("reload_empty", True), fm, inspect(), dry_fire(m)]
+             reload("reload", False), reload("reload_empty", True), fm, Anim(m, "inspect", 1.0), dry_fire(m)]
     return GunAsset(m, anims, {"hip": {"pos": [0.115, -0.12, -0.2], "rot": [0, 4, 0]}, "ads": {"dist": 0.26}})
 
 
