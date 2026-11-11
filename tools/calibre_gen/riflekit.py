@@ -88,7 +88,8 @@ def handguard(b: Bone, z0, z1, hw, y0, y1, mat, caps=None):
             b.rbox(-hw - 0.4, hw + 0.4, y0, y1 + 0.4, z - 3, z + 3, caps, r=min(6.5, hw * 0.5), axis="z", edges="top")
 
 
-def receiver(b: Bone, z0, z1, d, mat, port=None, ring=None, bridge=None, tang=None, sides=None, side_port=True):
+def receiver(b: Bone, z0, z1, d, mat, port=None, ring=None, bridge=None, tang=None, sides=None, side_port=True,
+             top_port=True):
     """
     Tubular bolt-action receiver. port = (z0, z1) of the loading / ejection opening, ring = length of the thicker
     front ring, bridge = (z0, z1, height) of the rear bridge, tang = (z_end, y0, y1).
@@ -99,7 +100,8 @@ def receiver(b: Bone, z0, z1, d, mat, port=None, ring=None, bridge=None, tang=No
         b.cyl((0, 0, z0 + ring / 2), d + 2.4, ring, mat, sides=sides)
         b.cyl((0, r + 0.9, z0 + ring * 0.5), 3, 0.8, "rubber", axis="y", sides=8)          # gas escape hole
     if port:
-        b.box(-r * 0.36, r * 0.36, r - 2, r + 0.45, port[0], port[1], "rubber")
+        if top_port:
+            b.box(-r * 0.36, r * 0.36, r - 2, r + 0.45, port[0], port[1], "rubber")
         if side_port:
             b.box(0, r * 0.82, r * 0.1, r * 0.7, port[0] + 4, port[1], "rubber")
     if bridge:

@@ -3,6 +3,10 @@ from ..core import Anim
 from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, apply_hidden, along)
 from ..templates import rifle_reload, bolt_cycle, bolt_load, _settle, OFF_LEFT, OFF_LEFT_ROT
 from ..parts import (pistol_grip, trigger_group, curved_mag, straight_mag, barrel, muzzle_brake, scope, bipod)
+from ..common import moving
+from ..pistolkit import control
+from ..riflekit import stock, line_y, butt_plate, bolt, rides
+from .hunting import _bolt_rifle
 
 SNIPER_FP = {"hip": {"pos": [0.12, -0.15, -0.18], "rot": [0, 3, 0]}, "ads": {"dist": 0.075}}
 
@@ -17,137 +21,118 @@ def _bolt(m, parent, z_front, z_rear, handle_z, knob=True, mat="steel_light", d=
     return b
 
 
-def m24():
-    m = new_gun("m24")
+def _ai_rifle(name, *, muzzle, barrel_d, brake=None, flutes=False, g="polymer_od", rec="steel_dark", butt=442):
+    """
+    Accuracy International chassis rifle: flat-bottomed receiver, free-floated barrel, two polymer stock halves bolted
+    over the chassis, thumbhole grip, adjustable cheek piece and butt spacers, spigot bipod. No magazine or scope.
+    """
+    m = new_gun(name)
     body = m["body"]
-    st = "steel_dark"
-    body.cyl((0, 0, -10), 34, 220, st, sides=12)                                 # 700 receiver
-    body.box(0, 17.5, 2, 16, -60, 10, "rubber")                                   # ejection port
-    barrel(body, -120, -720, d=22)
-    body.cyl((0, 0, -716), 18, 8, st)
-    # HS Precision stock (OD green)
-    s = "polymer_od"
-    body.box(-24, 24, -46, -10, -560, 100, s)
-    body.box(-22, 22, -40, -16, -560, -140, s)
-    body.box(-22, 22, -110, -10, 100, 160, s, rot=(-20, 0, 0), pivot=(0, -10, 100))   # grip area
-    body.taper(-24, 24, 160, 359, 8, 8, -78, -100, s)
-    body.box(-25, 25, -106, 14, 355, 371, "rubber")
-    body.box(-6, 6, -46, -40, -480, -460, "steel")                                   # sling swivel
-    trigger_group(m, body, 40, y_top=-46, guard_depth=26, guard_len=60, guard_mat=st)
-    sel = body.bone("selector", pivot=(14, 10, 110))
-    sel.box(12, 16, 6, 14, 104, 116, "steel")
-    _bolt(m, "gun", -60, 110, 96)
+    body.rbox(-17, 17, -14, 18, -100, 120, rec, r=8, edges="top")                 # receiver
+    body.box(9, 17.4, 2, 13, -62, 0, "rubber")                                    # ejection port
+    body.rbox(-10, 10, 17, 20, -92, 112, "steel_dark", r=1.2, edges="top")        # scope dovetail
+    zf = muzzle + (brake or 0)
+    body.cyl((0, 0, -110), barrel_d + 8, 22, rec)                                 # barrel shank
+    barrel(body, -100, zf, d=barrel_d, mat="steel_dark")
+    if flutes:
+        for k in range(6):
+            body.box(-1, 1, barrel_d / 2 - 0.5, barrel_d / 2 + 0.3, zf + 70, -200, "rubber", rot=(0, 0, k * 60 + 30),
+                     pivot=(0, 0, 0))
+    if brake:
+        muzzle_brake(body, zf, d=barrel_d + 5, length=brake, ports=2)
+    else:
+        body.cyl((0, 0, muzzle + 11), barrel_d + 3, 22, "steel_dark")
+        body.cyl((0, 0, muzzle - 0.3), barrel_d * 0.5, 0.6, "rubber", sides=8)
+    # fore-end and receiver sides
+    stock(body, [(-430, -11), (124, -11)], [(-430, -36), (-404, -46), (-110, -52), (124, -52)], [(-430, 124, 25)], g)
+    body.rbox(-25, 25, -14, 3, -104, 124, g, r=2.5, edges="top")
+    for z in (-390, -260, -130, 10, 100):                                         # the stock bolts
+        for sx in (-1, 1):
+            body.cyl((sx * 25.3, -30, z), 7, 0.8, "steel_dark", axis="x", sides=8)
+            body.cyl((sx * 25.8, -30, z), 3.4, 0.5, "rubber", axis="x", sides=8)
+    for sx in (-1, 1):
+        body.box(sx * 25 - 0.3, sx * 25 + 0.3, -44, -20, -380, -160, "olive")     # grip stipple
+    body.rbox(-17, 17, -126, -48, 62, 112, g, r=8, axis="y", rot=(-14, 0, 0), pivot=(0, -50, 90))
+    trigger_group(m, body, 30, y_top=-52, guard_depth=30, guard_len=70, guard_mat=g)
+    control(body, "mag_release", (0, -54, -2), [(-4, 4, -70, -53, -5, -1, "steel_dark")], turn=(14, 0, 0))
+    # thumbhole butt: low behind the action so the bolt clears it, then the raised cheek piece
+    zb = butt - 16.6
+    st = m["gun"].bone("stock", pivot=(-20, 0, 124))
+    stock(st, [(124, -12), (250, -12), (264, 6), (zb, 6)], [(124, -40), (172, -40), (198, -118), (zb, -124)],
+          [(124, zb, 24)], g)
+    st.profile(-20, 20, [(100, -110), (200, -104)], [(100, -127), (200, -123)], g)        # strap under the thumbhole
+    st.rbox(-17, 17, 6, 20, 276, 384, g, r=6, edges="top")                        # adjustable cheek piece
+    for z in (300, 360):
+        for sx in (-1, 1):
+            st.cyl((sx * 24.6, -8, z), 9, 1.4, "steel_dark", axis="x", sides=8)
+    for z, y in ((300, -70), (400, -30), (400, -100)):
+        for sx in (-1, 1):
+            st.cyl((sx * 24.3, y, z), 7, 0.8, "steel_dark", axis="x", sides=8)
+    butt_plate(st, zb, -124, 6, 24, "polymer", th=3, pad="rubber", pad_th=12, spacer="polymer")
+    st.cyl((0, -128, 392), 12, 10, "steel_dark", axis="y", sides=16)              # rear spike housing
+    bipod(body, -412, y=-44, legs_len=200, folded=True)
+    bolt(m, -60, 116, 102, parent="gun", d=21, mat="steel_dark", handle_len=28, droop=38, knob_d=23,
+         knob_mat="polymer")
+    sh = m["gun"].bone("shroud", pivot=(0, 0, 0))
+    sh.cyl((0, 0, 125), 24, 18, "steel_dark")
+    sh.cyl((0, 0, 139), 24, 10, "steel_dark", d2=15, steps=2)
+    sf = sh.bone("safety", pivot=(12, 4, 124))
+    sf.box(11, 15, 2, 6, 112, 126, "steel")
+    sf.box(13, 17, 4, 9, 110, 116, "steel")
+    moving(m, "safety", rot=(-40, 0, 0))
+    rides(m, "shroud")
+    br = m["gun"].bone("brass", pivot=(0, 6, -30))
+    br.cyl((0, 6, -20), barrel_d / 2 + 1, 60, "brass")
+    return m
+
+
+def m24():
+    # M24 SWS: 1092 mm long, heavy 610 mm barrel, wide composite stock with the adjustable butt, fixed 10x scope
+    m, top, bot = _bolt_rifle("m24", "polymer_od", muzzle=-720, butt=371, barrel_d=22, breech_d=30, nose=-560,
+                              fore=(-6, -38, -44), belly=-46, wrist=(-14, -58), comb=-3, heel=-5, toe=-106,
+                              hw=(22, 23, 17, 21), trig_z=40, bolt_parent="gun", handle_z=96, checker=None, butt_gap=10,
+                              bolt_kw=dict(handle_len=36, droop=32, knob_d=18, mat="steel_dark"),
+                              scope_kw=dict(length=330, tube_d=30, obj_d=50, eye_d=42, mount_y=17, turrets=True))
+    body = m["body"]
+    zb = 371 - 10 - 4 - 14
+    body.cyl((0, -56, zb + 5), 40, 4, "steel", sides=24)                # length-of-pull thumbwheel
+    for y in (-30, -82):
+        body.cyl((0, y, zb + 5), 8, 10, "steel_light")
+    body.box(-13, 13, -50, -46, -96, 0, "steel_dark")                   # floorplate
+    body.box(-2.5, 2.5, -52, -46, -2, 6, "steel")
+    for sx in (-1, 1):                                                  # palm swell and stipple bands
+        body.box(sx * 17 - 0.3, sx * 17 + 0.3, -68, -32, 158, 196, "olive")
+        body.box(sx * 22 - 0.3, sx * 22 + 0.3, -32, -14, -500, -200, "olive")
     rl = m["gun"].bone("round_load", pivot=(0, 10, -20))
     rl.round_((0, 10, -20), 70, 12)
-
-    br = m["gun"].bone("brass", pivot=(0, 6, -30))
-    br.cyl((0, 6, -20), 12, 50, "brass")
-    sc = body.bone("scope", pivot=(0, 50, -10))
-    scope(sc, -10, 52, length=330, tube_d=30, obj_d=50, eye_d=42, mount_y=17)
     add_arms(m, right_hand=(10, -80, 150), left_hand=(-14, -50, -260), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -720), under=(0, -46, -360), eject=(18, 8, -20), sight=(0, 52, 150))
-    m.meta["integral_optic"] = {"zoom": 10.0, "reticle": "mildot", "eye": [0, 52, 150]}
+    add_sockets(m, muzzle=(0, 0, -721), under=(0, line_y(bot, -360), -360), eject=(18, 8, -20), sight=(0, 52, 150))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.0)
-        a.mv("gun", 0.0, 0.4, pos=(-30, 20, 30), rot=(4, -20, -26))
-        a.mv("arm_right", 0.0, 0.2, pos=(20, 40, -30), rot=(-25, -20, -20))
-        a.grab("arm_right", "bolt", 0.2, 1.8, fade_in=0.03, fade_out=0.06)
-        a.key("bolt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.22, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.34, pos=(0, 0, 0), rot=(0, 0, 66), e="outquad")
-        a.sound(0.32, "bolt_open")
-        a.key("bolt", 0.62, pos=(0, 0, 28), rot=(0, 0, 66), e="inoutsine")
-        a.mv("gun", 0.6, 1.0, pos=(-40, 30, 40), rot=(10, -36, -50))                  # peek at the round
-        a.key("bolt", 1.4, pos=(0, 0, 28), rot=(0, 0, 66))
-        a.key("bolt", 1.56, pos=(0, 0, 0), rot=(0, 0, 66), e="inoutsine")
-        a.key("bolt", 1.66, pos=(0, 0, 0), rot=(0, 0, 0), e="inquad")
-        a.sound(1.66, "bolt_close")
-        a.mv("arm_right", 1.85, 2.1, pos=(0, 0, 0), rot=(0, 0, 0))
-        # check the scope caps / turrets
-        a.mv("gun", 1.8, 2.5, pos=(-60, 20, 0), rot=(-6, 30, 16), e="inoutsine")
-        a.mv("arm_left", 2.2, 2.5, pos=(10, 110, 210), rot=(-40, 10, 20))
-        for t in (2.6, 2.75, 2.9):
-            a.sound(t, "click_small")
-        a.mv("arm_left", 3.0, 3.4, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.0, 3.95)
-        return a
+    m.meta["integral_optic"] = {"zoom": 10.0, "reticle": "mildot", "eye": [0, 52, 150]}
 
     cyc = bolt_cycle(m, "cycle", travel=(0, 0, 96), handle_rot=(0, 0, 66))
     cyc_aim = bolt_cycle(m, "cycle_aim", travel=(0, 0, 96), handle_rot=(0, 0, 66), aim=True)
     anims = [idle(m), draw(m, 0.8, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(7, 0.6, 1.4), push=22, recover=0.4, length=0.5),
              fire_basic(m, "fire_aim", kick=(7, 0.6, 1.4), push=22, recover=0.36, length=0.45, aim=True),
-             cyc, cyc_aim, *bolt_load(m, travel=(0, 0, 96), handle_rot=(0, 0, 66)), inspect(), dry_fire(m)]
+             cyc, cyc_aim, *bolt_load(m, travel=(0, 0, 96), handle_rot=(0, 0, 66)), Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["round_load", "brass"])
     return GunAsset(m, anims, SNIPER_FP)
 
 
 def awm():
+    # Accuracy International AWM: 1230 mm long, 686 mm fluted barrel with brake, thumbhole chassis stock
     A = 0.0
-    m = new_gun("awm")
+    m = _ai_rifle("awm", muzzle=-788, barrel_d=24, brake=60, flutes=True)
     body = m["body"]
-    g = "polymer_od"
-    body.box(-17, 17, -14, 18, -100, 120, "alloy_grey")                           # receiver
-    body.box(0, 17.4, 0, 16, -60, 0, "rubber")
-    barrel(body, -100, -700, d=24)
-    muzzle_brake(body, -700, d=26, length=60, ports=2)
-    # chassis + thumbhole stock (green)
-    body.box(-26, 26, -50, -14, -420, 120, g)
-    body.box(-24, 24, -46, -20, -420, -120, g)
-    body.box(-20, 20, -120, -50, 70, 120, g, rot=(-14, 0, 0), pivot=(0, -50, 90))
-    trigger_group(m, body, 30, y_top=-50, guard_depth=30, guard_len=70, guard_mat=g)
-    stock = m["gun"].bone("stock", pivot=(-20, 0, 120))
-    stock.box(-26, 26, -60, 8, 120, 180, g)
-    stock.box(-26, 26, -110, -70, 140, 420, g)
-    stock.box(-26, 26, -30, 8, 180, 420, g)
-    stock.box(-26, 26, -110, 8, 400, 430, g)
-    stock.box(-28, 28, -118, 12, 428, 442, "rubber")
-    stock.box(-18, 18, 8, 26, 280, 380, g)                                        # cheek piece
-    bipod(body, -400, y=-50, legs_len=200, folded=True)
-    _bolt(m, "gun", -60, 116, 102, mat="steel_dark", d=21)
-    br = m["gun"].bone("brass", pivot=(0, 6, -30))
-    br.cyl((0, 6, -20), 14, 60, "brass")
     mag = m["gun"].bone("magazine", pivot=(0, -50, -30))
-    straight_mag(mag, -46, -70, 20, 90, width=26, mat="steel_dark", round_d=13, round_len=80)
+    straight_mag(mag, -46, -90, -4, 84, width=26, mat="steel_dark", round_d=13, round_len=82)
     sc = body.bone("scope", pivot=(0, 52, -10))
-    scope(sc, -10, 54, length=340, tube_d=34, obj_d=56, eye_d=44, mount_y=18)
+    scope(sc, -10, 54, length=340, tube_d=34, obj_d=56, eye_d=44, mount_y=20)
     add_arms(m, right_hand=(10, -96, 104), left_hand=(-14, -54, -280), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -760), under=None, eject=(18, 8, -20), sight=(0, 54, 160))
-    m.meta["integral_optic"] = {"zoom": 12.0, "reticle": "mildot", "eye": [0, 54, 160]}
+    add_sockets(m, muzzle=(0, 0, -789), under=None, eject=(18, 8, -20), sight=(0, 54, 160))
 
-    def inspect():
-        a = Anim(m, "inspect", 4.6)
-        # open the bolt, look into the chamber
-        a.mv("gun", 0.0, 0.4, pos=(-30, 20, 30), rot=(4, -20, -26))
-        a.mv("arm_right", 0.0, 0.2, pos=(20, 40, -30), rot=(-25, -20, -20))
-        a.grab("arm_right", "bolt", 0.2, 1.5, fade_in=0.03, fade_out=0.06)
-        a.key("bolt", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.22, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("bolt", 0.34, pos=(0, 0, 0), rot=(0, 0, 66), e="outquad")
-        a.sound(0.32, "bolt_open")
-        a.key("bolt", 0.56, pos=(0, 0, 34), rot=(0, 0, 66), e="inoutsine")
-        a.mv("gun", 0.55, 0.9, pos=(-40, 30, 40), rot=(10, -36, -50))
-        a.key("bolt", 1.15, pos=(0, 0, 34), rot=(0, 0, 66))
-        a.key("bolt", 1.3, pos=(0, 0, 0), rot=(0, 0, 66), e="inoutsine")
-        a.key("bolt", 1.4, pos=(0, 0, 0), rot=(0, 0, 0), e="inquad")
-        a.sound(1.4, "bolt_close")
-        a.mv("arm_right", 1.5, 1.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        # fold the stock to the left and back
-        a.mv("gun", 1.5, 2.1, pos=(-80, 30, -80), rot=(0, -60, -10), e="inoutsine")
-        a.mv("arm_left", 1.7, 2.1, pos=(-40, -40, 600), rot=(0, -40, 0))
-        a.grab("arm_left", "stock", 2.12, 3.4, fade_in=0.03, fade_out=0.06)
-        a.key("stock", 0.0, rot=(0, 0, 0))
-        a.key("stock", 2.15, rot=(0, 0, 0))
-        a.sound(2.15, "stock_unlock")
-        a.key("stock", 2.7, rot=(0, -150, 0), e="inoutsine")
-        a.sound(2.7, "stock_lock")
-        a.key("stock", 2.9, rot=(0, -150, 0))
-        a.key("stock", 3.35, rot=(0, 0, 0), e="inoutsine")
-        a.sound(3.35, "stock_lock")
-        a.mv("arm_left", 3.4, 3.9, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.5, 4.55)
-        return a
+    m.meta["integral_optic"] = {"zoom": 12.0, "reticle": "mildot", "eye": [0, 54, 160]}
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(9, 0.6, 1.6), push=26, recover=0.45, length=0.55),
@@ -155,9 +140,8 @@ def awm():
              bolt_cycle(m, "cycle", travel=(0, 0, 104), handle_rot=(0, 0, 66)),
              bolt_cycle(m, "cycle_aim", travel=(0, 0, 104), handle_rot=(0, 0, 66), aim=True),
              rifle_reload(m, "reload", A, empty=False, style="ar", mag_out=50, tilt=(4, -6, -20)),
-             inspect(), dry_fire(m)]
+             Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["brass"])
-    m.warp_z([(-761, -788), (-110, -110)])
     return GunAsset(m, anims, SNIPER_FP)
 
 

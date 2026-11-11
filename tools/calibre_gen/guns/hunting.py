@@ -4,7 +4,9 @@ import numpy as np
 from ..core import Anim
 from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, apply_hidden)
 from ..templates import (rifle_reload, tube_reload, pump_cycle, bolt_cycle, _settle, OFF_LEFT, OFF_LEFT_ROT)
-from ..parts import pistol_grip, trigger_group, barrel, straight_mag, scope
+from ..parts import pistol_grip, trigger_group, barrel, straight_mag, scope, sling_swivel
+from ..pistolkit import control
+from ..riflekit import mil_stock, line_y, butt_plate, receiver, stepped_barrel, bolt, rides
 from .ww2 import _butt, _military_bolt
 from .classic import _sg_shells, _tube_mag
 
@@ -185,64 +187,64 @@ def mossberg190():
 # =================================================================================================
 # Tikka T3 (synthetic, scoped, 3-round flush magazine)
 # =================================================================================================
-def _scoped_bolt_gun(name, stock_mat, barrel_len, barrel_d, mag_rounds_len, mag_len, eye, threaded=False,
-                     stock_len=294):
+def _bolt_rifle(name, stock_mat, *, muzzle, butt, barrel_d, breech_d=29.0, nose=-450, fore=(-4, -34, -42), belly=-52,
+                wrist=(-16, -60), comb=None, heel=-20, toe=-126, hw=(16, 18, 15, 17), trig_z=30, st="steel_dark",
+                top_port=True, bolt_parent="body", handle_z=92, bolt_kw=None, pad_th=14.0, spacer=None, butt_gap=0.0,
+                checker="polymer", scope_kw=None, scope_y=52, brass_len=56, guard_mat=None):
+    """
+    Scoped sporting / sniping bolt action on the rifle kit: tubular receiver, tapered barrel, a one-piece stock with
+    pistol grip and recoil pad, chequered panels, sling studs, a bolt with a shroud that does not turn with it, the
+    safety, and the scope in rings. `butt` is the rear-most z. Returns (model, top, bot) of the stock outline.
+    """
     m = new_gun(name)
     body = m["body"]
-    st = "steel_dark"
-    body.cyl((0, 0, -10), 32, 210, st, sides=12)                           # -115 .. 95
-    body.box(0, 16.6, -2, 12, -80, -10, "rubber")
-    barrel(body, -115, -115 - barrel_len, d=barrel_d, mat=st)
-    body.box(-17, 17, -44, -4, -460, -115, stock_mat)
-    body.box(-18, 18, -52, -8, -115, 100, stock_mat)
-    trigger_group(m, body, 30, y_top=-52, guard_depth=24, guard_len=60, guard_mat=stock_mat)
-    sel = body.bone("selector", pivot=(10, 8, 96))
-    sel.box(8, 13, 4, 14, 90, 100, "steel")
-    _sporter_stock(body, 100, stock_mat, grip_mat=stock_mat, length=stock_len)
-    _military_bolt(m, -70, 110, 92, handle_len=44, knob_d=17, d=19, cock=(20, 16))
-    rl = m["gun"].bone("brass", pivot=(0, 6, -30))
-    rl.cyl((0, 6, -20), 12, mag_rounds_len * 0.7, "brass")
-    mag = m["gun"].bone("magazine", pivot=(0, -52, -40))
-    straight_mag(mag, -52, -78, -4, mag_len, width=24, mat="polymer", round_d=12, round_len=mag_rounds_len)
-    sc = body.bone("scope", pivot=(0, 50, -10))
-    scope(sc, -10, 52, length=320, tube_d=30, obj_d=48, eye_d=42, mount_y=17)
-    for nm, z, d, side in (("cap_front", -10 - 320 * 0.485, 48 * 0.95, -1), ("cap_rear", -10 + 320 * 0.475, 42 * 0.95, 1)):
-        cap = sc.bone(nm, pivot=(-d / 2 - 2, 52, z))
-        cap.cyl((0, 52, z + side * 2), d, 4, "polymer", sides=12)
-        cap.box(-d / 2 - 4, -d / 2, 46, 58, z - 3, z + 3, "polymer")
-    return m
+    receiver(body, -115, 95, 32, st, port=(-80, -10), top_port=top_port, tang=(132, wrist[0] + 2, -4))
+    stepped_barrel(body, -115, muzzle, breech_d, barrel_d, st, reinforce=36, cone=70, taper=1.2)
+    zb = butt - butt_gap - 4 - pad_th - (1.6 if spacer else 0)
+    top, bot = mil_stock(body, stock_mat, nose=nose, butt=(zb, heel, toe), action=(-115, 100), fore=fore, belly=belly,
+                         wrist=wrist, grip=True, comb=comb, hw=hw)
+    butt_plate(body, zb + butt_gap, toe, heel, hw[3], "polymer", th=4, pad="rubber", pad_th=pad_th, spacer=spacer)
+    if checker:                                                          # grip and fore-end panels
+        for sx in (-1, 1):
+            body.box(sx * hw[2] - 0.3, sx * hw[2] + 0.3, wrist[1] - 10, wrist[1] + 26, 158, 196, checker)
+            body.box(sx * hw[0] - 0.3, sx * hw[0] + 0.3, fore[1] + 8, fore[0] - 8, nose + 70, -180, checker)
+    sling_swivel(body, 0, line_y(bot, nose + 50), nose + 50, along="x", w=16, drop=9, mat="steel")
+    sling_swivel(body, 0, line_y(bot, zb - 70), zb - 70, along="x", w=16, drop=9, mat="steel")
+    trigger_group(m, body, trig_z, y_top=belly, guard_depth=24, guard_len=60, guard_mat=guard_mat or st)
+    kw = dict(d=19, handle_len=38, droop=32, knob_d=18)
+    kw.update(bolt_kw or {})
+    bolt(m, -70, 110, handle_z, parent=bolt_parent, **kw)
+    sh = m[bolt_parent].bone("shroud", pivot=(0, 0, 0))                  # slides with the bolt, does not turn
+    sh.cyl((0, 0, 118), 22, 16, st)
+    sh.cyl((0, 0, 131), 22, 10, st, d2=13, steps=2)
+    sh.cyl((0, 0, 136.3), 6, 0.6, "sight_orange", sides=8)               # cocking indicator
+    rides(m, "shroud")
+    control(body, "safety", (14, 6, 108), [(12, 16, 3, 9, 100, 112, "steel"), (14, 18, 7, 12, 98, 104, "steel")],
+            turn=(-35, 0, 0))
+    br = m["gun"].bone("brass", pivot=(0, 6, -30))
+    br.cyl((0, 6, -20), 12, brass_len, "brass")
+    br.cyl((0, 6, -20 + brass_len / 2 - 1), 13, 1.6, "brass")
+    sc = body.bone("scope", pivot=(0, scope_y - 2, -10))
+    skw = dict(length=320, tube_d=30, obj_d=48, eye_d=42, mount_y=17)
+    skw.update(scope_kw or {})
+    scope(sc, -10, scope_y, **skw)
+    return m, top, bot
 
 
 def tikka_t3():
-    m = _scoped_bolt_gun("tikka_t3", "polymer_grey", 560, 17, 84, 40, eye=150)
+    # Tikka T3 Lite: 1080 mm long, 570 mm barrel, grey synthetic stock, flush single-stack magazine
+    m, top, bot = _bolt_rifle("tikka_t3", "polymer_grey", muzzle=-675, butt=404, barrel_d=16, nose=-452, top_port=False,
+                              guard_mat="polymer", bolt_kw=dict(handle_len=36, droop=30, knob_d=17, knob_mat="polymer"))
+    body = m["body"]
+    body.box(-16.3, 16.3, -30, -27, -440, -130, "polymer")              # fore-end groove
+    mag = m["gun"].bone("magazine", pivot=(0, -52, -40))
+    straight_mag(mag, -50, -78, -4, 24, width=22, mat="polymer", round_d=12, round_len=84)
+    control(body, "mag_release", (0, -54, -82), [(-4, 4, -60, -53, -90, -80, "polymer")], press=(0, 0, 3))
     add_arms(m, right_hand=(10, -86, 140), left_hand=(-14, -48, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -675), eject=(17, 8, -20), sight=(0, 52, 150))
+    add_sockets(m, muzzle=(0, 0, -676), eject=(17, 8, -20), sight=(0, 52, 150))
+
     m.meta["integral_optic"] = {"zoom": 7.0, "reticle": "mildot", "eye": [0, 52, 150]}
     travel, hrot = (0, 0, 98), (0, 0, 70)
-
-    def inspect():
-        # flip both scope caps open, glass the distance, snap them closed again
-        a = Anim(m, "inspect", 4.4)
-        a.mv("gun", 0.0, 0.45, pos=(-30, 30, 40), rot=(-8, 26, 20))
-        a.mv("arm_left", 0.2, 0.5, pos=(-10, 110, -40), rot=(-50, 10, 20))
-        for nm, t in (("cap_front", 0.6), ("cap_rear", 1.1)):
-            a.key(nm, 0.0, rot=(0, 0, 0))
-            a.key(nm, t, rot=(0, 0, 0))
-            a.key(nm, t + 0.16, rot=(0, -100, 0) if nm == "cap_front" else (0, 100, 0), e="outback")
-            a.sound(t + 0.02, "click_small")
-            a.key(nm, 3.0 if nm == "cap_front" else 3.3, rot=(0, -100, 0) if nm == "cap_front" else (0, 100, 0))
-            a.key(nm, (3.0 if nm == "cap_front" else 3.3) + 0.12, rot=(0, 0, 0), e="inquad")
-            a.sound((3.0 if nm == "cap_front" else 3.3) + 0.12, "click_small")
-        a.mv("arm_left", 0.75, 1.0, pos=(-4, 100, 160), rot=(-50, 10, 20))
-        a.mv("arm_left", 1.3, 1.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("gun", 1.4, 1.9, pos=(-6, -10, -20), rot=(-2, 0, 0))                 # glass downrange
-        a.wave("gun", "rot", (0.3, 0.6, 0), 1.4)
-        a.mv("gun", 2.5, 2.9, pos=(-30, 30, 40), rot=(-8, 26, 20))
-        a.mv("arm_left", 2.6, 2.9, pos=(-10, 110, -40), rot=(-50, 10, 20))
-        a.mv("arm_left", 3.15, 3.3, pos=(-4, 100, 160), rot=(-50, 10, 20))
-        a.mv("arm_left", 3.5, 3.8, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.5, 4.35)
-        return a
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(7.5, 0.6, 1.5), push=24, recover=0.42, length=0.52),
@@ -250,52 +252,34 @@ def tikka_t3():
              bolt_cycle(m, "cycle", travel=travel, handle_rot=hrot, length=0.78),
              bolt_cycle(m, "cycle_aim", travel=travel, handle_rot=hrot, length=0.78, aim=True),
              rifle_reload(m, "reload", 0.0, empty=False, style="ar", mag_out=40, tilt=(4, -6, -20)),
-             inspect(), dry_fire(m)]
+             Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["brass"])
     return GunAsset(m, anims, SCOPED_FP)
 
 
 def savage10():
-    m = _scoped_bolt_gun("savage10", "polymer", 406, 22, 57, 90, eye=150, stock_len=272)
+    # Savage Model 10 FCP-SR: 940 mm long, short heavy threaded barrel, AccuTrigger, ten-round box, top rail
+    m, top, bot = _bolt_rifle("savage10", "polymer", muzzle=-521, butt=382, barrel_d=21, breech_d=27, nose=-430,
+                              top_port=False, fore=(-4, -36, -42), hw=(17, 18, 15, 17),
+                              bolt_kw=dict(handle_len=38, droop=28, knob="tactical", knob_d=14, knob_mat="polymer"))
     body = m["body"]
-    body.cyl((0, 0, -527), 18, 10, "steel")                                      # threads
+    body.cyl((0, 0, -527), 17, 12, "steel")                             # muzzle threads
     cap = body.bone("thread_cap", pivot=(0, 0, -532))
-    cap.cyl((0, 0, -545), 24, 26, "steel_dark", sides=12)
-    # AccuTrigger blade in the middle of the trigger
-    blade = m["trigger"].bone("accu_blade", pivot=(0, -54, 30))
+    cap.cyl((0, 0, -545), 24, 26, "steel_dark")
+    for k in range(6):
+        cap.box(-12.3, 12.3, -1, 1, -556, -536, "steel", rot=(0, 0, k * 30), pivot=(0, 0, -545))
+    blade = m["trigger"].bone("accu_blade", pivot=(0, -54, 30))         # AccuTrigger safety blade
     blade.box(-1, 1, -70, -56, 27, 29, "sight_orange")
     body.rail(-120, 90, 16, mat="alloy")
+    body.cyl((0, 0, -118), 34, 8, "steel")                              # barrel nut
+    mag = m["gun"].bone("magazine", pivot=(0, -52, -40))
+    straight_mag(mag, -50, -80, -6, 78, width=24, mat="steel_dark", round_d=12, round_len=57)
+    control(body, "mag_release", (0, -54, -2), [(-4, 4, -68, -53, -5, -1, "steel_dark")], turn=(14, 0, 0))
     add_arms(m, right_hand=(10, -86, 140), left_hand=(-14, -48, -300), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
     add_sockets(m, muzzle=(0, 0, -558), eject=(17, 8, -20), sight=(0, 52, 150))
+
     m.meta["integral_optic"] = {"zoom": 8.0, "reticle": "mildot", "eye": [0, 52, 150]}
     travel, hrot = (0, 0, 80), (0, 0, 70)
-
-    def inspect():
-        # spin the thread protector off a couple of turns and back on, then thumb the AccuTrigger blade
-        a = Anim(m, "inspect", 4.4)
-        a.mv("gun", 0.0, 0.5, pos=(-90, 10, -60), rot=(6, 62, 14), e="inoutsine")
-        a.mv("arm_left", 0.2, 0.55, pos=(10, 34, -230), rot=(-40, 10, 20))
-        a.key("thread_cap", 0.0, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("thread_cap", 0.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.key("thread_cap", 1.2, pos=(0, 0, -6), rot=(0, 0, -540), e="inoutsine")
-        a.sound(0.7, "click_small")
-        a.key("thread_cap", 1.5, pos=(0, 0, -6), rot=(0, 0, -540))
-        a.key("thread_cap", 2.1, pos=(0, 0, 0), rot=(0, 0, 0), e="inoutsine")
-        a.sound(2.1, "click_small")
-        a.mv("arm_left", 2.2, 2.6, pos=(0, 0, 0), rot=(0, 0, 0))
-        a.mv("gun", 2.1, 2.6, pos=(-50, 30, 30), rot=(8, -44, -20))
-        a.mv("arm_right", 2.6, 2.8, pos=(0, 6, -16), rot=(-8, 0, 0))
-        a.key("trigger", 0.0, rot=(0, 0, 0))
-        a.key("trigger", 2.8, rot=(0, 0, 0))
-        a.key("accu_blade", 0.0, rot=(0, 0, 0))
-        a.key("accu_blade", 2.8, rot=(0, 0, 0))
-        a.key("accu_blade", 2.88, rot=(-14, 0, 0), e="outquad")
-        a.sound(2.88, "click_small")
-        a.key("accu_blade", 3.2, rot=(-14, 0, 0))
-        a.key("accu_blade", 3.26, rot=(0, 0, 0))
-        a.mv("arm_right", 3.25, 3.5, pos=(0, 0, 0), rot=(0, 0, 0))
-        _settle(a, 3.4, 4.35)
-        return a
 
     anims = [idle(m), draw(m, 0.85, sound="draw_rifle"),
              fire_basic(m, "fire", kick=(5.5, 0.6, 1.2), push=18, recover=0.36, length=0.46),
@@ -303,7 +287,7 @@ def savage10():
              bolt_cycle(m, "cycle", travel=travel, handle_rot=hrot, length=0.74),
              bolt_cycle(m, "cycle_aim", travel=travel, handle_rot=hrot, length=0.74, aim=True),
              rifle_reload(m, "reload", 0.0, empty=False, style="ar", mag_out=80, tilt=(4, -6, -20)),
-             inspect(), dry_fire(m)]
+             Anim(m, "inspect", 1.0), dry_fire(m)]
     apply_hidden(anims, ["brass"])
     return GunAsset(m, anims, SCOPED_FP)
 
