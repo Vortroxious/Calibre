@@ -295,7 +295,8 @@ class Bone:
         a_top = math.degrees(math.atan2(top0 - top1, L))      # positive x-rotation drops the +z end
         a_bot = math.degrees(math.atan2(bot0 - bot1, L))
         h_min = min(top0 - bot0, top1 - bot1)
-        tt = tb = max(2.0, h_min * 0.5 + 0.5)
+        # thin edge slabs: a thick slab's square end pokes past the vertical end of a steep taper
+        tt = tb = min(7.0, max(2.0, h_min * 0.5 + 0.5))
         lt = L / math.cos(math.radians(a_top))
         lb = L / math.cos(math.radians(a_bot))
         cubes = []

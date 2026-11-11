@@ -2,12 +2,12 @@
  "muzzle": [
   0,
   0,
-  -208
+  -200
  ],
  "sight": [
   0,
-  24,
-  38
+  29,
+  44
  ],
  "texel_density": 1.0,
  "hip": {
@@ -30,6 +30,7 @@
   "root",
   "gun",
   "body",
+  "mag_release",
   "trigger",
   "selector",
   "stock",
@@ -1715,7 +1716,7 @@
   "muzzle": [
    0.0,
    0.0,
-   -208.0
+   -200.0
   ]
  }
 }

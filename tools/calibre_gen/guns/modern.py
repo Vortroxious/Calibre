@@ -5,6 +5,11 @@ from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire
                       apply_hidden)
 from ..templates import rifle_reload, pistol_reload, pump_cycle, tube_reload
 from ..parts import pistol_grip, trigger_group, curved_mag, straight_mag, barrel, flash_hider_a2
+from ..common import moving
+from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
+from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
+                       peep, rod_stock, selector, paddle, button, stock_solid)
+from ..pistolkit import control
 from .shotguns import _shells
 
 
@@ -69,37 +74,57 @@ def _famas_detail(m, body, p="polymer"):
 # Kriss Vector .45 (Gen II SMG)
 # =================================================================================================
 def vector():
+    # Kriss Vector Gen II SMG: 617 mm with the stock open (406 folded), 140 mm barrel set low under the rail
     m = new_gun("vector")
     body = m["body"]
-    p = "polymer"
-    body.box(-17, 17, -26, 20, -250, 70, p)                                   # upper receiver
-    body.box(-16, 16, -62, -26, -150, 70, p)                                  # tall lower (the "Super V" block)
-    body.taper(-16, 16, -250, -150, -26, -26, -34, -62, p)                    # sloped front of the lower
-    body.box(0, 17.3, -6, 10, -40, 0, "rubber")                               # ejection port
-    body.box(-17.5, 17.5, -44, -36, -130, 30, "polymer_grey")                 # side panels
-    body.rail(-240, 66, 20, mat="alloy", side="top")
-    body.rail(-240, -160, -26, mat="alloy", side="bottom")
-    barrel(body, -250, -330, d=18)
-    body.cyl((0, 0, -340), 22, 24, "steel_dark")                             # thread protector
-    _flip_sights(body, -232, 50, 24)
-    pistol_grip(body, 36, top_y=-60, length=84, width=28, depth=36, angle=-12, mat=p)
-    trigger_group(m, body, -4, y_top=-62, guard_depth=26, guard_len=56, guard_mat=p)
-    sel = body.bone("selector", pivot=(-17, -46, 44))
-    sel.box(-20, -17, -50, -42, 38, 52, "steel")
-    ch = body.bone("charging_handle", pivot=(-18, 8, -150))
-    ch.box(-30, -17, 2, 12, -160, -140, "polymer_grey")
+    P, st = "polymer", "steel_dark"
+    body.chamfer_box(-17, 17, 18, 58, -154, 206, P, ch=4, edges="top")              # upper, full length
+    body.rail(-150, 202, 58, mat="alloy", side="top")
+    body.profile(-17, 17, [(-154, 18), (20, 18)], [(-154, -30), (-60, -52), (20, -86)], P)   # the Super V housing
+    body.box(-17, 17, -92, 18, 20, 62, P)                                          # magazine well
+    body.box(-17.6, 17.6, -92, -86, 18, 64, P)
+    body.box(-16, 16, -42, 18, 62, 152, P)                                         # trigger housing
+    body.chamfer_box(-17, 17, -22, 18, 150, 206, P, ch=5, edges="bottom")           # rear
+    body.box(-17.4, 17.4, 16, 19, -150, 202, "rubber")                             # upper / lower seam
+    for sx in (-1, 1):                                                             # side panels on the housing
+        body.box(sx * 17 - 0.4, sx * 17 + 0.4, -22, 6, -130, -20, "polymer_grey")
+    body.rail(-146, -80, -30, mat="alloy", side="bottom")
+    barrel(body, -154, -196, d=17, mat="steel")
+    body.cyl((0, 0, -202), 21, 14, st)                                             # thread protector
+    body.cyl((0, 0, -209.3), 11, 0.6, "rubber", sides=8)
+    ejection_port(body, 17, 22, 38, 18, 60, lip_mat=P)
+    _flip_sights(body, -136, 188, 61)
+    pistol_grip(body, 124, top_y=-40, length=88, width=28, depth=36, angle=-14, mat=P)
+    trigger_group(m, body, 86, y_top=-42, guard_depth=26, guard_len=56, guard_mat=P)
+    selector(body, (-16, -24, 126), mat="steel", length=16, side=-1, turn=(-40, 0, 0))
+    control(body, "safety", (-16, -8, 100), [(-18.6, -16, -11, -5, 86, 104, "steel")], turn=(-30, 0, 0))
+    control(body, "bolt_catch", (-17, 2, 40), [(-19.4, -17, -6, 8, 34, 46, st)], press=(0, 3, 0))
+    button(body, "mag_release", (-17, -60, 56), d=9, mat=st)
+    pins(body, 17, [(4, -120), (-30, 70), (4, 190)], d=5, mat="steel")
+    ch = body.bone("charging_handle", pivot=(-18, 2, -100))
+    ch.box(-22, -17, -2, 6, -112, -88, st)
+    ch.box(-30, -22, -3, 7, -96, -88, st)
+    slot(body, -17, 0, 4, -112, -40)
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 16.8, -4, 8, -38, -2, "steel_light")
-    stock = m["gun"].bone("stock", pivot=(0, 0, 70))
-    stock.box(-15, 15, -10, 14, 70, 120, p)
-    stock.cyl((0, 2, 200), 20, 170, "alloy")
-    stock.taper(-18, 18, 260, 340, 16, 16, -40, -66, p)
-    stock.box(-19, 19, -70, 18, 336, 348, "rubber")
-    mag = m["gun"].bone("magazine", pivot=(0, -62, -110))
-    straight_mag(mag, -60, -132, -92, 150, width=24, mat="polymer", base_mat="polymer_grey", round_d=11, round_len=30)
-    add_arms(m, right_hand=(8, -100, 52), left_hand=(-10, -40, -200), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -352), optic=(0, 22, -60), under=(0, -28, -200), side=(-17, 6, -210),
-                eject=(17, 2, -20), sight=(0, 44, 50))
+    bolt.box(2, 16.6, 23, 37, 20, 58, "steel_light")
+    # side-folding stock, open
+    stock = m["gun"].bone("stock", pivot=(17, 38, 206))
+    stock.box(-17, 17, 18, 58, 206, 222, P)
+    stock.cyl((17, 38, 214), 8, 36, "steel", axis="y", sides=8)
+    stock.box(-8, 8, 36, 52, 222, 400, P)
+    stock.path([(222, 22), (300, -6), (400, -34)], 14, 10, P)
+    stock.box(-8, 8, -8, 38, 296, 308, P)
+    stock.box(-16, 16, -46, 56, 398, 408, P)
+    stock.box(-17, 17, -50, 58, 408, 418, "rubber")
+    mag = m["gun"].bone("magazine", pivot=(0, -92, 41))
+    straight_mag(mag, -40, 24, 58, 196, width=27, mat=P, base_mat="polymer_grey", round_d=11.6, round_len=32,
+                 witness=False)
+    for i in range(6):                                                             # numbered witness holes
+        mag.box(-2, 2, -110 - i * 20, -106 - i * 20, 58, 58.5, "rubber")
+    add_arms(m, right_hand=(8, -86, 136), left_hand=(-10, -52, -90), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -210), optic=(0, 61, 30), under=(0, -33, -110), side=(-17, 36, -130),
+                eject=(17, 30, 40), sight=(0, 83, 188))
+
     cyc = dict(bone="bolt", travel=(0, 0, 28), t_back=0.01, t_fwd=0.032)
     anims = _rifle_anims(m, 0.0, (1.8, 0.3, 0.8), 7, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 60),
                          selector=(-40, 0, 0), mag_sound="smg", rec=0.1, length=0.18)
@@ -110,38 +135,62 @@ def vector():
 # H&K MP7A1
 # =================================================================================================
 def mp7():
+    # H&K MP7A1: 638 mm with the stock out (415 in), 180 mm barrel, magazine in the grip
     m = new_gun("mp7")
     body = m["body"]
-    p = "polymer"
-    body.box(-15, 15, -22, 18, -200, 60, p)                                   # receiver
-    body.box(-12, 12, 18, 24, -190, 56, p)
-    body.rail(-186, 54, 24, mat="alloy", side="top")
-    body.box(0, 15.3, -6, 8, -60, -20, "rubber")                              # ejection port
-    barrel(body, -200, -300, d=15)
-    body.cyl((0, 0, -306), 18, 14, "steel_dark")
-    _flip_sights(body, -176, 40, 28)
-    body.box(-14, 14, -40, -22, -200, -120, p)                                 # folding foregrip housing
-    fg = body.bone("foregrip", pivot=(0, -40, -150))
-    fg.box(-10, 10, -110, -40, -168, -138, p, rot=(-8, 0, 0), pivot=(0, -40, -150))
-    # mag goes into the pistol grip
-    gp = (0, -22, -10)
-    body.box(-15, 15, -130, -22, -36, 10, p, rot=(-10, 0, 0), pivot=gp)
-    trigger_group(m, body, -50, y_top=-24, guard_depth=24, guard_len=48, guard_mat=p)
-    sel = body.bone("selector", pivot=(-15, -16, 10))
-    sel.box(-18, -15, -20, -12, 4, 18, "steel")
-    ch = body.bone("charging_handle", pivot=(0, 18, 58))
-    ch.box(-14, 14, 14, 24, 56, 68, "polymer_grey")
+    P, st = "polymer", "steel_dark"
+    body.chamfer_box(-17, 17, -24, 24, -230, 150, P, ch=5, edges="top")              # receiver
+    body.box(-13, 13, 24, 28, -224, 146, P)
+    body.rail(-220, 142, 28, mat="alloy", side="top")
+    body.chamfer_box(-16, 16, -46, -24, -230, -72, P, ch=5, edges="bottom")          # fore-end
+    for sx in (-1, 1):
+        body.rail(-214, -150, 0, x=sx * 17, mat="alloy", side="right" if sx > 0 else "left", width=18)
+    body.box(-17.4, 17.4, -26, -23, -226, 146, "rubber")
+    barrel(body, -230, -244, d=14, mat="steel")
+    flash_hider_a2(body, -238, d=17, length=28)
+    ejection_port(body, 17, -4, 10, -64, -22, lip_mat=P)
+    _flip_sights(body, -206, 128, 31)
+    # grip with the magazine well, guard, ambidextrous controls
+    gp = (0, -24, 12)
+    r = dict(rot=(-10, 0, 0), pivot=gp)
+    body.box(-16, 16, -128, -24, -10, 36, P, **r)
+    body.box(-14.5, 14.5, -128, -24, -12.5, -10, P, **r)
+    body.box(-14.5, 14.5, -128, -24, 36, 38.5, P, **r)
+    for i in range(5):
+        body.box(-16.5, 16.5, -118 + i * 17, -110 + i * 17, -6, 32, P, **r)
+    body.box(-17, 17, -132, -126, -12, 38, P, **r)
+    trigger_group(m, body, -40, y_top=-26, guard_depth=26, guard_len=52, guard_mat=P)
+    selector(body, (-17, -12, 22), mat=P, length=16, side=-1, turn=(-50, 0, 0))
+    body.box(17, 20, -15, -9, 8, 24, P)
+    control(body, "bolt_catch", (-17, -14, -30), [(-19.4, -17, -20, -10, -36, -24, st)], press=(0, 3, 0))
+    mr = body.bone("mag_release", pivot=(0, -50, -12))
+    mr.box(5, 9, -54, -46, -18, -8, st)
+    mr.box(-9, -5, -54, -46, -18, -8, st)
+    moving(m, "mag_release", pos=(0, -2.4, 0))
+    pins(body, 17, [(-16, -80), (-16, 130)], d=5, mat="steel")
+    # folding foregrip, down
+    fg = body.bone("foregrip", pivot=(0, -46, -150))
+    fg.box(-11, 11, -124, -46, -164, -138, P, rot=(6, 0, 0), pivot=(0, -46, -150))
+    for i in range(4):
+        fg.box(-11.5, 11.5, -114 + i * 16, -108 + i * 16, -162, -140, P, rot=(6, 0, 0), pivot=(0, -46, -150))
+    fg.cyl((0, -46, -150), 8, 34, "steel", axis="x", sides=8)
+    ch = body.bone("charging_handle", pivot=(0, 18, 150))
+    ch.box(-6, 6, 14, 22, 100, 152, st)
+    ch.box(-18, 18, 13, 23, 150, 160, st)
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 14.8, -4, 6, -58, -22, "steel_light")
-    stock = m["gun"].bone("stock", pivot=(0, 0, 60))
-    for sx in (-11, 11):
-        stock.box(sx - 3, sx + 3, -10, 4, 60, 230, "steel_dark")
-    stock.box(-17, 17, -60, 14, 226, 244, p)
-    mag = m["gun"].bone("magazine", pivot=(0, -24, -12), rot=(-10, 0, 0))
-    straight_mag(mag, -26, -28, 2, 150, width=20, mat="polymer", base_mat="polymer_grey", round_d=7, round_len=26)
-    add_arms(m, right_hand=(8, -82, 0), left_hand=(-8, -84, -150), right_rot=(34, 14, 6), left_rot=(10, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -314), optic=(0, 26, -60), side=(-15, 4, -170), eject=(15, 0, -40),
-                sight=(0, 48, 40))
+    bolt.box(2, 16.6, -3, 9, -62, -24, "steel_light")
+    # retractable stock, out
+    stock = m["gun"].bone("stock", pivot=(0, 0, 150))
+    rod_stock(stock, 20, 354, 12, -4, "steel_dark", -64, 22, butt_hw=17, rod=7)
+    side_swivel(body, -17, 8, 138, h=12)
+    side_swivel(body, -17, -34, -220, h=12)
+    mag = m["gun"].bone("magazine", pivot=gp, rot=(-10, 0, 0))
+    straight_mag(mag, -28, -4, 30, 150, width=21, mat=P, base_mat="polymer_grey", round_d=7.2, round_len=30,
+                 witness=False)
+    add_arms(m, right_hand=(8, -84, 26), left_hand=(-8, -90, -150), right_rot=(34, 14, 6), left_rot=(10, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -268), optic=(0, 31, -40), side=(-20, 0, -180), eject=(17, 3, -42),
+                sight=(0, 53, 128))
+
     cyc = dict(bone="bolt", travel=(0, 0, 24), t_back=0.01, t_fwd=0.03)
     anims = _rifle_anims(m, -10.0, (1.6, 0.3, 0.8), 6, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 40),
                          selector=(0, 0, 0), mag_sound="pistol", rec=0.1, length=0.16, tilt=(10, -8, -24),

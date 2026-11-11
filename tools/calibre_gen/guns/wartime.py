@@ -5,6 +5,11 @@ from ..core import Anim
 from ..common import (GunAsset, new_gun, add_arms, add_sockets, idle, draw, fire_basic, dry_fire, apply_hidden)
 from ..templates import bolt_clip_load, belt_reload, OFF_LEFT
 from ..parts import pistol_grip, trigger_group, curved_mag, straight_mag, barrel, bipod, flash_hider_a2
+from ..common import moving
+from ..parts import pins, vents, ejection_port, side_swivel, sling_swivel
+from ..longkit import (slot, top_slot, ribs, ring_sight, eared_sight, drum_sight, flip_sight, aperture_sight,
+                       peep, rod_stock, selector, paddle, button, stock_solid)
+from ..pistolkit import control
 from .ww2 import _military_bolt, _clip, _round_load, _bolt_set, _butt, _band, RIFLE_FP
 from .lmgs import _belt, _belt_feed, LMG_FP
 from .modern import _rifle_anims, _inspect, _fp
@@ -210,33 +215,61 @@ def enfield():
 # Thompson M1A1
 # =================================================================================================
 def thompson():
+    # Thompson M1A1: 811 mm long, 267 mm barrel, side actuator, horizontal fore grip
     m = new_gun("thompson")
     body = m["body"]
     st, wd = "steel_parked", "wood"
-    body.box(-17, 17, -34, 22, -120, 110, st)                            # milled receiver
-    body.box(0, 17.3, -6, 12, -60, -10, "rubber")
-    body.box(-10, 10, 22, 34, 70, 100, st)                               # rear sight ears
-    body.box(-2, 2, 22, 30, -110, -100, st)
-    barrel(body, -120, -380, d=20)
-    body.box(-20, 20, -44, -12, -320, -150, wd)                          # horizontal handguard
-    body.box(-17, 17, -46, -34, -110, -50, st)                           # mag well
-    pistol_grip(body, 30, top_y=-34, length=88, width=28, depth=38, angle=-18, mat=wd)
-    trigger_group(m, body, -10, y_top=-34, guard_depth=28, guard_len=60, guard_mat=st)
-    sel = body.bone("selector", pivot=(-17, -20, 30))
-    sel.box(-21, -17, -24, -16, 24, 38, "steel")
-    ch = body.bone("charging_handle", pivot=(17, 4, -40))                  # M1A1: actuator knob on the right
-    ch.box(17, 28, 0, 8, -46, -34, "steel")
-    ch.cyl((30, 4, -40), 12, 6, "steel", axis="x")
+    body.chamfer_box(-19, 19, -18, 22, -190, 110, st, ch=5, edges="top")            # milled receiver
+    body.box(-17, 17, -40, -18, -112, 110, st)                                     # frame
+    body.box(-19.4, 19.4, -20, -17, -186, 108, "steel_dark")                       # receiver / frame seam
+    ejection_port(body, 19, -6, 8, -72, -22, lip_mat=st)
+    slot(body, 19, 12, 16, -86, 20)                                                # actuator slot
+    body.cyl((0, 0, -196), 30, 14, st)                                             # barrel collar
+    body.cyl((0, 0, -318), 22, 232, st, d2=None)
+    body.cyl((0, 0, -437), 19, 8, st)
+    body.cyl((0, 0, -441.3), 11.5, 0.6, "rubber", sides=8)
+    body.box(-6, 6, 9, 14, -436, -418, st)                                         # front sight base and blade
+    body.box(-1.4, 1.4, 14, 30, -432, -424, st)
+    # rear sight: fixed peep between triangular ears
+    body.box(-12, 12, 22, 25, 70, 108, st)
+    for sx in (-1, 1):
+        body.taper(sx * 12 - (2.4 if sx > 0 else 0), sx * 12 + (2.4 if sx < 0 else 0), 72, 106, 28, 40, 25, 25, st)
+    peep(body, 99.5, 25, 36, st, w=8, hole=4, hole_y=30)
+    # grip mount bar and the horizontal fore grip
+    body.box(-6, 6, -24, -12, -372, -190, st)
+    body.chamfer_box(-20, 20, -48, -22, -366, -214, wd, ch=7, edges="bottom")
+    for z in range(-356, -224, 22):
+        body.box(-20.4, 20.4, -42, -30, z, z + 9, "wood_light")
+    body.box(-21, 21, -48, -22, -372, -366, st)
+    sling_swivel(body, 0, -48, -300, along="z", drop=9)
+    # frame: magazine well, grip, guard, the rocker selector and safety, magazine catch
+    body.box(-17.6, 17.6, -44, -38, -106, -62, st)
+    pistol_grip(body, 42, top_y=-38, length=86, width=27, depth=36, angle=-18, mat=wd)
+    trigger_group(m, body, -4, y_top=-40, guard_depth=27, guard_len=58, guard_mat=st)
+    selector(body, (-17, -22, 26), mat="steel", length=14, side=-1, marks=False, turn=(-40, 0, 0))
+    control(body, "safety", (-17, -22, 52), [(-20.4, -17, -25, -19, 44, 60, "steel"),
+                                             (-21.4, -20.4, -24, -20, 44, 50, "steel_dark")], turn=(40, 0, 0))
+    control(body, "mag_release", (-17, -30, -56), [(-19.6, -17, -36, -24, -62, -48, "steel"),
+                                                   (-20.4, -19.6, -30, -25, -60, -50, "steel_dark")],
+            turn=(0, 0, -14))
+    pins(body, 17, [(-30, 90), (-30, -96)], d=5, mat="steel_dark")
+    ch = body.bone("charging_handle", pivot=(19, 14, -60))                          # actuator knob (right)
+    ch.box(19, 27, 11, 17, -66, -54, "steel")
+    ch.cyl((30, 14, -60), 13, 7, "steel", axis="x")
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 17, -4, 10, -58, -12, "steel_light")
+    bolt.box(2, 18.6, -5, 7, -70, -24, "steel_light")
+    # butt stock
     stock = m["gun"].bone("stock", pivot=(0, 0, 110))
-    stock.taper(-17, 17, 110, 420, 12, -4, -36, -112, wd)
-    stock.box(-18, 18, -116, -2, 416, 428, st)
-    mag = m["gun"].bone("magazine", pivot=(0, -40, -80))
-    straight_mag(mag, -36, -102, -58, 220, width=24, mat="steel_dark", round_d=11, round_len=30)
-    _thompson_detail(m, body)
-    add_arms(m, right_hand=(8, -94, 50), left_hand=(-10, -40, -240), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -386), eject=(17, 4, -30), sight=(0, 32, 86))
+    stock.box(-11, 11, -2, 10, 104, 160, st)                                       # upper tang
+    stock.box(-11, 11, -42, -34, 104, 150, st)
+    stock_solid(stock, 17, [(110, 2), (170, -4), (364, -18)], [(110, -40), (176, -56), (364, -124)], wd, pad=None)
+    stock.box(-12, 12, -112, -30, 366, 368, "steel_dark")                          # butt-trap door
+    sling_swivel(stock, 0, -104, 320, along="z", drop=9)
+    mag = m["gun"].bone("magazine", pivot=(0, -40, -84))
+    straight_mag(mag, -34, -104, -64, 215, width=24, mat="steel_dark", round_d=12, round_len=32)
+    add_arms(m, right_hand=(8, -92, 54), left_hand=(-10, -50, -290), right_rot=(34, 14, 6), left_rot=(20, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -443), eject=(19, 2, -46), sight=(0, 30, 100))
+
     cyc = dict(bone="bolt", travel=(0, 0, 80), t_back=0.016, t_fwd=0.05)
     anims = _rifle_anims(m, 0.0, (2.4, 0.4, 1.0), 9, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 80),
                          selector=(-40, 0, 0), mag_sound="smg", rec=0.12, length=0.2)
@@ -247,36 +280,72 @@ def thompson():
 # MP 40
 # =================================================================================================
 def mp40():
+    # MP 40: 630 mm with the stock folded under (833 open), 251 mm barrel
     m = new_gun("mp40")
     body = m["body"]
-    st = "steel_dark"
-    body.cyl((0, 0, -20), 30, 260, st, sides=12)                         # tubular receiver
-    body.box(0, 15.3, -6, 8, -70, -30, "rubber")
-    barrel(body, -150, -290, d=16)
-    body.box(-6, 6, -16, -8, -300, -270, st)                             # barrel rest bar
-    body.box(-8, 8, 10, 24, -290, -280, st)                              # hooded front sight
-    body.box(-2, 2, 14, 22, 70, 80, st)
-    body.box(-15, 15, -56, -14, -150, -30, "polymer")                    # bakelite lower
-    body.box(-13, 13, -60, -14, -130, -90, st)                           # mag housing
-    pistol_grip(body, 30, top_y=-30, length=86, width=26, depth=34, angle=-10, mat="polymer")
-    trigger_group(m, body, -10, y_top=-30, guard_depth=24, guard_len=52, guard_mat=st)
-    ch = body.bone("charging_handle", pivot=(-15, 0, -40))
-    ch.box(-30, -15, -4, 6, -50, -30, "steel")
+    st, bk = "steel_dark", "polymer"
+    body.cyl((0, 0, -58), 38, 396, st)                                             # receiver tube -256 .. 140
+    body.cyl((0, 0, 143), 40, 8, st)                                               # end cap
+    body.cyl((0, 0, 148.3), 12, 2.4, "steel", sides=8)
+    slot(body, -19, -3, 4, -224, -60)                                              # cocking slot (left)
+    slot(body, -19, 4, 11, -74, -62)                                               # safety notch
+    for y in (9, -9):                                                              # tube flutes
+        slot(body, 19, y - 1.6, y + 1.6, -180, 110)
+        slot(body, -19, y - 1.6, y + 1.6, -40, 110)
+    ejection_port(body, 19, -4, 10, -238, -196)
+    body.cyl((0, 0, -264), 30, 16, st)                                             # barrel nut
+    for ang in range(0, 180, 45):
+        body.box(-15.4, 15.4, -1.4, 1.4, -270, -258, "rubber", rot=(0, 0, ang), pivot=(0, 0, -264))
+    body.cyl((0, 0, -370), 17, 196, st, d2=None)
+    body.cyl((0, 0, -476), 19, 16, st)                                             # muzzle nut
+    body.cyl((0, 0, -488), 15, 8, "steel")
+    body.cyl((0, 0, -492.3), 9.5, 0.6, "rubber", sides=8)
+    body.box(-5, 5, -22, -8, -470, -380, "polymer_grey")                           # resting bar
+    body.box(-5, 5, -30, -22, -470, -456, "polymer_grey")
+    # hooded front sight, flip rear
+    body.box(-8, 8, 8, 12, -486, -468, st)
+    for sx in (-1, 1):
+        body.box(sx * 9 - 1.2, sx * 9 + 1.2, 8, 34, -485, -469, st)
+    body.box(-9, 9, 32, 34.4, -485, -469, st)
+    body.box(-1.2, 1.2, 12, 28, -478, -476, "steel")
+    flip_sight(body, -105, 18, st, w=10, h=13)
+    # bakelite lower with the magazine housing, grip, guard
+    body.chamfer_box(-17, 17, -52, -17, -190, 86, bk, ch=5, edges="bottom")
+    for z in range(-182, -70, 16):
+        slot(body, 17, -46, -24, z, z + 6)
+        slot(body, -17, -46, -24, z, z + 6)
+    body.box(-14, 14, -64, -15, -236, -194, st)                                    # magazine housing
+    for z in (-230, -220, -210, -200):
+        slot(body, 14, -60, -24, z, z + 4)
+        slot(body, -14, -60, -24, z, z + 4)
+    button(body, "mag_release", (-14, -36, -190), d=9, mat="steel")
+    pistol_grip(body, 22, top_y=-50, length=84, width=27, depth=36, angle=-10, mat=bk)
+    trigger_group(m, body, -40, y_top=-52, guard_depth=25, guard_len=54, guard_mat=st)
+    pins(body, 17, [(-30, -60), (-30, 70)], d=5, mat="steel")
+    side_swivel(body, -19, 0, 126, h=14)
+    side_swivel(body, -7, -15, -440, h=10)
+    ch = body.bone("charging_handle", pivot=(-19, 1, -200))
+    ch.box(-30, -18.5, -3, 5, -206, -194, "steel")
+    ch.box(-36, -29, -6, 8, -208, -192, "steel")
     bolt = body.bone("bolt", pivot=(0, 0, 0))
-    bolt.box(2, 15, -4, 8, -68, -32, "steel_light")
-    stock = m["gun"].bone("stock", pivot=(0, 0, 110))                    # under-folding stock (folded)
-    for sx in (-10, 10):
-        stock.box(sx - 3, sx + 3, -70, -62, -120, 120, "steel")
-    stock.box(-16, 16, -80, -60, -132, -118, st)
-    mag = m["gun"].bone("magazine", pivot=(0, -60, -110))
-    straight_mag(mag, -58, -122, -98, 220, width=20, mat="steel_dark", round_d=9, round_len=28)
-    _mp40_detail(m, body)
-    add_arms(m, right_hand=(8, -88, 50), left_hand=(-10, -110, -110), right_rot=(34, 14, 6), left_rot=(10, -18, -4))
-    add_sockets(m, muzzle=(0, 0, -296), eject=(15, 2, -50), sight=(0, 24, 76))
+    bolt.box(2, 18.6, -3, 9, -236, -198, "steel_light")
+    # under-folding stock (folded): hinge behind the grip, arms along the frame, butt plate under the housing
+    stock = m["gun"].bone("stock", pivot=(0, -40, 96))
+    stock.box(-16, 16, -52, -24, 84, 110, st)
+    stock.cyl((0, -38, 100), 12, 36, "steel", axis="x", sides=8)
+    for sx in (-1, 1):
+        stock.box(sx * 13 - 3, sx * 13 + 3, -62, -55, -250, 96, "steel")
+    stock.box(-16, 16, -64, -54, -256, -244, st)
+    stock.box(-17, 17, -110, -56, -262, -254, st, rot=(-78, 0, 0), pivot=(0, -58, -256))   # butt plate folded flat
+    mag = m["gun"].bone("magazine", pivot=(0, -64, -215))
+    straight_mag(mag, -40, -233, -197, 240, width=24, mat="steel_dark", round_d=9.6, round_len=29)
+    add_arms(m, right_hand=(8, -98, 30), left_hand=(-10, -96, -216), right_rot=(34, 14, 6), left_rot=(10, -18, -4))
+    add_sockets(m, muzzle=(0, 0, -494), eject=(19, 3, -216), sight=(0, 28, -105))
+
     cyc = dict(bone="bolt", travel=(0, 0, 60), t_back=0.016, t_fwd=0.05)
     anims = _rifle_anims(m, 0.0, (2.0, 0.4, 1.0), 8, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 70),
                          mag_sound="smg", rec=0.12, length=0.2)
-    return GunAsset(m, anims, _fp(pos=(0.115, -0.115, -0.2), ads=0.2))
+    return GunAsset(m, anims, _fp(pos=(0.115, -0.115, -0.2), ads=0.32))
 
 
 # =================================================================================================
