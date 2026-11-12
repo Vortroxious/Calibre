@@ -1,0 +1,9 @@
+{
+ "model": {
+  "type": "minecraft:special",
+  "base": "calibre:item/m3grease",
+  "model": {
+   "type": "geckolib:geckolib"
+  }
+ }
+}

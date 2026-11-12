@@ -65,6 +65,26 @@
    "weight": 3
   },
   {
+   "item": "calibre:makarov",
+   "weight": 3
+  },
+  {
+   "item": "calibre:p38",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m3grease",
+   "weight": 3
+  },
+  {
+   "item": "calibre:pps43",
+   "weight": 3
+  },
+  {
+   "item": "calibre:doublebarrel",
+   "weight": 3
+  },
+  {
    "item": "calibre:win1894",
    "weight": 3
   },
@@ -278,6 +298,48 @@
   },
   {
    "item": "calibre:ammo_23mm",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_545x39",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_58x42",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_30carbine",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_9x18",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_763x25",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_45colt",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_9x39",
    "weight": 4,
    "min": 8,
    "max": 32

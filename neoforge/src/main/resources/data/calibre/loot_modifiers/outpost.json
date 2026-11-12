@@ -61,6 +61,26 @@
    "weight": 3
   },
   {
+   "item": "calibre:makarov",
+   "weight": 3
+  },
+  {
+   "item": "calibre:p38",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m3grease",
+   "weight": 3
+  },
+  {
+   "item": "calibre:pps43",
+   "weight": 3
+  },
+  {
+   "item": "calibre:doublebarrel",
+   "weight": 3
+  },
+  {
    "item": "calibre:m4a1",
    "weight": 3
   },
@@ -157,6 +177,54 @@
    "weight": 3
   },
   {
+   "item": "calibre:ak74m",
+   "weight": 3
+  },
+  {
+   "item": "calibre:aks74u",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ak12",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mcx",
+   "weight": 3
+  },
+  {
+   "item": "calibre:l85a2",
+   "weight": 3
+  },
+  {
+   "item": "calibre:qbz95",
+   "weight": 3
+  },
+  {
+   "item": "calibre:f2000",
+   "weight": 3
+  },
+  {
+   "item": "calibre:hk417",
+   "weight": 3
+  },
+  {
+   "item": "calibre:p226",
+   "weight": 3
+  },
+  {
+   "item": "calibre:mac10",
+   "weight": 3
+  },
+  {
+   "item": "calibre:ksg",
+   "weight": 3
+  },
+  {
+   "item": "calibre:rpk",
+   "weight": 3
+  },
+  {
    "item": "calibre:mosin",
    "weight": 3
   },
@@ -218,6 +286,50 @@
   },
   {
    "item": "calibre:sten",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m1carbine",
+   "weight": 3
+  },
+  {
+   "item": "calibre:svt40",
+   "weight": 3
+  },
+  {
+   "item": "calibre:g43",
+   "weight": 3
+  },
+  {
+   "item": "calibre:fg42",
+   "weight": 3
+  },
+  {
+   "item": "calibre:m3grease",
+   "weight": 3
+  },
+  {
+   "item": "calibre:pps43",
+   "weight": 3
+  },
+  {
+   "item": "calibre:luger",
+   "weight": 3
+  },
+  {
+   "item": "calibre:p38",
+   "weight": 3
+  },
+  {
+   "item": "calibre:c96",
+   "weight": 3
+  },
+  {
+   "item": "calibre:bren",
+   "weight": 3
+  },
+  {
+   "item": "calibre:dp28",
    "weight": 3
   },
   {
@@ -402,6 +514,48 @@
   },
   {
    "item": "calibre:ammo_23mm",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_545x39",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_58x42",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_30carbine",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_9x18",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_763x25",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_45colt",
+   "weight": 4,
+   "min": 8,
+   "max": 32
+  },
+  {
+   "item": "calibre:ammo_9x39",
    "weight": 4,
    "min": 8,
    "max": 32
