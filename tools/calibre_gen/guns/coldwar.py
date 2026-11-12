@@ -240,6 +240,7 @@ def sten():
     fm.key("selector", 0.26, pos=(-8, 0, 0), e="outquad")
     fm.key("selector", 0.55, pos=(-8, 0, 0))
     _side_mag(anims)
+    m.meta["mag_dir"] = "left"
     return GunAsset(m, anims, _fp(pos=(0.11, -0.115, -0.21), ads=0.24))
 
 

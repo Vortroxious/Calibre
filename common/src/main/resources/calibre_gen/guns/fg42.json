@@ -14,6 +14,7 @@
   44,
   128
  ],
+ "mag_dir": "left",
  "texel_density": 1.0,
  "hip": {
   "pos": [

@@ -1,6 +1,6 @@
 # Calibre: realistic firearms for Minecraft 1.21.11 (NeoForge and Fabric) + GeckoLib 5
 
-Calibre is a gun mod with 77 real-world firearms. Every gun has fully animated first-person handling built on GeckoLib 5.4.5:
+Calibre is a gun mod with 107 real-world firearms. Every gun has fully animated first-person handling built on GeckoLib 5.4.5:
 - a draw, fire and dry-fire animation
 - a tactical and an empty reload
 - fire-mode switching
@@ -46,8 +46,12 @@ Both versions have the same guns, animations, sounds, attachments, workbench, mo
 | WWII | Karabiner 98k and Lee-Enfield No.4 (stripper clips), M1 Garand (8-round en-bloc clip that **pings** out on the last shot), Thompson M1A1, MP40, StG 44, MG42 (belt-fed, 1200 rpm), M1918 BAR |
 | Sniper / precision | CheyTac M200 Intervention (.408), AI L96A1, Remington 700 (internal magazine, loaded round by round), KAC SR-25, SVU (bullpup Dragunov), DSR-1 (bullpup, .338 Lapua) |
 | Cold War | M60 (belt-fed), M16A1, IMI Galil ARM, H&K G3A3 (HK slap), Sten Mk II (**side-mounted magazine**), Colt Python (.357), Skorpion vz. 61 (.32 ACP), KS-23 (23 mm pump) |
+| Modern II | AK-74M, AKS-74U, AK-12 (2-round burst) in 5.45×39; SIG MCX (.300 Blackout, folding stock); L85A2, QBZ-95 (5.8×42) and FN F2000 (bullpups); H&K HK417 |
+| WWII II | M1 Carbine (.30 Carbine), SVT-40, Gewehr 43, FG 42 (**magazine from the left**), M3 Grease Gun, PPS-43, Luger P08 (**the toggle breaks up on every shot**), Walther P38 |
+| Machine guns | RPK (40-round magazine), RPD (belt drum), M240B, DP-28 (**47-round pan on top**), MG 34 (belt drum, two-stage trigger), Bren Mk II (**curved magazine on top, sights offset to the left**) |
+| Handguns and specials | SIG P226, Makarov PM (9×18), Mauser C96 (**loaded from a stripper clip**), Colt Single Action Army (.45 Colt, loaded through the gate), Ingram MAC-10, VSS Vintorez (9×39, **built-in suppressor** and PSO-1), Kel-Tec KSG (twin tubes), double-barrel shotgun (**break action**) |
 
-The 20 guns from Lever actions to More handguns each fire their **own recorded gunshot** from the Free Firearm Sound Library. The 32 guns in the last four rows use the closest of those recordings, re-pitched for their calibre and mastered for their class.
+The 20 guns from Lever actions to More handguns each fire their **own recorded gunshot** from the Free Firearm Sound Library. The other guns added since use the closest of those recordings, re-pitched for their calibre and mastered for their class.
 
 ### Models
 Every gun is modelled to its real overall and barrel length (the build fails a gun that is more than 6 % off), with rounded edges and barrels, iron sights you actually look through, cartridges you can see in magazines, clips and belts, and small parts that move: safeties, magazine releases, slide stops and bolt catches, bolt shrouds that slide without turning, dust covers. A typical gun has about 440 parts; the scoped sniper rifles have around 1,000.
@@ -61,7 +65,7 @@ Stats come from the real weapons:
 - available fire modes
 - weight, which affects aim time and sway
 
-Ammunition comes in 32 calibres.
+Ammunition comes in 39 calibres.
 
 ### Inspects (H)
 Every inspect is a close-up presentation (in the style of modern shooters such as MW3) of about 7–9 seconds,

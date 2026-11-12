@@ -1,11 +1,11 @@
 # Calibre
 
-**77 real firearms for Minecraft 1.21.11, on NeoForge and Fabric.** Every gun has its own model, real-world stats, its own recorded gunshot and fully animated first-person handling, from the draw to an empty reload to a CS2-style inspect.
+**107 real firearms for Minecraft 1.21.11, on NeoForge and Fabric.** Every gun has its own model, real-world stats, its own recorded gunshot and fully animated first-person handling, from the draw to an empty reload to a CS2-style inspect.
 
 ## Features
-- **77 guns:** pistols, revolvers, SMGs, assault rifles, bullpups, battle rifles and DMRs, bolt-action snipers, pump, semi-auto, full-auto and bolt shotguns, lever actions, WWII and Cold War rifles, four belt-fed machine guns and an RPG-7.
+- **107 guns:** pistols, revolvers, SMGs, assault rifles, bullpups, battle rifles and DMRs, bolt-action snipers, pump, semi-auto, full-auto, bolt and double-barrel shotguns, lever actions, WWII and Cold War rifles, ten machine guns and an RPG-7.
 - **Detailed models:** every gun is built to its real length and proportions, with rounded edges, iron sights you look through, visible cartridges and moving safeties, catches and bolts. Guns in other hands and in the inventory use a lighter version, so crowds stay fast.
-- **Real mechanics:** stripper clips for the Mosin, Kar98k, both Enfields, Arisaka and SKS; the M1 Garand's en-bloc ping; speedloaders; shell-by-shell loading; lever throws; slam fire on the Model 12; a single-action Ruger you thumb-cock and load through its gate.
+- **Real mechanics:** stripper clips for the Mosin, Kar98k, both Enfields, Arisaka and SKS; the M1 Garand's en-bloc ping; speedloaders; shell-by-shell loading; lever throws; slam fire on the Model 12; a single-action Ruger you thumb-cock and load through its gate. New in 1.3: the Luger's breaking toggle, stripper-clip loading for the Mauser C96, top-fed DP-28 and Bren, the FG 42's side magazine, a break-action double barrel and the integrally suppressed VSS.
 - **Close-up inspects (H):** the gun is brought up close and turned to show both sides, the magazine is pulled and held up to the eye, and pistols and revolvers show off the slide or the cylinder.
 - **Real sounds:** gunshots, reloads and handling are cut from real recordings.
 - **CS2-style camera motion** during reloads, inspects and shots. It can be turned down or off.
@@ -15,7 +15,7 @@
   - suppressors, compensator and flash hider
   - grips, bipod and laser
   - extended magazines
-- **Gun Workbench:** craft guns, ammo (32 calibres) and parts, and fit attachments.
+- **Gun Workbench:** craft guns, ammo (39 calibres) and parts, and fit attachments.
 - **Mercenaries:** armed hostile mobs spawn at night, fire in bursts, strafe and reload.
 - **Loot:** guns, ammo and attachments turn up in structure chests.
 - **HUD:** ammo counter, fire mode, a dynamic crosshair, and hit and headshot markers.

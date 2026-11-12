@@ -54,6 +54,14 @@ def build_gun(name, preview=False):
             a = asset.anims[i] = cs2.cs2_inspect(asset)
             for src, dst in m.follow:
                 templates.follow_pos([a], src, dst)
+            # magazines that come out to the side or the top: the inspect's magazine check goes the same way
+            md = m.meta.get("mag_dir")
+            if md == "left":
+                from calibre_gen.guns.coldwar import _side_mag
+                _side_mag([a])
+            elif md == "top":
+                from calibre_gen.guns.mg2 import _top_mag
+                _top_mag([a])
             motion.fluid_inspect(asset, a)
             motion.clearance(asset, a, dmin=0.07)   # close-ups: only keep parts out of the near plane
     core.pack_uv(m)

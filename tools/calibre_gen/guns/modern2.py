@@ -96,8 +96,12 @@ def qbz95():
     body.box(-19.4, 19.4, -12, -10, -196, 244, "rubber")                               # shell seam
     pins(body, 19, [(-28, -180), (-28, 120), (4, 220)], d=5, mat="steel")
     # carry handle with the rear sight in it; the dovetail on top takes an optic
-    for z in (-150, 112):
-        body.rbox(-8, 8, 24, 70, z, z + 16, p, r=3, axis="x")
+    for sx in (-1, 1):                                                                 # front posts, the
+        body.rbox(sx * 9 - 3, sx * 9 + 3, 24, 70, -150, -134, p, r=1.5, axis="x")      # front sight between
+    body.box(-6, 6, 24, 32, -150, -134, p)
+    body.box(-1.2, 1.2, 32, 59, -144, -140, "steel_dark")
+    for sx in (-1, 1):                                                                 # rear posts: open between
+        body.rbox(sx * 9 - 3, sx * 9 + 3, 24, 70, 112, 128, p, r=1.5, axis="x")
     body.rbox(-9, 9, 66, 78, -152, 130, p, r=4)
     body.rail(-120, 100, 78, mat="alloy", width=16)
     body.box(-8, 8, 24, 30, 96, 128, p)
@@ -110,7 +114,6 @@ def qbz95():
     body.rbox(-18, 18, -38, 22, -300, -200, p, r=8)
     vents(body, 18, -6, 6, -292, -208, n=3, fill=0.6)
     body.rbox(-9, 9, -10, 34, -334, -312, st, r=3, edges="top")
-    eared_sight(body, -323, 32, 31.6, st, w=14, depth=12, lean=4)                      # post top at 59
     barrel(body, -200, -441, d=17, mat=st)
     flash_hider_a2(body, -441, d=20, length=42)
     body.box(-3, 3, -18, -9, -400, -380, st)                                           # bayonet lug

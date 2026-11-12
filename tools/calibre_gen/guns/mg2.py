@@ -254,6 +254,7 @@ def dp28():
     anims = _rifle_anims(m, 0.0, (3.0, 0.6, 1.3), 12, "smg", cyc, ch="charging_handle", ch_travel=(0, 0, 100),
                          rec=0.13, length=0.22, draw_len=1.0, tilt=(6, -6, -18), tilt_pos=(-20, -10, 24))
     _top_mag(anims)
+    m.meta["mag_dir"] = "top"
     return GunAsset(m, anims, {"hip": LMG_FP["hip"], "ads": {"dist": 0.3}})
 
 
@@ -329,6 +330,7 @@ def bren():
                          selector=(-50, 0, 0), rec=0.14, length=0.24, draw_len=1.0, tilt=(6, -6, -18),
                          tilt_pos=(-20, -10, 24))
     _top_mag(anims)
+    m.meta["mag_dir"] = "top"
     return GunAsset(m, anims, {"hip": LMG_FP["hip"], "ads": {"dist": 0.3}})
 
 

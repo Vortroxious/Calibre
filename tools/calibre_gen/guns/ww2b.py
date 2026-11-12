@@ -203,6 +203,7 @@ def fg42():
                          selector=(-50, 0, 0), rec=0.16, length=0.24, tilt=(10, 10, 10), tilt_pos=(10, 16, 24),
                          draw_len=0.85)
     _side_mag(anims)
+    m.meta["mag_dir"] = "left"
     return GunAsset(m, anims, _fp(pos=(0.12, -0.13, -0.2), rot=(0, 3.5, 0), ads=0.16))
 
 
