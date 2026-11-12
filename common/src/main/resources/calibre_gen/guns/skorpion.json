@@ -1718,7 +1718,8 @@
   "moving": [
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 97
  },
  "sockets": {
   "muzzle": [

@@ -174,6 +174,11 @@ public final class ClientAutoTest {
     /** -Dcalibre.autotest.film=true: instead of the usual shots, film the inspect every 3 ticks (fluidity review) */
     private static final boolean FILM = Boolean.getBoolean("calibre.autotest.film");
     private static final int TOUR = FILM ? 250 : 250;
+    /** -Dcalibre.autotest.perf=N: instead of the usual shots, put N mercenaries carrying the gun in view and log the
+     *  frame rate, to compare how much each model costs to draw. */
+    private static final int PERF = Integer.getInteger("calibre.autotest.perf", -1);
+    private static final java.util.List<net.minecraft.world.entity.Entity> perfMobs = new java.util.ArrayList<>();
+    private static int perfSum, perfN;
 
     private static void gunTour(Minecraft mc, net.minecraft.client.server.IntegratedServer server, ServerPlayer sp) {
         // clean screenshots: no tutorial hints or recipe toasts
@@ -192,6 +197,43 @@ public final class ClientAutoTest {
         }
         String g = GUN_LIST[idx];
         String n = String.format("g%02d_%s_", idx, g);
+        if (PERF >= 0) {
+            if (k == 0) {
+                mc.options.framerateLimit().set(260);
+                mc.options.enableVsync().set(false);
+                perfSum = perfN = 0;
+                server.execute(() -> {
+                    for (var e : perfMobs) e.discard();
+                    perfMobs.clear();
+                    var level = sp.level();
+                    ItemStack own = new ItemStack(ModRegistry.GUNS.get(g).get());
+                    GunItem.setState(own, GunState.full(((GunItem) own.getItem()).def()));
+                    sp.getInventory().setItem(0, own);
+                    sp.getInventory().setSelectedSlot(0);
+                    for (int i = 0; i < PERF; i++) {
+                        var merc = ModRegistry.MERCENARY.get().create(level, EntitySpawnReason.COMMAND);
+                        if (merc == null) continue;
+                        merc.snapTo(0.5 + (i % 6 - 2.5) * 1.6, sp.getY(), 5.5 + (i / 6) * 2.0, 180, 0);
+                        merc.finalizeSpawn(level, level.getCurrentDifficultyAt(merc.blockPosition()),
+                                EntitySpawnReason.COMMAND, null);
+                        merc.setNoAi(true);
+                        ItemStack st = new ItemStack(ModRegistry.GUNS.get(g).get());
+                        GunItem.setState(st, GunState.full(((GunItem) st.getItem()).def()));
+                        merc.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, st);
+                        level.addFreshEntity(merc);
+                        perfMobs.add(merc);
+                    }
+                });
+            }
+            if (k == 1) select(0);
+            if (k >= 100 && k % 20 == 0 && k <= 240) {
+                perfSum += mc.getFps();
+                perfN++;
+            }
+            if (k == 200) shot(n + "perf");
+            if (k == 241) Calibre.LOGGER.info("[autotest] perf {} x{}: {} fps", g, PERF, perfSum / Math.max(1, perfN));
+            return;
+        }
         if (FILM) {
             switch (k) {
                 case 0 -> server.execute(() -> {

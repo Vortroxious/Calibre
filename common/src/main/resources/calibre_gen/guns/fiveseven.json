@@ -1781,7 +1781,8 @@
    "safety",
    "slide_stop",
    "takedown"
-  ]
+  ],
+  "lod_cubes": 66
  },
  "sockets": {
   "mount_optic": [

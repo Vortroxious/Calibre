@@ -4,6 +4,7 @@
 
 ## Features
 - **77 guns:** pistols, revolvers, SMGs, assault rifles, bullpups, battle rifles and DMRs, bolt-action snipers, pump, semi-auto, full-auto and bolt shotguns, lever actions, WWII and Cold War rifles, four belt-fed machine guns and an RPG-7.
+- **Detailed models:** every gun is built to its real length and proportions, with rounded edges, iron sights you look through, visible cartridges and moving safeties, catches and bolts. Guns in other hands and in the inventory use a lighter version, so crowds stay fast.
 - **Real mechanics:** stripper clips for the Mosin, Kar98k, both Enfields, Arisaka and SKS; the M1 Garand's en-bloc ping; speedloaders; shell-by-shell loading; lever throws; slam fire on the Model 12; a single-action Ruger you thumb-cock and load through its gate.
 - **Close-up inspects (H):** the gun is brought up close and turned to show both sides, the magazine is pulled and held up to the eye, and pistols and revolvers show off the slide or the cylinder.
 - **Real sounds:** gunshots, reloads and handling are cut from real recordings.

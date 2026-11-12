@@ -1825,7 +1825,8 @@
    "mag_release",
    "safety",
    "selector"
-  ]
+  ],
+  "lod_cubes": 90
  },
  "sockets": {
   "mount_optic": [

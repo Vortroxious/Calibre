@@ -1443,7 +1443,8 @@
   "length_mm": 267.1,
   "moving": [
    "gate"
-  ]
+  ],
+  "lod_cubes": 72
  },
  "sockets": {
   "muzzle": [

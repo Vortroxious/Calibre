@@ -1420,7 +1420,8 @@
   "length_mm": 279.3,
   "moving": [
    "latch"
-  ]
+  ],
+  "lod_cubes": 108
  },
  "sockets": {
   "mount_optic": [

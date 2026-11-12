@@ -1787,7 +1787,8 @@
    "mag_release",
    "safety",
    "slide_stop"
-  ]
+  ],
+  "lod_cubes": 70
  },
  "sockets": {
   "muzzle": [

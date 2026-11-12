@@ -1486,7 +1486,8 @@
  "model": {
   "cubes": 689,
   "length_mm": 951.2,
-  "moving": []
+  "moving": [],
+  "lod_cubes": 144
  },
  "sockets": {
   "muzzle": [

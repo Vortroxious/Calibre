@@ -1809,7 +1809,8 @@
   "moving": [
    "mag_release",
    "safety"
-  ]
+  ],
+  "lod_cubes": 152
  },
  "sockets": {
   "mount_under": [

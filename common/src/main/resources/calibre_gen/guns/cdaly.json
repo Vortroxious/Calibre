@@ -1423,7 +1423,8 @@
   "length_mm": 1250.5,
   "moving": [
    "safety"
-  ]
+  ],
+  "lod_cubes": 123
  },
  "sockets": {
   "mount_optic": [

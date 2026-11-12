@@ -2059,7 +2059,8 @@
    "dust_cover",
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 164
  },
  "sockets": {
   "mount_optic": [

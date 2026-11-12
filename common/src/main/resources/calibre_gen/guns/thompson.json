@@ -1857,7 +1857,8 @@
    "mag_release",
    "safety",
    "selector"
-  ]
+  ],
+  "lod_cubes": 128
  },
  "sockets": {
   "muzzle": [

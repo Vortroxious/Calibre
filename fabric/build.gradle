@@ -44,6 +44,7 @@ loom {
             vmArg '-Dcalibre.autotest=true'
             vmArg "-Dcalibre.autotest.guns=${project.findProperty('autotestGuns') ?: ''}"
             vmArg "-Dcalibre.autotest.film=${project.findProperty('autotestFilm') ?: 'false'}"
+            vmArg "-Dcalibre.autotest.perf=${project.findProperty('autotestPerf') ?: '-1'}"
             programArgs '--width', '1280', '--height', '720', '--username', 'Tester'
             runDir 'run'
         }

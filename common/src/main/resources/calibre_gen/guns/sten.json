@@ -1756,7 +1756,8 @@
   "length_mm": 760.0,
   "moving": [
    "mag_release"
-  ]
+  ],
+  "lod_cubes": 87
  },
  "sockets": {
   "muzzle": [

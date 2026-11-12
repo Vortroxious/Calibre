@@ -1367,7 +1367,8 @@
   "length_mm": 152.0,
   "moving": [
    "latch"
-  ]
+  ],
+  "lod_cubes": 82
  },
  "sockets": {
   "muzzle": [

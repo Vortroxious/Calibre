@@ -1780,7 +1780,8 @@
    "safety",
    "slide_stop",
    "takedown"
-  ]
+  ],
+  "lod_cubes": 56
  },
  "sockets": {
   "muzzle": [

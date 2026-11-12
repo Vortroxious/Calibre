@@ -1842,7 +1842,8 @@
   "moving": [
    "mag_release",
    "safety"
-  ]
+  ],
+  "lod_cubes": 186
  },
  "sockets": {
   "muzzle": [

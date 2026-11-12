@@ -1641,7 +1641,8 @@
   "length_mm": 1092.5,
   "moving": [
    "safety"
-  ]
+  ],
+  "lod_cubes": 136
  },
  "sockets": {
   "mount_under": [

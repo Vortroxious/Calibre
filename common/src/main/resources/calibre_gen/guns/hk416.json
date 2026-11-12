@@ -2011,7 +2011,8 @@
    "dust_cover",
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 174
  },
  "sockets": {
   "mount_optic": [

@@ -1808,7 +1808,8 @@
   "moving": [
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 140
  },
  "sockets": {
   "mount_optic": [

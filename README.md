@@ -19,8 +19,8 @@ Pick the jar for your loader. GeckoLib 5.4.5 is bundled inside both (jar-in-jar)
 
 | Loader | Jar | You also need |
 |---|---|---|
-| NeoForge 21.11.48+ | `calibre-neoforge-1.1.1.jar` | nothing else |
-| Fabric Loader 0.18+ | `calibre-fabric-1.1.1.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
+| NeoForge 21.11.48+ | `calibre-neoforge-1.2.0.jar` | nothing else |
+| Fabric Loader 0.18+ | `calibre-fabric-1.2.0.jar` | [Fabric API](https://modrinth.com/mod/fabric-api). [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds an in-game settings screen. |
 
 Both versions have the same guns, animations, sounds, attachments, workbench, mobs and loot. A server and its players must use the same loader's jar.
 
@@ -48,6 +48,11 @@ Both versions have the same guns, animations, sounds, attachments, workbench, mo
 | Cold War | M60 (belt-fed), M16A1, IMI Galil ARM, H&K G3A3 (HK slap), Sten Mk II (**side-mounted magazine**), Colt Python (.357), Skorpion vz. 61 (.32 ACP), KS-23 (23 mm pump) |
 
 The 20 guns from Lever actions to More handguns each fire their **own recorded gunshot** from the Free Firearm Sound Library. The 32 guns in the last four rows use the closest of those recordings, re-pitched for their calibre and mastered for their class.
+
+### Models
+Every gun is modelled to its real overall and barrel length (the build fails a gun that is more than 6 % off), with rounded edges and barrels, iron sights you actually look through, cartridges you can see in magazines, clips and belts, and small parts that move: safeties, magazine releases, slide stops and bolt catches, bolt shrouds that slide without turning, dust covers. A typical gun has about 440 parts; the scoped sniper rifles have around 1,000.
+
+That detail is for the gun in your own hands. Anywhere else (other players, mercenaries, inventory icons, item frames, guns lying on the ground) the mod draws a simplified version of the same gun with about a quarter of the parts, so a crowd of armed mobs or a creative tab full of guns costs no more than it did before.
 
 Stats come from the real weapons:
 - magazine capacity, plus one round in the chamber for closed-bolt guns
@@ -128,10 +133,11 @@ All models, textures, animations and sounds are **generated** by the Python tool
 | `tools/gen_sounds.py` | Synthesizes fallback versions of every sound (numpy + ffmpeg). |
 | `tools/import_sounds.py <src>` | Replaces the gunshots and reload/handling sounds with cuts of real **CC0 recordings** (mapping in `tools/sound_map.json`, sources and checksums in `tools/sound_sources.tsv`, see `CREDITS.md`). Run it after `gen_sounds.py`. |
 | `tools/gen_data.py` | Item model JSONs, lang, loot, damage types, the biome modifier, block assets, GUI and effect textures. |
-| `tools/validate.py` | Checks the bone and animation contract, sound references, UVs and item files. |
+| `tools/validate.py` | Checks the bone and animation contract, sound references, UVs and item files, and that every gun has at least 130 parts and is within 6 % of its real length (`tools/rosters/specs.py`). |
 
 How the pieces fit together:
-- Models are authored in millimetres from real dimensions, with a small cuboid DSL (`tools/calibre_gen/core.py`, `parts.py`).
+- Models are authored in millimetres from real dimensions, with a small cuboid DSL (`tools/calibre_gen/core.py`) and shared kits for each family (`parts.py`, `pistolkit.py`, `longkit.py`, `riflekit.py`, `shotkit.py`). Rounded edges and tubes are built from facets lit by their own normals.
+- Each gun is built twice: in full, and with `core.LOD` switched on (plain boxes, octagonal tubes, no small trim) for the `<id>_lod` model the renderer uses outside first person.
 - Animations are authored as eased keyframe "beats" with springs and shakes, plus a `grab` constraint that makes a hand follow the magazine, slide or bolt it is holding. They are baked to GeckoLib keyframes (`templates.py` and `guns/*.py`).
 - The same generator writes `calibre_gen/guns/<id>.json` with every animation's length, sound timeline and the moment the round goes in. The server uses it to time reloads, so the game logic always matches the animation.
 - `--preview` renders side, iso and first-person views and per-animation frame sheets to `build/preview/`.
@@ -150,7 +156,7 @@ You can open the generated `.geo.json` / `.animation.json` files in Blockbench (
 ```bash
 ./gradlew buildAll
 ```
-This builds both jars and copies `calibre-neoforge-1.1.1.jar` and `calibre-fabric-1.1.1.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
+This builds both jars and copies `calibre-neoforge-1.2.0.jar` and `calibre-fabric-1.2.0.jar` to the project root. It needs Gradle 9.2+ (the wrapper downloads it) and Java 21.
 
 ```bash
 ./gradlew :neoforge:runGameTestServer

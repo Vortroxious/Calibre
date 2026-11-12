@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 
+from . import core as _core
 from .core import Bone
 
 METAL_MAGS = ("steel_dark", "steel", "steel_parked", "alloy", "alloy_grey", "stainless", "steel_light")
@@ -361,6 +362,17 @@ def scope(b: Bone, z_center, y_axis, length=300.0, tube_d=30.0, obj_d=50.0, eye_
     rubber eye ring, and two slim rings on a base.
     """
     zc, ya, L = z_center, y_axis, length
+    if _core.LOD:                                         # at a distance: tube, two bells, one mount block
+        b.cyl((0, ya, zc), tube_d, L * 0.6, mat)
+        b.cyl((0, ya, zc - L * 0.39), obj_d, L * 0.22, mat)
+        b.cyl((0, ya, zc + L * 0.4), eye_d, L * 0.2, mat)
+        b.cyl((0, ya, zc - L / 2 - 0.3), obj_d * 0.8, 1.2, "glass")
+        if turrets:
+            b.bc((0, ya + tube_d / 2 + 6, zc), (15, 12, 15), mat)
+        if mount_y is not None:
+            for dz in (-L * 0.15, L * 0.15):
+                b.box(-7, 7, mount_y, ya, zc + dz - 6, zc + dz + 6, "alloy")
+        return
     zf, zr = zc - L / 2, zc + L / 2                       # objective end, ocular end
     ob_len, ob_cone = L * 0.17, L * 0.1
     ey_len, ey_cone = L * 0.19, L * 0.055

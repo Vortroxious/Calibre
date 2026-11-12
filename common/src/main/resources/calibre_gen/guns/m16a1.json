@@ -2009,7 +2009,8 @@
    "dust_cover",
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 156
  },
  "sockets": {
   "mount_under": [

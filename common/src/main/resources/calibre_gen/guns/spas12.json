@@ -1434,7 +1434,8 @@
   "moving": [
    "safety",
    "selector"
-  ]
+  ],
+  "lod_cubes": 121
  },
  "sockets": {
   "mount_optic": [

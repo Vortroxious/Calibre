@@ -1777,7 +1777,8 @@
    "mag_release",
    "safety",
    "slide_stop"
-  ]
+  ],
+  "lod_cubes": 60
  },
  "sockets": {
   "mount_optic": [

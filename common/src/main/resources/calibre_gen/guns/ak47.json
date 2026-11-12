@@ -1838,7 +1838,8 @@
   "length_mm": 876.5,
   "moving": [
    "mag_release"
-  ]
+  ],
+  "lod_cubes": 142
  },
  "sockets": {
   "mount_under": [

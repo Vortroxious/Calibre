@@ -32,6 +32,24 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
             public net.minecraft.resources.Identifier buildFormattedTexturePath(net.minecraft.resources.Identifier base) {
                 return base.withPath("textures/gun/" + base.getPath() + ".png");
             }
+
+            // The full model is for the player's own hands. Everywhere else (other players and mobs, icons, item
+            // frames, dropped guns) a simplified one with the same bones is drawn: a crowd of armed mercenaries or a
+            // creative tab full of guns would otherwise cost tens of thousands of parts per frame.
+            private final net.minecraft.resources.Identifier lodModel =
+                    buildFormattedModelPath(Calibre.id(item.def().id() + "_lod"));
+            private final net.minecraft.resources.Identifier lodTexture =
+                    buildFormattedTexturePath(Calibre.id(item.def().id() + "_lod"));
+
+            @Override
+            public net.minecraft.resources.Identifier getModelResource(GeoRenderState state) {
+                return fullDetail(state) ? super.getModelResource(state) : lodModel;
+            }
+
+            @Override
+            public net.minecraft.resources.Identifier getTextureResource(GeoRenderState state) {
+                return fullDetail(state) ? super.getTextureResource(state) : lodTexture;
+            }
         });
         spareBones = item.meta().spareBones.toArray(String[]::new);
         emptyHidden = item.meta().emptyHidden.toArray(String[]::new);
@@ -55,6 +73,10 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         if (fp) flash = ClientGun.flashAlpha(partialTick);
         else if (data.itemOwner() != null && data.renderPerspective() != ItemDisplayContext.GUI) flash = ClientGun.flashFor(data.itemOwner());
         state.addGeckolibData(CalibreTickets.FLASH, GunItem.attachments(stack).suppressed() ? 0f : flash);
+    }
+
+    private static boolean fullDetail(GeoRenderState state) {
+        return Boolean.TRUE.equals(state.getGeckolibData(CalibreTickets.FIRST_PERSON));
     }
 
     private static ItemDisplayContext ctx(RenderPassInfo<GeoRenderState> info) {

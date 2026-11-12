@@ -138,6 +138,11 @@ class Cube:
         return ((self.x0 + self.x1) / 2, (self.y0 + self.y1) / 2, (self.z0 + self.z1) / 2)
 
 
+# Simplified build for guns seen at a distance (in someone else's hands, icons, item frames): the same builders run
+# with rounded edges as plain boxes, tubes as octagons and small trim left out. Bones and sockets are unchanged.
+LOD = False
+
+
 class Bone:
     def __init__(self, model, name, parent=None, pivot=(0, 0, 0), rot=(0, 0, 0)):
         self.model = model
@@ -161,6 +166,10 @@ class Bone:
         za, zb = sorted((z0, z1))
         c = Cube(xa, ya, za, xb, yb, zb, mat, tuple(rot) if rot else (0, 0, 0),
                  tuple(pivot) if pivot else None, inflate)
+        if LOD:
+            d = sorted((xb - xa, yb - ya, zb - za))
+            if d[2] < 3.0 or d[0] * d[1] * d[2] < 24.0 or (d[0] <= 1.0 and (d[2] < 18.0 or d[1] < 6.0)):
+                return c                       # small trim: not part of the simplified model
         self.cubes.append(c)
         return c
 
@@ -184,6 +193,8 @@ class Bone:
             out = []
             x, y, z = c
             steps = steps or max(3, min(8, int(abs(d2 - d) / 1.6) + 1))
+            if LOD:
+                steps = 1 if abs(d2 - d) < 0.35 * max(d, d2) else 2
             seg = length / steps
             for k in range(steps):
                 dk = d + (d2 - d) * (k + 0.5) / steps
@@ -192,7 +203,9 @@ class Bone:
                 out += self.cyl(ck, dk, seg + 0.05, mat, axis=axis, sides=sides)
             return out
         auto = 8 if d < 7 else (16 if d < 16 else (24 if d < 34 else 32))
-        if sides is None:
+        if LOD:
+            sides = 8 if d >= 20 else 4
+        elif sides is None:
             sides = auto
         elif sides == 12:                       # callers that asked for "the round one" get as round as the size wants
             sides = max(16, auto)
@@ -279,7 +292,7 @@ class Bone:
                 e = (w0, w1, v0, v1, -u1, -u0)
             return self.box(*e, mat, rot=rot, pivot=tuple(piv) if rot else None)
 
-        if r < 0.8:
+        if LOD or r < 0.8:
             return [plain_box(U[0], U[1], V[0], V[1], W[0], W[1])]
         hi = edges in ("all", "top", "hi")
         lo = edges in ("all", "bottom", "lo")
@@ -383,7 +396,7 @@ class Bone:
         lb = L / math.cos(math.radians(a_bot))
         xa, xb = sorted((x0, x1))
         x0, x1 = xa, xb
-        rd = round
+        rd = 0.0 if LOD else round
         if rd is None:                       # stocks, butts and fore-ends get their long edges rounded over
             rd = min(4.5, (x1 - x0) * 0.2, h_min * 0.3) if (x1 - x0) >= 14 else 0.0
         rd = min(rd, tt - 1.5)
@@ -480,6 +493,8 @@ class Bone:
         """Picatinny rail. side: top/bottom/left/right. y is the rail base surface."""
         z0, z1 = sorted((z0, z1))
         h = 3.0
+        if LOD:
+            slots = False
         if side == "top":
             self.box(x - width / 2, x + width / 2, y, y + h, z0, z1, mat)
             if slots:
@@ -511,6 +526,10 @@ class Bone:
         belts and stacks where dozens are visible.
         """
         x, y, z = c
+        if LOD:
+            self.cyl((x, y, z + length * 0.2), d, length * 0.6, case)
+            self.cyl((x, y, z - length * 0.3), d * 0.62, length * 0.4, tip)
+            return
         bottleneck = length / d > 3.6
         zb = z + length / 2                                   # case head
         if bottleneck:

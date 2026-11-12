@@ -1841,7 +1841,8 @@
   "length_mm": 992.1,
   "moving": [
    "mag_release"
-  ]
+  ],
+  "lod_cubes": 81
  },
  "sockets": {
   "mount_optic": [

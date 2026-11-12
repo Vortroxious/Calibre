@@ -1962,7 +1962,8 @@
    "bolt_catch",
    "mag_release",
    "selector"
-  ]
+  ],
+  "lod_cubes": 129
  },
  "sockets": {
   "mount_optic": [

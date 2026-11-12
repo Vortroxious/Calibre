@@ -1502,7 +1502,8 @@
   "length_mm": 1021.6,
   "moving": [
    "safety"
-  ]
+  ],
+  "lod_cubes": 147
  },
  "sockets": {
   "muzzle": [

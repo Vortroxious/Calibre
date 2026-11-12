@@ -74,10 +74,21 @@ def build_gun(name, preview=False):
     empty_anim = next((a for a in asset.anims if a.name == "idle_empty"), None)
     if empty_anim is not None:
         meta["empty_hidden"] = sorted(empty_anim.hidden - idle_anim.hidden)
+    # the simplified model drawn wherever the gun is not in the player's own hands (see core.LOD)
+    core.LOD = True
+    try:
+        lod = all_guns()[name]().model
+    finally:
+        core.LOD = False
+    if [b.name for b in lod.order] != [b.name for b in m.order]:
+        raise RuntimeError(f"{name}: the simplified model has different bones")
+    core.pack_uv(lod, density=0.5, max_size=1024)
+    core.export_geo(lod, os.path.join(ASSETS, "geckolib", "models", "item", f"{m.name}_lod.geo.json"))
+    materials.paint_texture(lod, os.path.join(ASSETS, "textures", "gun", f"{m.name}_lod.png"))
     # model facts for tools/validate.py: part count, overall length (loose projectiles excluded), moving controls
     skip = set(idle_anim.hidden) | {"rocket"}
     meta["model"] = {"cubes": sum(len(b.cubes) for b in m.order), "length_mm": round(float(m.length(skip=skip)), 1),
-                     "moving": sorted(m.moves)}
+                     "moving": sorted(m.moves), "lod_cubes": sum(len(b.cubes) for b in lod.order)}
     for s in ("mount_optic", "mount_under", "mount_side", "muzzle"):
         if m.has(s):
             meta.setdefault("sockets", {})[s] = m.socket(s)

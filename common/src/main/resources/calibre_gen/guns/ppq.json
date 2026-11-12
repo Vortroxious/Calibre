@@ -1736,7 +1736,8 @@
   "moving": [
    "mag_release",
    "slide_stop"
-  ]
+  ],
+  "lod_cubes": 71
  },
  "sockets": {
   "mount_optic": [

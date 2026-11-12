@@ -68,18 +68,26 @@ def main():
             for _, s in a["sounds"]:
                 if s not in sounds:
                     errors.append(f"{gid}/{name}: unknown sound {s}")
-        geo = json.load(open(os.path.join(A, "geckolib", "models", "item", f"{gid}.geo.json")))["minecraft:geometry"][0]
-        tw, th = geo["description"]["texture_width"], geo["description"]["texture_height"]
-        img = Image.open(os.path.join(A, "textures", "gun", f"{gid}.png"))
-        if img.size != (tw, th):
-            errors.append(f"{gid}: texture {img.size} != geo {tw}x{th}")
-        for b in geo["bones"]:
-            for c in b.get("cubes", []):
-                for f, uv in c["uv"].items():
-                    u, v = uv["uv"]
-                    w, h = uv["uv_size"]
-                    if min(u, u + w) < 0 or max(u, u + w) > tw or min(v, v + h) < 0 or max(v, v + h) > th:
-                        errors.append(f"{gid}/{b['name']}: uv out of bounds")
+        for suffix in ("", "_lod"):          # the full model and the simplified one drawn at a distance
+            gp = os.path.join(A, "geckolib", "models", "item", f"{gid}{suffix}.geo.json")
+            tp = os.path.join(A, "textures", "gun", f"{gid}{suffix}.png")
+            if not os.path.exists(gp) or not os.path.exists(tp):
+                errors.append(f"{gid}: missing {os.path.basename(gp)} or its texture")
+                continue
+            geo = json.load(open(gp))["minecraft:geometry"][0]
+            tw, th = geo["description"]["texture_width"], geo["description"]["texture_height"]
+            img = Image.open(tp)
+            if img.size != (tw, th):
+                errors.append(f"{gid}{suffix}: texture {img.size} != geo {tw}x{th}")
+            if suffix and {b["name"] for b in geo["bones"]} != bones:
+                errors.append(f"{gid}: the simplified model has different bones")
+            for b in geo["bones"]:
+                for c in b.get("cubes", []):
+                    for f, uv in c["uv"].items():
+                        u, v = uv["uv"]
+                        w, h = uv["uv_size"]
+                        if min(u, u + w) < 0 or max(u, u + w) > tw or min(v, v + h) < 0 or max(v, v + h) > th:
+                            errors.append(f"{gid}{suffix}/{b['name']}: uv out of bounds")
         anims = json.load(open(os.path.join(A, "geckolib", "animations", "item", f"{gid}.animation.json")))["animations"]
         for name in acts:
             if f"animation.{gid}.{name}" not in anims:
