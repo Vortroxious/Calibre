@@ -74,6 +74,37 @@ GUN_NAMES = {
     "python": "Colt Python",
     "skorpion": "Skorpion vz. 61",
     "ks23": "KS-23",
+    # expansion 3
+    "ak74m": "AK-74M",
+    "aks74u": "AKS-74U",
+    "ak12": "AK-12",
+    "mcx": "SIG MCX",
+    "l85a2": "L85A2",
+    "qbz95": "QBZ-95",
+    "f2000": "FN F2000",
+    "hk417": "H&K HK417",
+    "m1carbine": "M1 Carbine",
+    "svt40": "SVT-40",
+    "g43": "Gewehr 43",
+    "fg42": "FG 42",
+    "m3grease": "M3 Grease Gun",
+    "pps43": "PPS-43",
+    "luger": "Luger P08",
+    "p38": "Walther P38",
+    "rpk": "RPK",
+    "rpd": "RPD",
+    "m240b": "M240B",
+    "dp28": "DP-28",
+    "mg34": "MG 34",
+    "bren": "Bren Mk II",
+    "p226": "SIG Sauer P226",
+    "makarov": "Makarov PM",
+    "c96": "Mauser C96",
+    "saa": "Colt Single Action Army",
+    "mac10": "Ingram MAC-10",
+    "vss": "VSS Vintorez",
+    "ksg": "Kel-Tec KSG",
+    "doublebarrel": "Double-Barrel Shotgun",
 }
 AMMO = {
     "9mm": ("9×19mm Parabellum", (196, 152, 62), (178, 102, 58), 6, 0.45),
@@ -108,6 +139,13 @@ AMMO = {
     "357mag": (".357 Magnum", (196, 152, 62), (120, 120, 126), 6, 0.55),
     "32acp": (".32 ACP", (196, 152, 62), (178, 102, 58), 4, 0.34),
     "23mm": ("23×75mmR Buckshot", (60, 70, 60), (205, 165, 70), 9, 0.8),
+    "545x39": ("5.45×39mm", (120, 110, 70), (178, 102, 58), 5, 0.72),
+    "58x42": ("5.8×42mm", (120, 110, 70), (178, 102, 58), 5, 0.74),
+    "30carbine": (".30 Carbine", (196, 152, 62), (178, 102, 58), 5, 0.6),
+    "9x18": ("9×18mm Makarov", (120, 110, 70), (178, 102, 58), 4, 0.4),
+    "763x25": ("7.63×25mm Mauser", (196, 152, 62), (178, 102, 58), 4, 0.5),
+    "45colt": (".45 Colt", (196, 152, 62), (120, 120, 126), 6, 0.56),
+    "9x39": ("9×39mm", (120, 110, 70), (60, 60, 70), 5, 0.8),
 }
 ATT_NAMES = {
     "red_dot": "Red Dot Sight", "holo": "Holographic Sight", "acog": "ACOG 4× Scope", "scope_8x": "8× Rifle Scope",
@@ -455,13 +493,13 @@ def loot():
         return [{"condition": "minecraft:any_of", "terms": [
             {"condition": "neoforge:loot_table_id", "loot_table_id": t} for t in tables]}]
 
-    guns_common = ["glock17", "m1911", "m9", "rem870", "uzi", "mp5", "akm", "usp", "cz75", "mp40", "sten", "spas12"]
+    guns_common = ["glock17", "m1911", "m9", "rem870", "uzi", "mp5", "akm", "usp", "cz75", "mp40", "sten", "spas12", "makarov", "p38", "m3grease", "pps43", "doublebarrel"]
     # hunting / civilian guns turn up where villagers and sailors live, old service arms in ruins and strongholds
     guns_civ = ["win1894", "marlin336", "nova", "cdaly", "mossberg190", "ppq", "bersa", "rugermk3", "sw642", "singlesix",
-                "tikka_t3", "rem700", "python"]
-    guns_ww2 = ["mosin", "m1917", "arisaka", "sks", "ppsh41", "m45", "ak47", "model12", "kar98k", "garand", "enfield", "thompson", "mp40", "stg44", "bar", "sten"]
-    guns_mil = ["m4a1", "hk416", "akm", "fal", "scar_h", "m14ebr", "svd", "m249", "ump45", "p90", "aug", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "fiveseven", "m16a1", "galil", "g3a3", "sr25", "aa12", "skorpion"]
-    guns_rare = ["deagle", "model29", "m24", "awm", "m82a1", "pkm", "rpg7", "mg42", "m60", "intervention", "l96", "dsr1", "svu", "ks23"]
+                "tikka_t3", "rem700", "python", "saa", "doublebarrel", "m1carbine"]
+    guns_ww2 = ["mosin", "m1917", "arisaka", "sks", "ppsh41", "m45", "ak47", "model12", "kar98k", "garand", "enfield", "thompson", "mp40", "stg44", "bar", "sten", "m1carbine", "svt40", "g43", "fg42", "m3grease", "pps43", "luger", "p38", "c96", "bren", "dp28"]
+    guns_mil = ["m4a1", "hk416", "akm", "fal", "scar_h", "m14ebr", "svd", "m249", "ump45", "p90", "aug", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "fiveseven", "m16a1", "galil", "g3a3", "sr25", "aa12", "skorpion", "ak74m", "aks74u", "ak12", "mcx", "l85a2", "qbz95", "f2000", "hk417", "p226", "mac10", "ksg", "rpk"]
+    guns_rare = ["deagle", "model29", "m24", "awm", "m82a1", "pkm", "rpg7", "mg42", "m60", "intervention", "l96", "dsr1", "svu", "ks23", "rpd", "m240b", "mg34", "vss"]
     ammo_all = [f"ammo_{k}" for k in AMMO if k != "pg7"]
     atts = [k for k in ATT_NAMES]
     mods = {

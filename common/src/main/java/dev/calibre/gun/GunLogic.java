@@ -170,11 +170,11 @@ public final class GunLogic {
 
         // gunshot: everyone but the shooter (who already heard it locally)
         GunAttachments att = GunItem.attachments(stack);
-        SoundEvent shot = att.suppressed() ? ModRegistry.sound(def.category() == GunDefinition.Category.PISTOL
+        SoundEvent shot = def.quiet(att) ? ModRegistry.sound(def.category() == GunDefinition.Category.PISTOL
                 || def.caliber() == Caliber.NINE_MM || def.caliber() == Caliber.ACP45 ? "suppressed_pistol" : "suppressed_rifle")
                 : ModRegistry.sound(def.caliber() == Caliber.PG7 ? "rocket_launch" : "fire_" + def.id());
         if (shot != null) {
-            float vol = att.suppressed() ? 1.0f : 4.0f;
+            float vol = def.quiet(att) ? 1.0f : 4.0f;
             shooter.level().playSound(shooter instanceof Player pl ? pl : null, shooter.getX(), shooter.getEyeY(), shooter.getZ(),
                     shot, shooter instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE, vol, 0.95f + shooter.getRandom().nextFloat() * 0.1f);
         }

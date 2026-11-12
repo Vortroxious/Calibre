@@ -13,14 +13,14 @@ from .core import HOLD, bone_local_matrix, cube_matrix, ease, euler_mat
 RATE = 120.0
 
 FLOURISH = {
-    "pistol": ["glock17", "m9", "ppq", "m1911", "bersa", "deagle", "rugermk3", "fiveseven", "usp", "cz75"],
-    "revolver": ["model29", "sw642", "singlesix", "python"],
+    "pistol": ["glock17", "m9", "ppq", "m1911", "bersa", "deagle", "rugermk3", "fiveseven", "usp", "cz75", "luger", "p38", "p226", "makarov", "c96"],
+    "revolver": ["model29", "sw642", "singlesix", "python", "saa"],
     "rifle": ["ak47", "akm", "aug", "fal", "hk416", "m14ebr", "m4a1", "scar_h", "mp5", "p90", "ump45", "uzi", "m45",
-              "ppsh41", "sks", "svd", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "aa12", "garand", "thompson", "mp40", "stg44", "bar", "sr25", "svu", "m16a1", "galil", "g3a3", "sten", "skorpion"],
-    "shotgun": ["rem870", "model12", "nova", "cdaly", "spas12", "ks23"],
+              "ppsh41", "sks", "svd", "benelli_m4", "vector", "mp7", "g36c", "famas", "x95", "aa12", "garand", "thompson", "mp40", "stg44", "bar", "sr25", "svu", "m16a1", "galil", "g3a3", "sten", "skorpion", "ak74m", "aks74u", "ak12", "mcx", "l85a2", "qbz95", "f2000", "hk417", "m1carbine", "svt40", "g43", "fg42", "m3grease", "pps43", "rpk", "mac10", "vss"],
+    "shotgun": ["rem870", "model12", "nova", "cdaly", "spas12", "ks23", "ksg", "doublebarrel"],
     "lever": ["win1894", "marlin336"],
     "bolt": ["mosin", "arisaka", "m1917", "m24", "awm", "savage10", "tikka_t3", "mossberg190", "kar98k", "enfield", "intervention", "l96", "rem700", "dsr1"],
-    "heavy": ["m249", "pkm", "rpg7", "m82a1", "mg42", "m60"],
+    "heavy": ["m249", "pkm", "rpg7", "m82a1", "mg42", "m60", "rpd", "m240b", "dp28", "mg34", "bren"],
 }
 KIND = {g: k for k, gs in FLOURISH.items() for g in gs}
 

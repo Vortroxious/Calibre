@@ -334,12 +334,12 @@ public final class ClientGun {
         if (rounds - 1 <= 0 && meta.has("fire_last")) anim = "fire_last";
         play(p, stack, gun, anim, false);
         GunAttachments att = GunItem.attachments(stack);
-        String snd = att.suppressed() ? (def.caliber() == Caliber.NINE_MM || def.caliber() == Caliber.ACP45
+        String snd = def.quiet(att) ? (def.caliber() == Caliber.NINE_MM || def.caliber() == Caliber.ACP45
                 || def.category() == GunDefinition.Category.PISTOL ? "suppressed_pistol" : "suppressed_rifle")
                 : def.caliber() == Caliber.PG7 ? "rocket_launch" : "fire_" + def.id();
         SoundEvent se = ModRegistry.sound(snd);
         if (se != null) Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(se, 0.97f + p.getRandom().nextFloat() * 0.06f, 1.0f));
-        if (!att.suppressed()) flashUntilMs = System.currentTimeMillis() + 55;
+        if (!def.quiet(att)) flashUntilMs = System.currentTimeMillis() + 55;
         // recoil
         float mul = att.product(a -> a.recoil) * (aiming ? 0.8f : 1f) * (p.isCrouching() ? 0.8f : 1f)
                 * (float) CalibreConfig.client(CalibreConfig.CAMERA_RECOIL, 1.0);

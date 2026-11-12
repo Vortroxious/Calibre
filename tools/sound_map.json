@@ -288,7 +288,37 @@
   "fire_sten": "smg",
   "fire_python": "magnum",
   "fire_skorpion": "smg",
-  "fire_ks23": "shotgun"
+  "fire_ks23": "shotgun",
+  "fire_ak74m": "rifle",
+  "fire_aks74u": "rifle",
+  "fire_ak12": "rifle",
+  "fire_mcx": "rifle",
+  "fire_l85a2": "rifle",
+  "fire_qbz95": "rifle",
+  "fire_f2000": "rifle",
+  "fire_hk417": "battle",
+  "fire_m1carbine": "rifle",
+  "fire_svt40": "battle",
+  "fire_g43": "battle",
+  "fire_fg42": "battle",
+  "fire_m3grease": "smg",
+  "fire_pps43": "smg",
+  "fire_luger": "pistol",
+  "fire_p38": "pistol",
+  "fire_rpk": "lmg",
+  "fire_rpd": "lmg",
+  "fire_m240b": "lmg",
+  "fire_dp28": "lmg",
+  "fire_mg34": "lmg",
+  "fire_bren": "lmg",
+  "fire_p226": "pistol",
+  "fire_makarov": "pistol",
+  "fire_c96": "pistol",
+  "fire_saa": "magnum",
+  "fire_mac10": "smg",
+  "fire_vss": "rifle",
+  "fire_ksg": "shotgun",
+  "fire_doublebarrel": "shotgun"
  },
  "_mech": {
   "src": "gun_reload_sounds_springyspringo/x/gunreload1.wav",
@@ -2395,6 +2425,444 @@
    "pitch": [
     -3.0,
     -3.5
+   ]
+  }
+ ],
+ "fire_ak74m": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    1.5,
+    0.9
+   ]
+  }
+ ],
+ "fire_aks74u": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    2.4,
+    1.8
+   ]
+  }
+ ],
+ "fire_ak12": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    1.0,
+    0.4
+   ]
+  }
+ ],
+ "fire_mcx": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Savage 10 .300 Blackout/T_27P.wav",
+   "at": [
+    0.949,
+    4.966
+   ],
+   "len": "rifle",
+   "pitch": [
+    0.5,
+    0.0
+   ]
+  }
+ ],
+ "fire_l85a2": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    -0.6,
+    -0.1
+   ]
+  }
+ ],
+ "fire_qbz95": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    0.6,
+    1.1
+   ]
+  }
+ ],
+ "fire_f2000": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    0.3,
+    0.8
+   ]
+  }
+ ],
+ "fire_hk417": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    -2.4,
+    -1.9
+   ]
+  }
+ ],
+ "fire_m1carbine": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AR-15/D_32P.wav",
+   "at": [
+    0.702,
+    5.645
+   ],
+   "len": "rifle",
+   "pitch": [
+    -1.5,
+    -1.0
+   ]
+  }
+ ],
+ "fire_svt40": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154,
+    14.135
+   ],
+   "len": "big",
+   "pitch": 0.6
+  }
+ ],
+ "fire_g43": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Arisaka/E_25P.wav",
+   "at": [
+    0.522,
+    4.029
+   ],
+   "len": "big",
+   "pitch": [
+    0.2,
+    -0.3
+   ]
+  }
+ ],
+ "fire_fg42": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Arisaka/E_25P.wav",
+   "at": [
+    0.522,
+    4.029
+   ],
+   "len": "big",
+   "pitch": [
+    0.8,
+    0.3
+   ]
+  }
+ ],
+ "fire_m3grease": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Carl Gustav M45/G_31P.wav",
+   "at": [
+    0.308,
+    3.5,
+    6.725
+   ],
+   "len": "smg",
+   "pitch": -2.2
+  }
+ ],
+ "fire_pps43": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/PPSh/P_30P.wav",
+   "at": [
+    0.967,
+    4.386,
+    8.24,
+    11.418,
+    15.09
+   ],
+   "len": "smg",
+   "pitch": 0.6
+  }
+ ],
+ "fire_luger": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol",
+   "pitch": -1.0
+  }
+ ],
+ "fire_p38": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol",
+   "pitch": -0.3
+  }
+ ],
+ "fire_rpk": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    -0.6,
+    -1.2
+   ]
+  }
+ ],
+ "fire_rpd": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/AK-47/C_28P.wav",
+   "at": [
+    0.61,
+    3.257
+   ],
+   "all_at": [
+    0.61,
+    3.257,
+    6.02,
+    9.154
+   ],
+   "len": "rifle",
+   "pitch": [
+    -1.2,
+    -1.8
+   ]
+  }
+ ],
+ "fire_m240b": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1917/B_24P.wav",
+   "at": [
+    1.306,
+    6.731
+   ],
+   "len": "big",
+   "pitch": [
+    -1.0,
+    -1.5
+   ]
+  }
+ ],
+ "fire_dp28": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Mosin Nagant/M_21P.wav",
+   "at": [
+    1.033,
+    5.018,
+    9.154,
+    14.135
+   ],
+   "len": "big",
+   "pitch": -1.2
+  }
+ ],
+ "fire_mg34": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/PPSh/P_30P.wav",
+   "at": [
+    0.967,
+    4.386,
+    8.24,
+    11.418,
+    15.09
+   ],
+   "len": "smg",
+   "pitch": -3.6
+  }
+ ],
+ "fire_bren": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1917/B_24P.wav",
+   "at": [
+    1.306,
+    6.731
+   ],
+   "len": "big",
+   "pitch": [
+    -0.5,
+    -1.0
+   ]
+  }
+ ],
+ "fire_p226": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol",
+   "pitch": 0.4
+  }
+ ],
+ "fire_makarov": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Bersa/F_47P.wav",
+   "at": [
+    0.334,
+    4.409
+   ],
+   "len": "pistol",
+   "pitch": [
+    -0.5,
+    -1.0
+   ]
+  }
+ ],
+ "fire_c96": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Walther PPQ/X_39P.wav",
+   "at": [
+    1.405,
+    6.444,
+    10.658
+   ],
+   "len": "pistol",
+   "pitch": 1.2
+  }
+ ],
+ "fire_saa": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1911/A_42P.wav",
+   "at": [
+    0.94,
+    5.001
+   ],
+   "len": "pistol",
+   "pitch": [
+    -1.8,
+    -2.4
+   ]
+  }
+ ],
+ "fire_mac10": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/1911/A_42P.wav",
+   "at": [
+    0.94,
+    5.001
+   ],
+   "len": "pistol",
+   "pitch": [
+    0.6,
+    0.0
+   ]
+  }
+ ],
+ "fire_vss": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Savage 10 .300 Blackout/T_27P.wav",
+   "at": [
+    0.949,
+    4.966
+   ],
+   "len": "rifle",
+   "pitch": [
+    -2.0,
+    -2.5
+   ]
+  }
+ ],
+ "fire_ksg": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Nova/O_21P.wav",
+   "at": [
+    0.43,
+    3.463
+   ],
+   "len": "shotgun",
+   "pitch": [
+    0.4,
+    -0.1
+   ]
+  }
+ ],
+ "fire_doublebarrel": [
+  {
+   "src": "free_firearm_library/x/Prepared SFX Library/Model 12/K_22P.wav",
+   "at": [
+    0.842,
+    7.445
+   ],
+   "len": "shotgun",
+   "pitch": [
+    -1.0,
+    -1.5
    ]
   }
  ]

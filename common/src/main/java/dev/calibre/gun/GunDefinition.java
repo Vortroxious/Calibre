@@ -60,6 +60,18 @@ public record GunDefinition(
         }
     }
 
+    /** Guns with a suppressor built into the barrel (VSS Vintorez): always quiet, no muzzle flash. */
+    private static final Set<String> INTEGRALLY_SUPPRESSED = Set.of("vss");
+
+    public boolean quiet() {
+        return INTEGRALLY_SUPPRESSED.contains(id);
+    }
+
+    /** suppressed by an attachment or by design */
+    public boolean quiet(GunAttachments att) {
+        return quiet() || att.suppressed();
+    }
+
     public boolean allows(Attachment a) {
         return attachments.contains(a);
     }

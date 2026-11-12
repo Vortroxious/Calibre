@@ -200,6 +200,15 @@ def _ar(name, *, ul=197.0, hw_low=11.5, hw_up=14.0, barrel_out, barrel_d=17.0, g
         st.rbox(-14, 14, -76, -52, 300, 366, poly, r=5, edges="bottom")                               # storage toe
         st.box(-22.4, 22.4, -80, 20, 370, 374, "rubber")                                              # convex pad
         butt = 374
+    elif stock == "mcx":                                  # folding skeleton stock, no buffer tube
+        st.rbox(-12, 12, -34, 6, 98, 116, al, r=3)
+        st.cyl((12, -14, 107), 9, 42, "steel", axis="y", sides=16)
+        st.path([(112, -2), (300, -2)], 12, 9, al)
+        st.path([(112, -26), (200, -30), (300, -74)], 9, 7, al)
+        st.rbox(-11, 11, 2, 12, 170, 284, poly, r=4, edges="top")                                     # cheek rest
+        st.rbox(-14, 14, -84, 12, 298, 312, poly, r=4)
+        st.rbox(-15, 15, -86, 14, 312, 320, "rubber", r=5)
+        butt = 320
     elif stock == "a1":
         st.cyl((0, -4, 122), 30, 40, al)
         stock_solid(st, 17.5, [(110, 12), (356, 14)], [(110, -30), (150, -40), (356, -98)], poly, pad="rubber",

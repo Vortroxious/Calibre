@@ -37,7 +37,14 @@ public enum Caliber {
     LAPUA338("338lm", ".338 Lapua Magnum", 20.0f, 915, 1, 3.5f, 0.6f, 0xFF7A30),
     MAG357("357mag", ".357 Magnum", 8.5f, 440, 1, 0.8f, 0.15f, 0xFFB040),
     ACP32("32acp", ".32 ACP", 4.0f, 300, 1, 0.3f, 0.03f, 0xFFB040),
-    SHELL23("23mm", "23×75mmR Buckshot", 3.6f, 300, 10, 0.2f, 0.0f, 0xFFB040);
+    SHELL23("23mm", "23×75mmR Buckshot", 3.6f, 300, 10, 0.2f, 0.0f, 0xFFB040),
+    R545X39("545x39", "5.45×39mm", 6.8f, 880, 1, 1.4f, 0.32f, 0x60FF60),
+    DBP58("58x42", "5.8×42mm", 7.0f, 930, 1, 1.5f, 0.34f, 0x60FF60),
+    CARBINE30("30carbine", ".30 Carbine", 6.5f, 600, 1, 0.9f, 0.18f, 0xFF7A30),
+    MAK9X18("9x18", "9×18mm Makarov", 5.2f, 315, 1, 0.5f, 0.07f, 0xFFB040),
+    MAUSER763("763x25", "7.63×25mm Mauser", 5.8f, 440, 1, 0.8f, 0.18f, 0xFFB040),
+    COLT45("45colt", ".45 Colt", 8.0f, 270, 1, 0.5f, 0.08f, 0xFFB040),
+    SUB9X39("9x39", "9×39mm", 9.0f, 290, 1, 1.6f, 0.45f, 0x60FF60);
 
     public final String id;
     public final String displayName;

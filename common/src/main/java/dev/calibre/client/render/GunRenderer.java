@@ -72,7 +72,7 @@ public class GunRenderer extends GeoItemRenderer<GunItem> {
         float flash = 0;
         if (fp) flash = ClientGun.flashAlpha(partialTick);
         else if (data.itemOwner() != null && data.renderPerspective() != ItemDisplayContext.GUI) flash = ClientGun.flashFor(data.itemOwner());
-        state.addGeckolibData(CalibreTickets.FLASH, GunItem.attachments(stack).suppressed() ? 0f : flash);
+        state.addGeckolibData(CalibreTickets.FLASH, gun.def().quiet(GunItem.attachments(stack)) ? 0f : flash);
     }
 
     private static boolean fullDetail(GeoRenderState state) {
