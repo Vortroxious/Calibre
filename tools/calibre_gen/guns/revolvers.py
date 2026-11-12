@@ -493,4 +493,32 @@ def singlesix():
     return GunAsset(m, anims, {"hip": {"pos": [0.1, -0.08, -0.29], "rot": [0, 6, 0]}, "ads": {"dist": 0.36}})
 
 
-GUNS = {"model29": model29, "python": python, "sw642": sw642, "singlesix": singlesix}
+def saa():
+    """Colt Single Action Army (5.5 in): 279 mm long, the pattern the Single-Six copies at full size. Built from the
+    Single-Six with the frame and cylinder widened for .45 Colt, a steel grip frame, walnut stocks and a
+    case-hardened frame."""
+    asset = singlesix()
+    m = asset.model
+    m.name = "saa"
+    k = 1.12                                                    # .45 Colt: wider frame, 41 mm cylinder
+    arms = {b.name for b in m.order if b.name.startswith("arm_")}
+    remap = {"alloy": "steel_dark", "wood_red": "wood", "steel": "steel_dark"}
+    for b in m.order:
+        p = b
+        under_arm = False
+        while p:
+            if p.name in arms:
+                under_arm = True
+            p = p.parent
+        if under_arm:
+            continue
+        b.pivot = (b.pivot[0] * k, b.pivot[1] * k, b.pivot[2])
+        for c in b.cubes:
+            c.x0, c.x1, c.y0, c.y1 = c.x0 * k, c.x1 * k, c.y0 * k, c.y1 * k
+            if c.pivot:
+                c.pivot = (c.pivot[0] * k, c.pivot[1] * k, c.pivot[2])
+            c.mat = remap.get(c.mat, c.mat)
+    return asset
+
+
+GUNS = {"model29": model29, "python": python, "sw642": sw642, "singlesix": singlesix, "saa": saa}
