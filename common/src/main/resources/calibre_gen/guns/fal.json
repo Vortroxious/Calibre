@@ -1955,6 +1955,15 @@
  },
  "spare_bones": [],
  "empty_hidden": [],
+ "model": {
+  "cubes": 427,
+  "length_mm": 1094.2,
+  "moving": [
+   "bolt_catch",
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

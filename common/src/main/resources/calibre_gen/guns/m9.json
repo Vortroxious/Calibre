@@ -1772,6 +1772,16 @@
  },
  "spare_bones": [],
  "empty_hidden": [],
+ "model": {
+  "cubes": 291,
+  "length_mm": 218.0,
+  "moving": [
+   "mag_release",
+   "safety",
+   "slide_stop",
+   "takedown"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

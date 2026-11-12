@@ -2095,6 +2095,13 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 600,
+  "length_mm": 1221.2,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

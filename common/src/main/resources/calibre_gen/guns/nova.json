@@ -1415,6 +1415,13 @@
   "shell_eject",
   "shell_load"
  ],
+ "model": {
+  "cubes": 416,
+  "length_mm": 1258.5,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

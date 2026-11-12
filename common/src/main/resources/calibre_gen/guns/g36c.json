@@ -1793,6 +1793,15 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 461,
+  "length_mm": 728.3,
+  "moving": [
+   "bolt_catch",
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

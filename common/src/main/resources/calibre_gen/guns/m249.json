@@ -2135,6 +2135,13 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 583,
+  "length_mm": 1042.1,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

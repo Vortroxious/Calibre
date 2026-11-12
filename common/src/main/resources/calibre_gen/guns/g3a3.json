@@ -1900,6 +1900,14 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 489,
+  "length_mm": 1035.2,
+  "moving": [
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

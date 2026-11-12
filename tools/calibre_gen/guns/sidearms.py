@@ -409,7 +409,7 @@ def bersa():
             [(-13.8, -11.5, -40, -32, -22, -13, SL)], press=(1.6, 0, 0))
     trigger(body, (0, -26, -40), mat=SL, length=22, w=6)
     barrel_assy(body, -121, -30, d=12.5, rod_y=None, chamber=True)
-    hammer(body, (0, -7, 38), mat=SL, style="ring", cocked=30, w=6.5)
+    hammer(body, (0, -7, 32), mat=SL, style="ring", cocked=30, w=6.5)
     slide = m["gun"].bone("slide", pivot=(0, 0, 0))
     slide_shell(slide, -118, 36, -9, 12, 12.2, SL, ch=3.4, rib=False)
     slide.box(-3.4, 3.4, 12, 13.2, -116, 30, SL)                                   # sighting rib

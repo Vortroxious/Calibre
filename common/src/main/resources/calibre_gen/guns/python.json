@@ -1415,6 +1415,13 @@
   "brass",
   "speedloader"
  ],
+ "model": {
+  "cubes": 475,
+  "length_mm": 279.3,
+  "moving": [
+   "latch"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

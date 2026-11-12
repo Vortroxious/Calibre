@@ -1817,6 +1817,16 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 305,
+  "length_mm": 627.6,
+  "moving": [
+   "bolt_catch",
+   "mag_release",
+   "safety",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

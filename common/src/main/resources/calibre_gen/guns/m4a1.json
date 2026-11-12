@@ -2003,6 +2003,16 @@
  },
  "spare_bones": [],
  "empty_hidden": [],
+ "model": {
+  "cubes": 590,
+  "length_mm": 846.2,
+  "moving": [
+   "bolt_catch",
+   "dust_cover",
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

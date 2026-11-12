@@ -74,6 +74,10 @@ def build_gun(name, preview=False):
     empty_anim = next((a for a in asset.anims if a.name == "idle_empty"), None)
     if empty_anim is not None:
         meta["empty_hidden"] = sorted(empty_anim.hidden - idle_anim.hidden)
+    # model facts for tools/validate.py: part count, overall length (loose projectiles excluded), moving controls
+    skip = set(idle_anim.hidden) | {"rocket"}
+    meta["model"] = {"cubes": sum(len(b.cubes) for b in m.order), "length_mm": round(float(m.length(skip=skip)), 1),
+                     "moving": sorted(m.moves)}
     for s in ("mount_optic", "mount_under", "mount_side", "muzzle"):
         if m.has(s):
             meta.setdefault("sockets", {})[s] = m.socket(s)

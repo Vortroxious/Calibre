@@ -1362,6 +1362,13 @@
   "brass",
   "speedloader"
  ],
+ "model": {
+  "cubes": 386,
+  "length_mm": 152.0,
+  "moving": [
+   "latch"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

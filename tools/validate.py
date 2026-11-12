@@ -13,6 +13,11 @@ A = os.path.join(RES, "assets", "calibre")
 
 REQUIRED_BONES = {"root", "gun", "body", "arm_right", "arm_left", "muzzle"}
 REQUIRED_ANIMS = {"idle", "draw", "fire", "inspect", "dry"}
+MIN_PARTS = 130            # every gun is at least this detailed
+LENGTH_TOL = 0.06          # overall length within 6 % of the real gun (tools/rosters/specs.py)
+
+sys.path.insert(0, os.path.join(ROOT, "tools", "rosters"))
+from specs import SPECS  # noqa: E402
 
 
 def main():
@@ -25,6 +30,19 @@ def main():
         bones = set(meta["bones"])
         if not REQUIRED_BONES <= bones:
             errors.append(f"{gid}: missing bones {REQUIRED_BONES - bones}")
+        model = meta.get("model")
+        if model is None:
+            errors.append(f"{gid}: no model facts (rebuild with tools/build_assets.py)")
+        else:
+            if model["cubes"] < MIN_PARTS:
+                errors.append(f"{gid}: only {model['cubes']} parts (minimum {MIN_PARTS})")
+            if gid not in SPECS:
+                errors.append(f"{gid}: no real dimensions in tools/rosters/specs.py")
+            elif abs(model["length_mm"] / SPECS[gid][0] - 1) > LENGTH_TOL:
+                errors.append(f"{gid}: {model['length_mm']} mm long, the real one is {SPECS[gid][0]} mm")
+            for bn in model["moving"]:
+                if bn not in bones:
+                    errors.append(f"{gid}: moving part {bn} has no bone")
         acts = set(meta["actions"])
         if not REQUIRED_ANIMS <= acts:
             errors.append(f"{gid}: missing animations {REQUIRED_ANIMS - acts}")

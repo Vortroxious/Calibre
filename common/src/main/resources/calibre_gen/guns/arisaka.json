@@ -1792,6 +1792,11 @@
   "clip_rounds",
   "round_load"
  ],
+ "model": {
+  "cubes": 748,
+  "length_mm": 1119.7,
+  "moving": []
+ },
  "sockets": {
   "muzzle": [
    0.0,

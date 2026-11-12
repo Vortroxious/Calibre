@@ -1812,6 +1812,14 @@
  "spare_bones": [
   "brass"
  ],
+ "model": {
+  "cubes": 1061,
+  "length_mm": 1231.1,
+  "moving": [
+   "mag_release",
+   "safety"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

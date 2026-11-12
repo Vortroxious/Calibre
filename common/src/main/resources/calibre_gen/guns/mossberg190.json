@@ -1788,6 +1788,13 @@
  "spare_bones": [
   "shell_eject"
  ],
+ "model": {
+  "cubes": 466,
+  "length_mm": 1149.5,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

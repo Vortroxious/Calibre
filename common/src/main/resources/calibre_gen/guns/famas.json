@@ -1755,6 +1755,13 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 444,
+  "length_mm": 757.2,
+  "moving": [
+   "mag_release"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

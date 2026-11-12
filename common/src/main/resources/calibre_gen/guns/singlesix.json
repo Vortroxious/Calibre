@@ -1438,6 +1438,13 @@
   "brass",
   "round_load"
  ],
+ "model": {
+  "cubes": 273,
+  "length_mm": 267.1,
+  "moving": [
+   "gate"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

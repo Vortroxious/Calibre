@@ -1636,6 +1636,13 @@
   "brass",
   "round_load"
  ],
+ "model": {
+  "cubes": 888,
+  "length_mm": 1092.5,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "mount_under": [
    0.0,

@@ -1458,6 +1458,13 @@
   "brass",
   "round_load"
  ],
+ "model": {
+  "cubes": 384,
+  "length_mm": 979.5,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "mount_optic": [
    0.0,

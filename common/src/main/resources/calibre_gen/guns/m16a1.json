@@ -2001,6 +2001,16 @@
  },
  "spare_bones": [],
  "empty_hidden": [],
+ "model": {
+  "cubes": 568,
+  "length_mm": 982.4,
+  "moving": [
+   "bolt_catch",
+   "dust_cover",
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "mount_under": [
    0.0,

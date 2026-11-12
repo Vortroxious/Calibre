@@ -1833,6 +1833,13 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 441,
+  "length_mm": 876.5,
+  "moving": [
+   "mag_release"
+  ]
+ },
  "sockets": {
   "mount_under": [
    0.0,

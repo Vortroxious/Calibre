@@ -1812,6 +1812,13 @@
  "empty_hidden": [
   "magazine"
  ],
+ "model": {
+  "cubes": 686,
+  "length_mm": 1104.7,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

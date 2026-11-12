@@ -1414,6 +1414,11 @@
   "brass",
   "round_load"
  ],
+ "model": {
+  "cubes": 370,
+  "length_mm": 961.6,
+  "moving": []
+ },
  "sockets": {
   "muzzle": [
    0.0,

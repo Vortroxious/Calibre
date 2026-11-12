@@ -1464,6 +1464,13 @@
   "shell_eject",
   "shell_load"
  ],
+ "model": {
+  "cubes": 488,
+  "length_mm": 1004.5,
+  "moving": [
+   "safety"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,

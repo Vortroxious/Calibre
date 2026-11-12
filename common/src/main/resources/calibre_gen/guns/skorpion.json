@@ -1712,6 +1712,14 @@
   }
  },
  "spare_bones": [],
+ "model": {
+  "cubes": 232,
+  "length_mm": 278.3,
+  "moving": [
+   "mag_release",
+   "selector"
+  ]
+ },
  "sockets": {
   "muzzle": [
    0.0,
